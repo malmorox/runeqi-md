@@ -9,7 +9,8 @@ import {
     FaRegImage,
     FaListUl,
     FaListOl,
-    FaListCheck
+    FaListCheck,
+    FaBars
 } from 'react-icons/fa6';
 import { IoCode } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
@@ -21,12 +22,12 @@ import TableRowsColumnsSelector from '@components/ui/TableRowsColumnsSelector';
 import CodeLanguageSelector from '@components/ui/CodeLanguageSelector';
 import EmojiPicker from '@components/ui/EmojiPicker';
 import { HeadingContent, InputContent } from '@components/ui/ToolbarDropdownsContent';
-import ThemeSwitcher from "@components/ThemeSwitcher";
 import { useEditor } from "@hooks/useEditor";
 import { useMarkdownActions } from "@hooks/useMarkdownActions";
 
 interface MarkdownToolbarProps {
     onInsert: (markdown: string, cursorOffset?: number) => void;
+    onSidebarToggle: () => void;
 }
 
 interface DropdownProps {
@@ -44,7 +45,7 @@ const Dropdown = ({ isOpen, children }: DropdownProps) => {
     );
 };
 
-const MarkdownToolbar = ({ onInsert }: MarkdownToolbarProps) => {
+const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const actions = useMarkdownActions({ onInsert });
@@ -293,7 +294,13 @@ const MarkdownToolbar = ({ onInsert }: MarkdownToolbarProps) => {
                 ))}
             </nav>
             <div className="flex items-center ml-auto">
-                <ThemeSwitcher />
+                <button
+                    onClick={onSidebarToggle}
+                    className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                    title="Menú"
+                >
+                    <FaBars size={20} />
+                </button>
             </div>
         </div>
     );

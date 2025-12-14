@@ -16,7 +16,7 @@ const MarkdownInterpreter = () => {
 
     return (
         <div className={`w-full h-full overflow-auto ${
-            isDark ? "bg-[#2d2d30]" : "bg-white"
+            isDark ? "bg-[#2d2d30]" : "bg-[#f3f3f3]"
         }`}>
             <div className="p-6 max-w-4xl mx-auto wrap-break-word overflow-wrap-anywhere">
                 <ReactMarkdown
