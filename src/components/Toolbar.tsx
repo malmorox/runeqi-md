@@ -9,14 +9,14 @@ import {
     FaRegImage,
     FaListUl,
     FaListOl,
-    FaListCheck,
-    FaBars
+    FaListCheck
 } from 'react-icons/fa6';
 import { IoCode } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
 import { MdInsertEmoticon } from "react-icons/md";
 import { BiTable } from "react-icons/bi";
 import { LuUndo, LuRedo } from "react-icons/lu";
+import { SlOptions } from "react-icons/sl";
 import type { ToolbarButton } from '@/types/toolbar';
 import TableRowsColumnsSelector from '@components/ui/TableRowsColumnsSelector';
 import CodeLanguageSelector from '@components/ui/CodeLanguageSelector';
@@ -45,11 +45,11 @@ const Dropdown = ({ isOpen, children }: DropdownProps) => {
     );
 };
 
-const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
+const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const actions = useMarkdownActions({ onInsert });
-    const { undo, redo } = useEditor();
+    const { undo, redo, canUndo, canRedo } = useEditor();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -112,7 +112,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: FaTextHeight,
             iconSize: 20,
-            tooltip: 'Encabezado',
+            tooltip: 'Heading',
             name: 'heading',
             dropdownContent: (
                 <HeadingContent 
@@ -125,7 +125,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaBold,
             iconSize: 18,
-            tooltip: 'Negrita',
+            tooltip: 'Bold',
             name: 'bold',
             onClick: () => actions.insertBold()
         },
@@ -133,7 +133,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaItalic,
             iconSize: 18,
-            tooltip: 'Cursiva',
+            tooltip: 'Italic',
             name: 'italic',
             onClick: () => actions.insertItalic()
         },
@@ -141,7 +141,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaStrikethrough,
             iconSize: 18,
-            tooltip: 'Tachado',
+            tooltip: 'Strikethrough',
             name: 'strikethrough',
             onClick: () => actions.insertStrikethrough()
         },
@@ -149,7 +149,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaQuoteRight,
             iconSize: 18,
-            tooltip: 'Cita',
+            tooltip: 'Blockquote',
             name: 'quote',
             onClick: () => actions.insertQuote()
         },
@@ -157,7 +157,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: IoCode,
             iconSize: 22,
-            tooltip: 'Código inline',
+            tooltip: 'Code',
             name: 'code',
             onClick: () => actions.insertCode()
         },
@@ -165,7 +165,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: FaLink,
             iconSize: 20,
-            tooltip: 'Enlace',
+            tooltip: 'Link',
             name: 'link',
             dropdownContent: (
                 <InputContent
@@ -181,7 +181,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaListUl,
             iconSize: 18,
-            tooltip: 'Lista desordenada',
+            tooltip: 'Unordered list',
             name: 'unordered-list',
             onClick: () => actions.insertUnorderedList()
         },
@@ -189,7 +189,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaListOl,
             iconSize: 18,
-            tooltip: 'Lista ordenada',
+            tooltip: 'Ordered list',
             name: 'ordered-list',
             onClick: () => actions.insertOrderedList()
         },
@@ -197,7 +197,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'action',
             icon: FaListCheck,
             iconSize: 18,
-            tooltip: 'Lista de tareas',
+            tooltip: 'Task list',
             name: 'task-list',
             onClick: () => actions.insertTaskList()
         },
@@ -205,7 +205,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: PiCodeBlockBold,
             iconSize: 20,
-            tooltip: 'Bloque de código',
+            tooltip: 'Code block',
             name: 'codeblock',
             dropdownContent: <CodeLanguageSelector onSelect={handleCodeBlockSelect} />
         },
@@ -213,7 +213,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: BiTable,
             iconSize: 21,
-            tooltip: 'Tabla',
+            tooltip: 'Table',
             name: 'table',
             dropdownContent: <TableRowsColumnsSelector onSelect={handleTableSelect} />
         },
@@ -221,7 +221,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: FaRegImage,
             iconSize: 18,
-            tooltip: 'Imagen',
+            tooltip: 'Image',
             name: 'image',
             dropdownContent:  (
                 <InputContent
@@ -237,7 +237,7 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             type: 'dropdown',
             icon: MdInsertEmoticon,
             iconSize: 21,
-            tooltip: 'Emoticonos',
+            tooltip: 'Emoji',
             name: 'emoji',
             dropdownContent: <EmojiPicker onSelect={actions.insertEmoji} />
         }
@@ -248,7 +248,14 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
             <nav className="flex flex-wrap gap-0.5 items-center">
                 <button
                     onClick={undo}
-                    className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                    disabled={!canUndo}
+                    className={`
+                        w-10 aspect-square p-2 rounded transition-colors
+                        flex items-center justify-center
+                        ${canUndo
+                            ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
+                            : 'text-[#555] cursor-not-allowed opacity-50'}
+                    `}
                     title="Undo"
                 >
                     <LuUndo size={24} />
@@ -256,7 +263,14 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
 
                 <button
                     onClick={redo}
-                    className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                    disabled={!canRedo}
+                    className={`
+                        w-10 aspect-square p-2 rounded transition-colors
+                        flex items-center justify-center
+                        ${canRedo
+                            ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
+                            : 'text-[#555] cursor-not-allowed opacity-50'}
+                    `}
                     title="Redo"
                 >
                     <LuRedo size={24} />
@@ -297,13 +311,13 @@ const MarkdownToolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) =>
                 <button
                     onClick={onSidebarToggle}
                     className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
-                    title="Menú"
+                    title="Toggle sidebar"
                 >
-                    <FaBars size={20} />
+                    <SlOptions size={20} />
                 </button>
             </div>
         </div>
     );
 };
 
-export default MarkdownToolbar;
+export default Toolbar;

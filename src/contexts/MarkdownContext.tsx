@@ -8,7 +8,7 @@ type MarkdownContextType = {
 export const MarkdownContext = createContext<MarkdownContextType | undefined>(undefined);
 
 export function MarkdownProvider({ children }: { children: React.ReactNode }) {
-    const [markdown, setMarkdown] = useState<string>("## Escribe tu markdown aquí");
+    const [markdown, setMarkdown] = useState<string>("## Write your markdown here");
 
     return (
         <MarkdownContext.Provider value={{ markdown, setMarkdown }}>

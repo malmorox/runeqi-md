@@ -15,7 +15,7 @@ export const mainMenuItems: MenuItem[] = [
         label: 'Export',
         description: 'Export current document.',
         onClick: () => {
-            alert('Función de exportar - Próximamente');
+            alert('trabajando en ello...');
         }
     },
     {
@@ -34,10 +34,10 @@ export const shortcuts: ShortcutItem[] = [
     { action: 'Quote', keys: ['Ctrl', 'Q'] },
     { action: 'Code', keys: ['Ctrl', 'K'] },
     { action: 'Link', keys: ['Ctrl', 'L'] },
-    { action: 'Unordered List', keys: ['Ctrl', 'U'] },
-    { action: 'Ordered List', keys: ['Ctrl', 'O'] },
-    { action: 'Task List', keys: ['Ctrl', 'T'] },
-    { action: 'Code Block', keys: ['Ctrl', 'Shift', 'K'] },
+    { action: 'Unordered list', keys: ['Ctrl', 'U'] },
+    { action: 'Ordered list', keys: ['Ctrl', 'O'] },
+    { action: 'Task list', keys: ['Ctrl', 'T'] },
+    { action: 'Code block', keys: ['Ctrl', 'Shift', 'K'] },
     { action: 'Table', keys: ['Ctrl', 'Shift', 'T'] },
     { action: 'Image', keys: ['Ctrl', 'Shift', 'I'] },
     { action: 'Emoji', keys: ['Ctrl', 'E'] }

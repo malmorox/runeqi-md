@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MarkdownToolbar from "@components/MarkdownToolbar";
+import Toolbar from "@components/Toolbar";
 import MarkdownWorkspace from "@components/MarkdownWorkspace";
 import Sidebar from "@components/Sidebar";
 import { useEditor } from "@hooks/useEditor"
@@ -13,7 +13,8 @@ export default function App() {
         <div className="w-screen h-screen flex">
             <div className="w-full h-full flex flex-col">
                 <div className="shrink-0">
-                    <MarkdownToolbar 
+                    {/* Toolbar */}
+                    <Toolbar 
                         onInsert={insertMarkdown} 
                         onSidebarToggle={() => setSidebarOpen(!sidebarOpen)} 
                     />
