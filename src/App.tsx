@@ -17,6 +17,7 @@ export default function App() {
                     <Toolbar 
                         onInsert={insertMarkdown} 
                         onSidebarToggle={() => setSidebarOpen(!sidebarOpen)} 
+                        isSidebarOpen={sidebarOpen}
                     />
                 </div>
                 {/* Paneles */}

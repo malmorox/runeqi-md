@@ -31,6 +31,7 @@ import ClearMarkdownModal from "@components/ui/ClearMarkdownModal";
 interface MarkdownToolbarProps {
     onInsert: (markdown: string, cursorOffset?: number) => void;
     onSidebarToggle: () => void;
+    isSidebarOpen: boolean;
 }
 
 interface DropdownProps {
@@ -48,7 +49,7 @@ const Dropdown = ({ isOpen, children }: DropdownProps) => {
     );
 };
 
-const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
+const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarProps) => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const actions = useMarkdownActions({ onInsert });
@@ -316,9 +317,10 @@ const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
                         </React.Fragment>
                     ))}
                 </nav>
-                <div className="flex items-center ml-auto">
+                <div className="flex items-center gap-1 ml-auto">
                     <button
                         onClick={() => {
+                            if (isMarkdownEmpty) return;
                             closeDropdown();
                             setIsClearModalOpen(true)
                         }}
@@ -331,7 +333,13 @@ const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
 
                     <button
                         onClick={onSidebarToggle}
-                        className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                        className={`
+                            w-10 aspect-square p-2 rounded flex items-center justify-center transition-colors cursor-pointer
+                            ${isSidebarOpen
+                                ? 'bg-[#4d4d4d] text-white'
+                                : 'text-[#bbbbbb] hover:bg-[#4d4d4d]'
+                            }
+                        `}
                         title="Toggle sidebar"
                     >
                         <SlOptions size={20} />
