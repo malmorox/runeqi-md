@@ -32,7 +32,7 @@ const SidebarContent = ({
                                 <item.icon size={18} />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="font-medium">{item.label}</div>
+                                <span className="font-medium">{item.label}</span>
                                 {item.description && (
                                     <p className="text-xs text-[#2d2d30] mt-0.5">
                                         {item.description}
