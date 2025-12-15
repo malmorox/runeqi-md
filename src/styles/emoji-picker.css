@@ -1,0 +1,29 @@
+.emoji-selector-wrapper .EmojiPickerReact {
+    background-color: #1e1e1e !important;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+.emoji-selector-wrapper .EmojiPickerReact .epr-header {
+    background-color: #252526;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.emoji-selector-wrapper .EmojiPickerReact input {
+    background-color: white;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.emoji-selector-wrapper .EmojiPickerReact .epr-body {
+    background-color: #252526;
+}
+
+.emoji-selector-wrapper .EmojiPickerReact .epr-emoji:hover {
+    background-color: #2a2a2a;
+}
+
+.emoji-selector-wrapper .EmojiPickerReact .epr-category-nav {
+    background-color: #252526;
+}
