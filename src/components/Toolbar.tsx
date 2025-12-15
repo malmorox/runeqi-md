@@ -23,8 +23,8 @@ import TableRowsColumnsSelector from '@components/ui/TableRowsColumnsSelector';
 import CodeLanguageSelector from '@components/ui/CodeLanguageSelector';
 import EmojiPicker from '@components/ui/EmojiPicker';
 import { HeadingContent, InputContent } from '@components/ui/ToolbarDropdownsContent';
-import { useEditor } from "@hooks/useEditor";
 import { useMarkdown } from '@hooks/useMarkdown';
+import { useEditor } from "@hooks/useEditor";
 import { useMarkdownActions } from "@hooks/useMarkdownActions";
 import ClearMarkdownModal from "@components/ui/ClearMarkdownModal";
 
@@ -54,7 +54,10 @@ const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
     const actions = useMarkdownActions({ onInsert });
     const { undo, redo, canUndo, canRedo } = useEditor();
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
-    const { clearMarkdown } = useMarkdown();
+    const { markdown } = useMarkdown();
+    const { clearEditor } = useEditor();
+
+    const isMarkdownEmpty = markdown.trim() === "";
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -319,7 +322,8 @@ const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
                             closeDropdown();
                             setIsClearModalOpen(true)
                         }}
-                        className="w-10 aspect-square p-2 text-[#bbbbbb] hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                        className={`w-10 aspect-square p-2 rounded flex items-center justify-center transition-colors
+                            ${isMarkdownEmpty ? 'text-[#555] cursor-not-allowed opacity-50' : 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'}`}
                         title="Clear markdown"
                     >
                         <FaTrash size={18} />
@@ -338,7 +342,7 @@ const Toolbar = ({ onInsert, onSidebarToggle }: MarkdownToolbarProps) => {
                 isOpen={isClearModalOpen}
                 onClose={() => setIsClearModalOpen(false)}
                 onConfirm={() => {
-                    clearMarkdown();
+                    clearEditor();
                     setIsClearModalOpen(false);
                 }}
             />

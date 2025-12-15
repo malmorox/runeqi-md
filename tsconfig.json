@@ -11,6 +11,8 @@
       "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
       "@config/*": ["src/config/*"],
+      "@types/*": ["src/types/*"],
+      "@styles/*": ["src/styles/*"],
       "@/*": ["src/*"]
     }
   }

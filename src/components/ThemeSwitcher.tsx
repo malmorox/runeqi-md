@@ -16,13 +16,13 @@ export default function ThemeSwitcher() {
             onClick={handleToggle}
             className={`
                 relative w-11 h-6 flex items-center rounded-md
-                cursor-pointer transition-colors
-                ${isDark ? "bg-[#3e3e42]" : "bg-gray-300"}
+                cursor-pointer outline outline-[#252526] transition-colors
+                ${isDark ? "bg-[#2d2d30]" : "bg-white"}
             `}
         >
             <span
                 className={`
-                    absolute w-4.5 h-4.5 bg-white rounded-sm shadow
+                    absolute w-4.5 h-4.5 bg-[#D4D4D4] border border-[#252526] rounded-sm shadow
                     transition-transform
                     ${isDark ? "translate-x-[22.5px]" : "translate-x-[3.5px]"}
                 `}

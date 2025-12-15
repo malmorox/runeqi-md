@@ -7,6 +7,7 @@ type EditorContextType = {
     insertMarkdown: (text: string, offset?: number) => void;
     undo: () => void;
     redo: () => void;
+    clearEditor: () => void;
     canUndo: boolean;
     canRedo: boolean;
 };
@@ -76,6 +77,19 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         editorInstance.focus();
     };
 
+    const clearEditor = () => {
+        if (!editorInstance) return;
+
+        const model = editorInstance.getModel();
+        if (!model) return;
+
+        model.setValue('');
+        editorInstance.focus();
+
+        setCanUndo(false);
+        setCanRedo(false);
+    };
+
     useEffect(() => {
         if (!editorInstance) return;
         const disposable = bindUndoRedoListener(editorInstance);
@@ -83,7 +97,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     }, [editorInstance]);
 
     return (
-        <EditorContext.Provider value={{ editorInstance, setEditorInstance, insertMarkdown, undo, redo, canUndo, canRedo }}>
+        <EditorContext.Provider value={{ editorInstance, setEditorInstance, insertMarkdown, undo, redo, clearEditor, canUndo, canRedo }}>
             {children}
         </EditorContext.Provider>
     );
