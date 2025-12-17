@@ -68,7 +68,9 @@ export default function DownloadModal({
 
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
+        
+        setFilename("");
+        setFilenameError(null);
         onClose();
     };
 
@@ -78,25 +80,25 @@ export default function DownloadModal({
                 Export Markdown
             </h2>
 
-            <div className="mt-4">
-                <label htmlFor="filename" className="block text-sm font-medium text-gray-700 mb-2">
-                    Filename
-                </label>
+            <div className="mt-2">
+                <p className="text-gray-600 mb-1.5">
+                    Enter a filename for your markdown file:
+                </p>
                 <div className="flex items-center gap-2">
                     <input
                         id="filename"
                         type="text"
                         value={filename}
                         onChange={(e) => handleFilenameChange(e.target.value)}
-                        className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                        className="flex-1 rounded-md border border-[#cccccc] px-3 py-2 text-sm font-mono focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
                         placeholder="document"
                         autoFocus
                     />
                     <span className="text-sm text-gray-500 font-mono">.md</span>
                 </div>
                 {filenameError && (
-    <p className="mt-1 text-sm text-red-500">{filenameError}</p>
-)}
+                    <span className="mt-1 text-sm text-red-500">{filenameError}</span>
+                )}
             </div>
 
             <div className="mt-6 flex justify-end gap-2">
@@ -112,7 +114,7 @@ export default function DownloadModal({
                     disabled={!!filenameError}
                     className={`px-4 py-2 rounded transition-colors
                         ${filenameError
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            ? "bg-neutral-200 text-neutral-400 cursor-not-allowed"
                             : "bg-sky-400 text-white hover:bg-sky-500 cursor-pointer"
                         }`}
                 >

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { IoClose, IoSettingsSharp } from "react-icons/io5";
-import { FaKeyboard, FaFileExport, FaPalette } from 'react-icons/fa';
+import { FaKeyboard, FaPalette } from 'react-icons/fa';
 import { FaAngleLeft } from "react-icons/fa6";
+import { IoIosSave } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
 import SidebarContent from '@components/ui/SidebarContent';
 import { viewTitles } from '@config/sidebarData';
@@ -28,7 +29,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             hasSubview: true
         },
         {
-            icon: FaFileExport,
+            icon: IoIosSave,
             label: 'Export',
             description: 'Export current document.',
             onClick: () => setIsExportModalOpen(true)
