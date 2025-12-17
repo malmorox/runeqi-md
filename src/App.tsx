@@ -10,8 +10,8 @@ export default function App() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="w-screen h-screen flex">
-            <div className="w-full h-full flex flex-col">
+        <div className="w-screen h-screen flex overflow-hidden">
+            <div className="flex-1 min-w-0 h-full flex flex-col">
                 <div className="shrink-0">
                     {/* Toolbar */}
                     <Toolbar 

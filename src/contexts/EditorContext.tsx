@@ -78,14 +78,14 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     };
 
     const clearEditor = () => {
-        if (!editorInstance) return;
-
-        const model = editorInstance.getModel();
-        if (!model) return;
-
-        model.setValue('');
-        editorInstance.focus();
-
+        if (editorInstance) {
+            const model = editorInstance.getModel();
+            if (model) {
+                model.setValue('');
+                editorInstance.focus();
+            }
+        }
+        
         setCanUndo(false);
         setCanRedo(false);
     };

@@ -42,14 +42,15 @@ const MarkdownEditor = () => {
                 onMount={handleEditorDidMount}
                 options={{
                     lineNumbers: Settings.editor.lineNumbers ? "on" : "off",
-                    wordWrap: "on",
+                    wordWrap: Settings.editor.wordWrap ? "on" : "off",
                     minimap: { enabled: Settings.editor.minimap },
                     fontSize: 14,
                     scrollBeyondLastLine: false,
                     padding: {
                         top: 24,
                         bottom: 24
-                    }
+                    },
+                    automaticLayout: true
                 }}
             />
         </div>

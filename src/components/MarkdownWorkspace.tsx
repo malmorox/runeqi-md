@@ -8,7 +8,6 @@ import { useSettings } from "@hooks/useSettings";
 const MarkdownWorkspace = () => {
     const { theme } = useTheme();
     const { Settings } = useSettings();
-
     const { viewMode, swapPanels } = Settings.workspace;
 
     if (viewMode !== "split") {

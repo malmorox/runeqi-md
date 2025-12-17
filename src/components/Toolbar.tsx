@@ -56,7 +56,6 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
     const { undo, redo, canUndo, canRedo } = useEditor();
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const { markdown } = useMarkdown();
-    const { clearEditor } = useEditor();
 
     const isMarkdownEmpty = markdown.trim() === "";
 
@@ -349,10 +348,6 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             <ClearMarkdownModal
                 isOpen={isClearModalOpen}
                 onClose={() => setIsClearModalOpen(false)}
-                onConfirm={() => {
-                    clearEditor();
-                    setIsClearModalOpen(false);
-                }}
             />
         </>
     );

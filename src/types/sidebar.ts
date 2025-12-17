@@ -11,6 +11,7 @@ export interface MenuItem {
     view?: MenuView;
     hasSubview?: boolean;
     inlineComponent?: React.ReactNode;
+    disabled?: boolean;
 }
 
 export interface ShortcutItem {

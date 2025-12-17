@@ -23,12 +23,19 @@ const SidebarContent = ({
                     {mainMenuItems.map((item, index) => (
                         <div
                             key={index}
-                            onClick={() => onMenuItemClick(item)}
-                            className={`w-full flex items-start gap-3 px-4 py-3 rounded-md transition-colors text-left ${
-                                item.inlineComponent 
-                                    ? 'cursor-default' 
-                                    : 'cursor-pointer hover:bg-[#C4C4C4]'
-                            }`}
+                            onClick={() => {
+                                if (!item.disabled) {
+                                    onMenuItemClick(item);
+                                }
+                            }}
+                            className={`w-full flex items-start gap-3 px-4 py-3 rounded-md text-left transition-colors
+                                ${item.disabled
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : item.inlineComponent
+                                        ? 'cursor-default'
+                                        : 'cursor-pointer hover:bg-[#C4C4C4]'
+                                }
+                            `}
                         >
                             <div className="shrink-0 flex items-center self-stretch">
                                 <item.icon size={18} />
@@ -91,28 +98,35 @@ const SidebarContent = ({
                     </p>
 
                     <div className="flex gap-2 flex-wrap">
-                        {(['split', 'editor', 'preview'] as const).map(mode => (
-                            <button
-                                key={mode}
-                                onClick={() =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    workspace: {
-                                        ...s.workspace,
-                                        viewMode: mode,
-                                        swapPanels: mode === "split" ? s.workspace.swapPanels : false,
-                                    },
-                                    }))
-                                }
-                                className={`px-3 py-1 rounded border border-[#2d2d30] cursor-pointer ${
-                                    Settings.workspace.viewMode === mode
-                                        ? 'bg-[#D4D4D4]'
-                                        : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
-                                }`}
-                            >
-                                {mode}
-                            </button>
-                        ))}
+                        {(['split', 'editor', 'preview'] as const).map(mode => {
+                            const labels = {
+                                split: 'Split View',
+                                editor: 'Editor Only',
+                                preview: 'Preview Only'
+                            };
+                            return (
+                                <button
+                                    key={mode}
+                                    onClick={() =>
+                                        setSettings(s => ({
+                                        ...s,
+                                        workspace: {
+                                            ...s.workspace,
+                                            viewMode: mode,
+                                            swapPanels: mode === "split" ? s.workspace.swapPanels : false,
+                                        },
+                                        }))
+                                    }
+                                    className={`px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] cursor-pointer ${
+                                        Settings.workspace.viewMode === mode
+                                            ? 'bg-[#D4D4D4]'
+                                            : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
+                                    }`}
+                                >
+                                    {labels[mode]}
+                                </button>
+                            );
+                        })}
                     </div>
                     
                     {Settings.workspace.viewMode === "split" && (

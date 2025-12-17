@@ -1,16 +1,25 @@
 import Modal from "@components/Modal";
+import { useMarkdown } from "@hooks/useMarkdown";
+import { useEditor } from "@hooks/useEditor";
 
 interface ClearMarkdownModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => void;
 }
 
 export default function ClearMarkdownModal({
     isOpen,
-    onClose,
-    onConfirm,
+    onClose
 }: ClearMarkdownModalProps) {
+    const { setMarkdown } = useMarkdown();
+    const { clearEditor } = useEditor();
+
+    const handleConfirm = () => {
+        setMarkdown('');
+        clearEditor();
+        onClose();
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-xl font-semibold text-gray-900">
@@ -30,10 +39,7 @@ export default function ClearMarkdownModal({
                 </button>
 
                 <button
-                    onClick={() => {
-                        onConfirm();
-                        onClose();
-                    }}
+                    onClick={handleConfirm}
                     className="px-4 py-2 text-white rounded bg-sky-400 hover:bg-sky-500 transition-colors cursor-pointer"
                 >
                     Confirm

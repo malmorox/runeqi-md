@@ -8,6 +8,7 @@ import SidebarContent from '@components/ui/SidebarContent';
 import { viewTitles } from '@config/sidebarData';
 import ExportMarkdownModal from '@components/ui/DownloadModal';
 import ThemeSwitcher from '@components/ThemeSwitcher';
+import { useMarkdown } from '@hooks/useMarkdown';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -17,8 +18,11 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const [currentView, setCurrentView] = useState<MenuView>('main');
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+    const { markdown } = useMarkdown();
 
     if (!isOpen) return null;
+
+    const hasMarkdown = markdown.trim().length > 0;
 
     const mainMenuItems: MenuItem[] = [
         {
@@ -32,7 +36,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             icon: IoIosSave,
             label: 'Export',
             description: 'Export current document.',
-            onClick: () => setIsExportModalOpen(true)
+            onClick: () => setIsExportModalOpen(true),
+            disabled: !hasMarkdown
         },
         {
             icon: FaPalette,
@@ -59,7 +64,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
     return (
         <>
-            <aside className="h-full w-100 bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
+            <aside className="h-full w-80 bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
                 {/* Header */}
                 <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
                     {currentView !== 'main' && (
