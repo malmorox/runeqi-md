@@ -1,38 +1,4 @@
-import { FaKeyboard, FaFileExport, FaPalette } from 'react-icons/fa';
-import { IoSettingsSharp } from "react-icons/io5";
-import type { MenuItem, ShortcutItem } from '@/types/sidebar';
-import ThemeSwitcher from '@components/ThemeSwitcher';
-
-export const mainMenuItems: MenuItem[] = [
-    {
-        icon: FaKeyboard,
-        label: 'Keyboard Shortcuts',
-        description: 'View all available shortcuts.',
-        view: 'shortcuts',
-        hasSubview: true
-    },
-    {
-        icon: FaFileExport,
-        label: 'Export',
-        description: 'Export current document.',
-        onClick: () => {
-            alert('trabajando en ello...');
-        }
-    },
-    {
-        icon: FaPalette,
-        label: 'Theme',
-        description: 'Switch between light and dark mode.',
-        inlineComponent: <ThemeSwitcher />
-    },
-    {
-        icon: IoSettingsSharp,
-        label: 'Editor Settings',
-        description: 'Switch between light and dark mode.',
-        view: 'settings',
-        hasSubview: true
-    }
-];
+import type { ShortcutItem } from '@/types/sidebar';
 
 export const shortcuts: ShortcutItem[] = [
     { action: 'Heading', keys: ['Ctrl', 'H'] },
@@ -55,5 +21,5 @@ export const viewTitles: Record<string, string> = {
     'main': 'MENU',
     'shortcuts': 'KEYBOARD SHORTCUTS',
     'theme': 'THEME',
-    'settings': 'EDITOR SETTINGS'
+    'settings': 'SETTINGS'
 };
