@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { MarkdownContext } from "@contexts/MarkdownContext";
 
-export function useMarkdown() {
+export const useMarkdown = () => {
     const context = useContext(MarkdownContext);
-    if (!context) throw new Error("useTheme must be used inside <ThemeProvider>");
+    if (!context) throw new Error("useMarkdown must be used inside <MarkdownProvider>");
     return context;
 }

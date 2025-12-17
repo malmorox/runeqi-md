@@ -4,15 +4,25 @@ import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
 import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
+import { useSettings } from "@hooks/useSettings";
 import { getMarkdownComponents } from "@config/markdownComponents";
 
 // Interprete del código Markdown que viene del contexto (lo captura del editor). Muestra por pantalla la salida final con el tema seleccionado.
 const MarkdownInterpreter = () => {
     const { markdown } = useMarkdown();
     const { theme } = useTheme();
+    const { Settings } = useSettings();
     // Dependiendo si es claro u oscuro los componentes de salida del markdown seran de un color u otro, que se lo pasamos a la libreria que interpreta.
     const components = getMarkdownComponents(theme)
     const isDark = theme === "vs-dark";
+
+
+    const remarkPlugins = [
+        ...(Settings.interpreter.gfm ? [remarkGfm] : []),
+        ...(Settings.interpreter.breaks ? [remarkBreaks] : []),
+    ];
+    
+    const rehypePlugins = Settings.interpreter.allowHtml ? [rehypeRaw] : [];
 
     return (
         <div className={`w-full h-full overflow-auto ${
@@ -20,8 +30,8 @@ const MarkdownInterpreter = () => {
         }`}>
             <div className="p-6 max-w-4xl mx-auto wrap-break-word overflow-wrap-anywhere">
                 <ReactMarkdown
-                    remarkPlugins={[remarkGfm, remarkBreaks]}
-                    rehypePlugins={[rehypeRaw]}
+                    remarkPlugins={remarkPlugins}
+                    rehypePlugins={rehypePlugins}
                     components={components}
                 >
                     {markdown}

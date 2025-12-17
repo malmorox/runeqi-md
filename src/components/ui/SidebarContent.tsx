@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
 import { shortcuts } from '@/config/sidebarData';
+import { useSettings } from '@hooks/useSettings';
 
 interface SidebarContentProps {
     currentView: MenuView;
@@ -13,6 +14,7 @@ const SidebarContent = ({
     mainMenuItems, 
     onMenuItemClick 
 }: SidebarContentProps) => {
+    const { Settings, setSettings, resetSettings } = useSettings();
     
     switch (currentView) {
         case 'main':
@@ -59,7 +61,7 @@ const SidebarContent = ({
                                 className="flex items-center justify-between py-2 px-3 bg-[#C4C4C4] rounded"
                             >
                                 <span className="text-md">{shortcut.action}</span>
-                                <div className="flex gap-1">
+                                <div className="flex">
                                     {shortcut.keys.map((key, keyIndex) => (
                                         <React.Fragment key={keyIndex}>
                                             <kbd className="px-2 py-1 text-xs font-semibold text-[#252526] bg-[#D4D4D4] border border-[#2d2d30] rounded">
@@ -74,6 +76,172 @@ const SidebarContent = ({
                             </div>
                         ))}
                     </div>
+                </div>
+            );
+        
+        case 'settings':
+            return (
+                <div className="overflow-y-auto flex-1 p-3 space-y-3">
+
+                {/* WORKSPACE */}
+                <section className="bg-[#C4C4C4] rounded-md p-3">
+                    <div className="font-semibold text-[#252526]">Workspace</div>
+                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
+                        Choose how you want to work with the editor and preview.
+                    </p>
+
+                    <div className="flex gap-2 flex-wrap">
+                        {(['split', 'editor', 'preview'] as const).map(mode => (
+                            <button
+                                key={mode}
+                                onClick={() =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    workspace: {
+                                        ...s.workspace,
+                                        viewMode: mode,
+                                        swapPanels: mode === "split" ? s.workspace.swapPanels : false,
+                                    },
+                                    }))
+                                }
+                                className={`px-3 py-1 rounded border border-[#2d2d30] cursor-pointer ${
+                                    Settings.workspace.viewMode === mode
+                                        ? 'bg-[#D4D4D4]'
+                                        : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
+                                }`}
+                            >
+                                {mode}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {Settings.workspace.viewMode === "split" && (
+                        <label className="mt-3 flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.workspace.swapPanels}
+                                onChange={(e) =>
+                                setSettings((s) => ({
+                                    ...s,
+                                    workspace: { ...s.workspace, swapPanels: e.target.checked },
+                                }))
+                                }
+                            />
+                            Swap panels (show preview on the left)
+                        </label>
+                    )}
+                </section>
+
+                {/* EDITOR */}
+                <section className="bg-[#C4C4C4] rounded-md p-3">
+                    <div className="font-semibold text-[#252526]">Editor</div>
+                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
+                        Customize how the editor looks and feels while you write.
+                    </p>
+
+                    <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.editor.wordWrap}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    editor: { ...s.editor, wordWrap: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Wrap long lines
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.editor.lineNumbers}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    editor: { ...s.editor, lineNumbers: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Show line numbers
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.editor.minimap}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    editor: { ...s.editor, minimap: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Show minimap
+                        </label>
+                    </div>
+                </section>
+
+                {/* INTERPRETER */}
+                <section className="bg-[#C4C4C4] rounded-md p-3">
+                    <div className="font-semibold text-[#252526]">Preview</div>
+                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
+                        Control how your document is displayed in the preview.
+                    </p>
+
+                    <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.interpreter.gfm}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    interpreter: { ...s.interpreter, gfm: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Enable tables and task lists
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.interpreter.breaks}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    interpreter: { ...s.interpreter, breaks: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Preserve line breaks
+                        </label>
+
+                        <label className="flex items-center gap-2 text-sm text-[#252526]">
+                            <input
+                                type="checkbox"
+                                checked={Settings.interpreter.allowHtml}
+                                onChange={(e) =>
+                                    setSettings(s => ({
+                                    ...s,
+                                    interpreter: { ...s.interpreter, allowHtml: e.target.checked }
+                                    }))
+                                }
+                            />
+                            Allow embedded HTML
+                        </label>
+                    </div>
+                </section>
+
+                <button
+                    onClick={resetSettings}
+                    className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"
+                >
+                    Reset
+                </button>
                 </div>
             );
 
