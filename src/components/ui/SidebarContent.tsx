@@ -1,7 +1,9 @@
 import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
-import { shortcuts } from '@/config/sidebarData';
+import { SHORTCUTS } from '@/config/shortcuts';
 import { useSettings } from '@hooks/useSettings';
+
+const shortcuts = Object.values(SHORTCUTS);
 
 interface SidebarContentProps {
     currentView: MenuView;
@@ -62,12 +64,12 @@ const SidebarContent = ({
             return (
                 <div className="overflow-y-auto flex-1 p-3">
                     <div className="space-y-2">
-                        {shortcuts.map((shortcut, index) => (
+                        {shortcuts.map((shortcut) => (
                             <div
-                                key={index}
+                                key={shortcut.id}
                                 className="flex items-center justify-between py-2 px-3 bg-[#C4C4C4] rounded"
                             >
-                                <span className="text-md">{shortcut.action}</span>
+                                <span className="text-md">{shortcut.label}</span>
                                 <div className="flex">
                                     {shortcut.keys.map((key, keyIndex) => (
                                         <React.Fragment key={keyIndex}>
