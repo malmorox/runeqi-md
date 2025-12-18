@@ -10,7 +10,7 @@ const MarkdownEditor = () => {
     const { markdown, setMarkdown } = useMarkdown();
     const { theme } = useTheme();
     const { setEditorInstance } = useEditor();
-    const { Settings } = useSettings();
+    const { settings } = useSettings();
 
     const handleEditorWillMount: BeforeMount = (monaco) => {
         // tema oscuro personalizado con fondo más claro
@@ -41,9 +41,9 @@ const MarkdownEditor = () => {
                 beforeMount={handleEditorWillMount}
                 onMount={handleEditorDidMount}
                 options={{
-                    lineNumbers: Settings.editor.lineNumbers ? "on" : "off",
-                    wordWrap: Settings.editor.wordWrap ? "on" : "off",
-                    minimap: { enabled: Settings.editor.minimap },
+                    lineNumbers: settings.editor.lineNumbers ? "on" : "off",
+                    wordWrap: settings.editor.wordWrap ? "on" : "off",
+                    minimap: { enabled: settings.editor.minimap },
                     fontSize: 14,
                     scrollBeyondLastLine: false,
                     padding: {

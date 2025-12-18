@@ -15,8 +15,8 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                     isFirst ? 'mt-0' : 'mt-8'
                 } ${
                     isDark 
-                        ? "text-white border-gray-700" 
-                        : "text-gray-900 border-gray-300"
+                        ? "text-white border-neutral-700" 
+                        : "text-neutral-900 border-neutral-300"
                 }`}>
                     {children}
                 </h1>
@@ -29,7 +29,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 <h2 className={`text-3xl font-bold mb-3 ${
                     isFirst ? 'mt-0' : 'mt-6'
                 } ${
-                    isDark ? "text-white" : "text-gray-900"
+                    isDark ? "text-white" : "text-neutral-900"
                 }`}>
                     {children}
                 </h2>
@@ -42,7 +42,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 <h3 className={`text-2xl font-bold mb-2 ${
                     isFirst ? 'mt-0' : 'mt-5'
                 } ${
-                    isDark ? "text-white" : "text-gray-900"
+                    isDark ? "text-white" : "text-neutral-900"
                 }`}>
                     {children}
                 </h3>
@@ -55,7 +55,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 <h4 className={`text-xl font-semibold mb-2 ${
                     isFirst ? 'mt-0' : 'mt-4'
                 } ${
-                    isDark ? "text-gray-200" : "text-gray-800"
+                    isDark ? "text-neutral-200" : "text-neutral-800"
                 }`}>
                     {children}
                 </h4>
@@ -68,7 +68,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 <h5 className={`text-lg font-semibold mb-2 ${
                     isFirst ? 'mt-0' : 'mt-3'
                 } ${
-                    isDark ? "text-gray-200" : "text-gray-800"
+                    isDark ? "text-neutral-200" : "text-neutral-800"
                 }`}>
                     {children}
                 </h5>
@@ -81,7 +81,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 <h6 className={`text-base font-semibold mb-1 ${
                     isFirst ? 'mt-0' : 'mt-2'
                 } ${
-                    isDark ? "text-gray-300" : "text-gray-700"
+                    isDark ? "text-neutral-300" : "text-neutral-700"
                 }`}>
                     {children}
                 </h6>
@@ -89,7 +89,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
         },
         p: ({ children }) => (
             <p className={`my-4 leading-relaxed ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-neutral-200" : "text-neutral-700"
             }`}>
                 {children}
             </p>
@@ -106,14 +106,14 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
         ),
         ul: ({ children }) => (
             <ul className={`list-disc list-inside my-4 space-y-2 ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-neutral-200" : "text-neutral-700"
             }`}>
                 {children}
             </ul>
         ),
         ol: ({ children }) => (
             <ol className={`list-decimal list-inside my-4 space-y-2 ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-neutral-200" : "text-neutral-700"
             }`}>
                 {children}
             </ol>
@@ -124,8 +124,8 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
         blockquote: ({ children }) => (
             <blockquote className={`border-l-4 border-sky-500 pl-4 my-4 italic py-2 ${
                 isDark 
-                    ? "text-gray-300 bg-gray-800/50" 
-                    : "text-gray-600 bg-gray-100/50"
+                    ? "text-neutral-300 bg-neutral-800/50" 
+                    : "text-neutral-600 bg-[#F0EDEB]"
             }`}>
                 {children}
             </blockquote>
@@ -138,8 +138,8 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             return isInline ? (
                 <code className={`px-1.5 py-0.5 rounded text-sm font-mono ${
                     isDark 
-                        ? "bg-gray-800 text-pink-400" 
-                        : "bg-gray-200 text-pink-600"
+                        ? "bg-[#545459] text-white" 
+                        : "bg-neutral-200 text-neutral-700"
                 }`}>
                     {children}
                 </code>
@@ -153,7 +153,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                         margin: 0,
                         padding: '1rem',
                         fontSize: '0.875rem',
-                        backgroundColor: isDark ? '#0d1117' : '#f5f2f0'
+                        backgroundColor: isDark ? '#3C3C40' : 'white'
                     }}
                 >
                     {String(children).replace(/\n$/, '')}
@@ -179,7 +179,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             return (
                 <div className="overflow-x-auto my-4">
                     <table className={`border ${
-                        isDark ? "border-gray-700" : "border-gray-300"
+                        isDark ? "border-neutral-700" : "border-neutral-300"
                     }`}>
                         {children}
                     </table>
@@ -187,20 +187,20 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             );
         },
         thead: ({ children }) => (
-            <thead className={isDark ? "bg-gray-800" : "bg-gray-200"}>
+            <thead className={isDark ? "bg-[#353538]" : "bg-neutral-200"}>
                 {children}
             </thead>
         ),
         tbody: ({ children }) => (
             <tbody className={`divide-y ${
-                isDark ? "divide-gray-700" : "divide-gray-300"
+                isDark ? "divide-neutral-700" : "divide-neutral-300"
             }`}>
                 {children}
             </tbody>
         ),
         tr: ({ children }) => (
             <tr className={`border-b ${
-                isDark ? "border-gray-700" : "border-gray-300"
+                isDark ? "border-neutral-700" : "border-neutral-300"
             }`}>
                 {children}
             </tr>
@@ -208,8 +208,8 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
         th: ({ children }) => (
             <th className={`px-4 py-2 text-left font-semibold border ${
                 isDark 
-                    ? "text-gray-200 border-gray-700" 
-                    : "text-gray-900 border-gray-300"
+                    ? "text-neutral-200 border-neutral-700" 
+                    : "text-neutral-900 border-neutral-300"
             }`}>
                 {children}
             </th>
@@ -217,8 +217,8 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
         td: ({ children }) => (
             <td className={`px-4 py-2 border ${
                 isDark 
-                    ? "text-gray-300 border-gray-700" 
-                    : "text-gray-700 border-gray-300"
+                    ? "text-neutral-300 border-neutral-700" 
+                    : "text-neutral-700 border-neutral-300"
             }`}>
                 {children}
             </td>
@@ -227,24 +227,24 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             <img
                 src={src}
                 alt={alt}
-                className="rounded-lg shadow-lg my-4 max-w-full"
+                className="my-4 max-w-full inline-block"
             />
         ),
         hr: () => (
             <hr className={`my-8 ${
-                isDark ? "border-gray-700" : "border-gray-300"
+                isDark ? "border-neutral-700" : "border-neutral-300"
             }`} />
         ),
         strong: ({ children }) => (
             <strong className={`font-bold ${
-                isDark ? "text-white" : "text-gray-900"
+                isDark ? "text-white" : "text-neutral-900"
             }`}>
                 {children}
             </strong>
         ),
         em: ({ children }) => (
             <em className={`italic ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-neutral-200" : "text-neutral-700"
             }`}>
                 {children}
             </em>

@@ -2,7 +2,7 @@ import React, { createContext, useMemo, useState } from "react";
 
 export type ViewMode = "split" | "editor" | "preview";
 
-export type Settings = {
+export type settings = {
   workspace: {
     viewMode: ViewMode;
     swapPanels: boolean;
@@ -19,28 +19,28 @@ export type Settings = {
   };
 };
 
-const DEFAULT_UI_SETTINGS: Settings = {
+const DEFAULT_UI_SETTINGS: settings = {
   workspace: { viewMode: "split", swapPanels: false },
   editor: { wordWrap: true, lineNumbers: true, minimap: false },
-  interpreter: { gfm: true, breaks: true, allowHtml: false },
+  interpreter: { gfm: true, breaks: false, allowHtml: true },
 };
 
 type SettingsContextValue = {
-  Settings: Settings;
-  setSettings: React.Dispatch<React.SetStateAction<Settings>>;
+  settings: settings;
+  setSettings: React.Dispatch<React.SetStateAction<settings>>;
   resetSettings: () => void;
 };
 
 export const SettingsContext = createContext<SettingsContextValue | null>(null);
 
 export const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
-  const [Settings, setSettings] = useState<Settings>(DEFAULT_UI_SETTINGS);
+  const [settings, setSettings] = useState<settings>(DEFAULT_UI_SETTINGS);
 
   const resetSettings = () => setSettings(DEFAULT_UI_SETTINGS);
 
   const value = useMemo(
-    () => ({ Settings, setSettings, resetSettings }),
-    [Settings]
+    () => ({ settings, setSettings, resetSettings }),
+    [settings]
   );
 
   return (

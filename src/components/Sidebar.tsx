@@ -5,7 +5,7 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { IoIosSave } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
 import SidebarContent from '@components/ui/SidebarContent';
-import { viewTitles } from '@config/sidebarData';
+import { viewTitles } from '@constants/sidebarData';
 import ExportMarkdownModal from '@components/ui/DownloadModal';
 import ThemeSwitcher from '@components/ThemeSwitcher';
 import { useMarkdown } from '@hooks/useMarkdown';

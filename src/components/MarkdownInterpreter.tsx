@@ -5,24 +5,24 @@ import rehypeRaw from "rehype-raw";
 import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
 import { useSettings } from "@hooks/useSettings";
-import { getMarkdownComponents } from "@config/markdownComponents";
+import { getMarkdownComponents } from "@constants/markdownComponents";
 
 // Interprete del código Markdown que viene del contexto (lo captura del editor). Muestra por pantalla la salida final con el tema seleccionado.
 const MarkdownInterpreter = () => {
     const { markdown } = useMarkdown();
     const { theme } = useTheme();
-    const { Settings } = useSettings();
+    const { settings } = useSettings();
     // Dependiendo si es claro u oscuro los componentes de salida del markdown seran de un color u otro, que se lo pasamos a la libreria que interpreta.
     const components = getMarkdownComponents(theme)
     const isDark = theme === "vs-dark";
 
 
     const remarkPlugins = [
-        ...(Settings.interpreter.gfm ? [remarkGfm] : []),
-        ...(Settings.interpreter.breaks ? [remarkBreaks] : []),
+        ...(settings.interpreter.gfm ? [remarkGfm] : []),
+        ...(settings.interpreter.breaks ? [remarkBreaks] : []),
     ];
     
-    const rehypePlugins = Settings.interpreter.allowHtml ? [rehypeRaw] : [];
+    const rehypePlugins = settings.interpreter.allowHtml ? [rehypeRaw] : [];
 
     return (
         <div className={`w-full h-full overflow-auto ${

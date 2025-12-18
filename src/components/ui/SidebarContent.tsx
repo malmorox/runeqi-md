@@ -1,6 +1,6 @@
 import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
-import { SHORTCUTS } from '@/config/shortcuts';
+import { SHORTCUTS } from '@constants/shortcuts';
 import { useSettings } from '@hooks/useSettings';
 
 const shortcuts = Object.values(SHORTCUTS);
@@ -16,7 +16,7 @@ const SidebarContent = ({
     mainMenuItems, 
     onMenuItemClick 
 }: SidebarContentProps) => {
-    const { Settings, setSettings, resetSettings } = useSettings();
+    const { settings, setSettings, resetSettings } = useSettings();
     
     switch (currentView) {
         case 'main':
@@ -120,7 +120,7 @@ const SidebarContent = ({
                                         }))
                                     }
                                     className={`px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] cursor-pointer ${
-                                        Settings.workspace.viewMode === mode
+                                        settings.workspace.viewMode === mode
                                             ? 'bg-[#D4D4D4]'
                                             : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
                                     }`}
@@ -131,11 +131,11 @@ const SidebarContent = ({
                         })}
                     </div>
                     
-                    {Settings.workspace.viewMode === "split" && (
+                    {settings.workspace.viewMode === "split" && (
                         <label className="mt-3 flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.workspace.swapPanels}
+                                checked={settings.workspace.swapPanels}
                                 onChange={(e) =>
                                 setSettings((s) => ({
                                     ...s,
@@ -159,7 +159,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.editor.wordWrap}
+                                checked={settings.editor.wordWrap}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,
@@ -173,7 +173,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.editor.lineNumbers}
+                                checked={settings.editor.lineNumbers}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,
@@ -187,7 +187,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.editor.minimap}
+                                checked={settings.editor.minimap}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,
@@ -211,7 +211,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.interpreter.gfm}
+                                checked={settings.interpreter.gfm}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,
@@ -225,7 +225,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.interpreter.breaks}
+                                checked={settings.interpreter.breaks}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,
@@ -239,7 +239,7 @@ const SidebarContent = ({
                         <label className="flex items-center gap-2 text-sm text-[#252526]">
                             <input
                                 type="checkbox"
-                                checked={Settings.interpreter.allowHtml}
+                                checked={settings.interpreter.allowHtml}
                                 onChange={(e) =>
                                     setSettings(s => ({
                                     ...s,

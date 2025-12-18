@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { headingOptions } from '@constants/toolbar';
 import { 
     FaTextHeight,
     FaBold, 
@@ -27,7 +28,7 @@ import { useMarkdown } from '@hooks/useMarkdown';
 import { useEditor } from "@hooks/useEditor";
 import { useMarkdownActions } from "@hooks/useMarkdownActions";
 import ClearMarkdownModal from "@components/ui/ClearMarkdownModal";
-import { SHORTCUTS } from '@/config/shortcuts';
+import { SHORTCUTS } from '@constants/shortcuts';
 
 interface MarkdownToolbarProps {
     onInsert: (markdown: string, cursorOffset?: number) => void;
@@ -78,16 +79,6 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
     const closeDropdown = () => {
         setOpenDropdown(null);
     };
-
-    // Configuración de encabezados
-    const headingOptions: { label: string; markdown: string; level: 1 | 2 | 3 | 4 | 5 | 6 }[] = [
-        { label: 'Heading 1', markdown: '#', level: 1 },
-        { label: 'Heading 2', markdown: '##', level: 2 },
-        { label: 'Heading 3', markdown: '###', level: 3 },
-        { label: 'Heading 4', markdown: '####', level: 4 },
-        { label: 'Heading 5', markdown: '#####', level: 5 },
-        { label: 'Heading 6', markdown: '######', level: 6 },
-    ];
 
     // Manejadores
     const handleHeadingSelect = (level: 1 | 2 | 3 | 4 | 5 | 6, label: string) => {

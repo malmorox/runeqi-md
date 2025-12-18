@@ -10,7 +10,7 @@
       "@components/*": ["src/components/*"],
       "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@config/*": ["src/config/*"],
+      "@constants/*": ["src/constants/*"],
       "@types/*": ["src/types/*"],
       "@styles/*": ["src/styles/*"],
       "@/*": ["src/*"]

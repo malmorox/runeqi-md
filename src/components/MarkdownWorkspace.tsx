@@ -7,8 +7,8 @@ import { useSettings } from "@hooks/useSettings";
 // Espacio de trabajo dividido en 2 paneles, el editor de Markdown y el intérprete que muestra su salida. Los paneles son redimensionables (de la libreria 'react-resizable-panels'), para dar libertad al usuario a la hora de trabajar.
 const MarkdownWorkspace = () => {
     const { theme } = useTheme();
-    const { Settings } = useSettings();
-    const { viewMode, swapPanels } = Settings.workspace;
+    const { settings } = useSettings();
+    const { viewMode, swapPanels } = settings.workspace;
 
     if (viewMode !== "split") {
         return (

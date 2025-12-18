@@ -56,7 +56,7 @@ export const HeadingContent = ({
     options,
     onSelect
 }: {
-    options: { label: string; markdown: string; level: 1 | 2 | 3 | 4 | 5 | 6 }[];
+    options: { label: string; level: 1 | 2 | 3 | 4 | 5 | 6 }[];
     onSelect: (level: 1 | 2 | 3 | 4 | 5 | 6, label: string) => void;
 }) => {
     const sizes = {
