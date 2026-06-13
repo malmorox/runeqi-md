@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Editor, { type BeforeMount } from "@monaco-editor/react";
 import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
@@ -30,28 +31,27 @@ const MarkdownEditor = () => {
         setEditorInstance(editor);
     };
 
+    const editorOptions = useMemo((): editor.IStandaloneEditorConstructionOptions => ({
+        lineNumbers: settings.editor.lineNumbers ? "on" : "off",
+        wordWrap: settings.editor.wordWrap ? "on" : "off",
+        minimap: { enabled: settings.editor.minimap },
+        fontSize: 14,
+        scrollBeyondLastLine: false,
+        padding: { top: 24, bottom: 24 },
+        automaticLayout: true
+    }), [settings.editor]);
+
     return (
         <div className="w-full h-full">
             <Editor
                 height="100%"
                 defaultLanguage="markdown"
                 theme={theme === 'vs-dark' ? 'customDark' : theme}
-                value={markdown}
+                defaultValue={markdown}
                 onChange={(v) => setMarkdown(v ?? "")}
                 beforeMount={handleEditorWillMount}
                 onMount={handleEditorDidMount}
-                options={{
-                    lineNumbers: settings.editor.lineNumbers ? "on" : "off",
-                    wordWrap: settings.editor.wordWrap ? "on" : "off",
-                    minimap: { enabled: settings.editor.minimap },
-                    fontSize: 14,
-                    scrollBeyondLastLine: false,
-                    padding: {
-                        top: 24,
-                        bottom: 24
-                    },
-                    automaticLayout: true
-                }}
+                options={editorOptions}
             />
         </div>
     );

@@ -1,51 +1,62 @@
-import React, { createContext, useMemo, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
+import type { AppSettings } from "@/types/settings";
+import { DEFAULT_SETTINGS } from "@constants/defaultSettings";
 
-export type ViewMode = "split" | "editor" | "preview";
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
-export type settings = {
-  workspace: {
-    viewMode: ViewMode;
-    swapPanels: boolean;
-  };
-  editor: {
-    wordWrap: boolean;
-    lineNumbers: boolean;
-    minimap: boolean;
-  };
-  interpreter: {
-    gfm: boolean;
-    breaks: boolean;
-    allowHtml: boolean;
-  };
-};
-
-const DEFAULT_UI_SETTINGS: settings = {
-  workspace: { viewMode: "split", swapPanels: false },
-  editor: { wordWrap: true, lineNumbers: true, minimap: false },
-  interpreter: { gfm: true, breaks: false, allowHtml: true },
-};
-
-type SettingsContextValue = {
-  settings: settings;
-  setSettings: React.Dispatch<React.SetStateAction<settings>>;
-  resetSettings: () => void;
-};
+interface SettingsContextValue {
+    settings: AppSettings;
+    updateSettings: (patch: DeepPartial<AppSettings>) => void;
+    resetSettings: () => void;
+}
 
 export const SettingsContext = createContext<SettingsContextValue | null>(null);
 
-export const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
-  const [settings, setSettings] = useState<settings>(DEFAULT_UI_SETTINGS);
+const STORAGE_KEY = "markdown-editor-settings";
 
-  const resetSettings = () => setSettings(DEFAULT_UI_SETTINGS);
+function loadSettings(): AppSettings {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return DEFAULT_SETTINGS;
+        const parsed = JSON.parse(stored) as DeepPartial<AppSettings>;
+        return deepMerge(DEFAULT_SETTINGS, parsed);
+    } catch {
+        return DEFAULT_SETTINGS;
+    }
+}
 
-  const value = useMemo(
-    () => ({ settings, setSettings, resetSettings }),
-    [settings]
-  );
+function deepMerge<T extends object>(base: T, override: DeepPartial<T>): T {
+    const result = { ...base };
+    for (const key in override) {
+        const val = override[key];
+        if (val && typeof val === "object" && !Array.isArray(val)) {
+            result[key] = deepMerge(base[key] as object, val as DeepPartial<object>) as T[typeof key];
+        } else if (val !== undefined) {
+            result[key] = val as T[typeof key];
+        }
+    }
+    return result;
+}
 
-  return (
-    <SettingsContext.Provider value={value}>
-      {children}
-    </SettingsContext.Provider>
-  );
-};
+export function SettingsProvider({ children }: { children: React.ReactNode }) {
+    const [settings, setSettings] = useState<AppSettings>(loadSettings);
+
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    }, [settings]);
+
+    const updateSettings = useCallback((patch: DeepPartial<AppSettings>) => {
+        setSettings(prev => deepMerge(prev, patch));
+    }, []);
+
+    const resetSettings = useCallback(() => {
+        setSettings(DEFAULT_SETTINGS);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SETTINGS));
+    }, []);
+
+    return (
+        <SettingsContext.Provider value={{ settings, updateSettings, resetSettings }}>
+            {children}
+        </SettingsContext.Provider>
+    );
+}

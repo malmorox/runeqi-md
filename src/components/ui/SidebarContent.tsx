@@ -11,13 +11,50 @@ interface SidebarContentProps {
     onMenuItemClick: (item: MenuItem) => void;
 }
 
-const SidebarContent = ({ 
-    currentView, 
-    mainMenuItems, 
-    onMenuItemClick 
+const SettingsSection = ({
+    title,
+    description,
+    children
+}: {
+    title: string;
+    description: string;
+    children: React.ReactNode;
+}) => (
+    <section className="bg-[#C4C4C4] rounded-md p-3 space-y-2">
+        <div>
+            <div className="font-semibold text-[#252526]">{title}</div>
+            <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">{description}</p>
+        </div>
+        {children}
+    </section>
+);
+
+const SettingsToggle = ({
+    label,
+    checked,
+    onChange
+}: {
+    label: string;
+    checked: boolean;
+    onChange: (v: boolean) => void;
+}) => (
+    <label className="flex items-center gap-2 text-sm text-[#252526] cursor-pointer">
+        <input
+            type="checkbox"
+            checked={checked}
+            onChange={e => onChange(e.target.checked)}
+        />
+        {label}
+    </label>
+);
+
+const SidebarContent = ({
+    currentView,
+    mainMenuItems,
+    onMenuItemClick
 }: SidebarContentProps) => {
-    const { settings, setSettings, resetSettings } = useSettings();
-    
+    const { settings, updateSettings, resetSettings } = useSettings();
+
     switch (currentView) {
         case 'main':
             return (
@@ -26,9 +63,7 @@ const SidebarContent = ({
                         <div
                             key={index}
                             onClick={() => {
-                                if (!item.disabled) {
-                                    onMenuItemClick(item);
-                                }
+                                if (!item.disabled) onMenuItemClick(item);
                             }}
                             className={`w-full flex items-start gap-3 px-4 py-3 rounded-md text-left transition-colors
                                 ${item.disabled
@@ -87,177 +122,101 @@ const SidebarContent = ({
                     </div>
                 </div>
             );
-        
+
         case 'settings':
             return (
                 <div className="overflow-y-auto flex-1 p-3 space-y-3">
 
-                {/* WORKSPACE */}
-                <section className="bg-[#C4C4C4] rounded-md p-3">
-                    <div className="font-semibold text-[#252526]">Workspace</div>
-                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
-                        Choose how you want to work with the editor and preview.
-                    </p>
-
-                    <div className="flex gap-2 flex-wrap">
-                        {(['split', 'editor', 'preview'] as const).map(mode => {
-                            const labels = {
-                                split: 'Split View',
-                                editor: 'Editor Only',
-                                preview: 'Preview Only'
-                            };
-                            return (
-                                <button
-                                    key={mode}
-                                    onClick={() =>
-                                        setSettings(s => ({
-                                        ...s,
-                                        workspace: {
-                                            ...s.workspace,
-                                            viewMode: mode,
-                                            swapPanels: mode === "split" ? s.workspace.swapPanels : false,
-                                        },
-                                        }))
-                                    }
-                                    className={`px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] cursor-pointer ${
-                                        settings.workspace.viewMode === mode
-                                            ? 'bg-[#D4D4D4]'
-                                            : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
-                                    }`}
-                                >
-                                    {labels[mode]}
-                                </button>
-                            );
-                        })}
-                    </div>
-                    
-                    {settings.workspace.viewMode === "split" && (
-                        <label className="mt-3 flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                    <SettingsSection title="Workspace" description="Choose how you want to work with the editor and preview.">
+                        <div className="flex gap-2 flex-wrap">
+                            {(['split', 'editor', 'preview'] as const).map(mode => {
+                                const labels = {
+                                    split: 'Split View',
+                                    editor: 'Editor Only',
+                                    preview: 'Preview Only'
+                                };
+                                return (
+                                    <button
+                                        key={mode}
+                                        onClick={() => updateSettings({
+                                            workspace: {
+                                                viewMode: mode,
+                                                swapPanels: mode === 'split' ? settings.workspace.swapPanels : false,
+                                            }
+                                        })}
+                                        className={`px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] cursor-pointer ${
+                                            settings.workspace.viewMode === mode
+                                                ? 'bg-[#D4D4D4]'
+                                                : 'bg-[#bbbbbb] hover:bg-[#D4D4D4]'
+                                        }`}
+                                    >
+                                        {labels[mode]}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {settings.workspace.viewMode === 'split' && (
+                            <SettingsToggle
+                                label="Swap panels (show preview on the left)"
                                 checked={settings.workspace.swapPanels}
-                                onChange={(e) =>
-                                setSettings((s) => ({
-                                    ...s,
-                                    workspace: { ...s.workspace, swapPanels: e.target.checked },
-                                }))
-                                }
+                                onChange={v => updateSettings({ workspace: { swapPanels: v } })}
                             />
-                            Swap panels (show preview on the left)
-                        </label>
-                    )}
-                </section>
-
-                {/* EDITOR */}
-                <section className="bg-[#C4C4C4] rounded-md p-3">
-                    <div className="font-semibold text-[#252526]">Editor</div>
-                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
-                        Customize how the editor looks and feels while you write.
-                    </p>
-
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                        )}
+                    </SettingsSection>
+                    
+                    {(settings.workspace.viewMode === 'split' || settings.workspace.viewMode === 'editor') && (
+                        <SettingsSection title="Editor" description="Customize how the editor looks and feels while you write.">
+                            <SettingsToggle
+                                label="Wrap long lines"
                                 checked={settings.editor.wordWrap}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    editor: { ...s.editor, wordWrap: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ editor: { wordWrap: v } })}
                             />
-                            Wrap long lines
-                        </label>
-
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                            <SettingsToggle
+                                label="Show line numbers"
                                 checked={settings.editor.lineNumbers}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    editor: { ...s.editor, lineNumbers: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ editor: { lineNumbers: v } })}
                             />
-                            Show line numbers
-                        </label>
-
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                            <SettingsToggle
+                                label="Show minimap"
                                 checked={settings.editor.minimap}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    editor: { ...s.editor, minimap: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ editor: { minimap: v } })}
                             />
-                            Show minimap
-                        </label>
-                    </div>
-                </section>
+                        </SettingsSection>
+                    )}
 
-                {/* INTERPRETER */}
-                <section className="bg-[#C4C4C4] rounded-md p-3">
-                    <div className="font-semibold text-[#252526]">Preview</div>
-                    <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">
-                        Control how your document is displayed in the preview.
-                    </p>
-
-                    <div className="space-y-2">
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                    {(settings.workspace.viewMode === 'split' || settings.workspace.viewMode === 'preview') && (
+                        <SettingsSection title="Preview" description="Control how your document is displayed in the preview.">
+                            <SettingsToggle
+                                label="Enable tables and task lists"
                                 checked={settings.interpreter.gfm}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    interpreter: { ...s.interpreter, gfm: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ interpreter: { gfm: v } })}
                             />
-                            Enable tables and task lists
-                        </label>
-
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                            <SettingsToggle
+                                label="Preserve line breaks"
                                 checked={settings.interpreter.breaks}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    interpreter: { ...s.interpreter, breaks: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ interpreter: { breaks: v } })}
                             />
-                            Preserve line breaks
-                        </label>
-
-                        <label className="flex items-center gap-2 text-sm text-[#252526]">
-                            <input
-                                type="checkbox"
+                            <SettingsToggle
+                                label="Allow embedded HTML"
                                 checked={settings.interpreter.allowHtml}
-                                onChange={(e) =>
-                                    setSettings(s => ({
-                                    ...s,
-                                    interpreter: { ...s.interpreter, allowHtml: e.target.checked }
-                                    }))
-                                }
+                                onChange={v => updateSettings({ interpreter: { allowHtml: v } })}
                             />
-                            Allow embedded HTML
-                        </label>
-                    </div>
-                </section>
+                            {settings.workspace.viewMode === 'split' && (
+                                <SettingsToggle
+                                    label="Sync scroll with editor"
+                                    checked={settings.interpreter.syncScroll}
+                                    onChange={v => updateSettings({ interpreter: { syncScroll: v } })}
+                                />
+                            )}
+                        </SettingsSection>
+                    )}
 
-                <button
-                    onClick={resetSettings}
-                    className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"
-                >
-                    Reset
-                </button>
+                    <button
+                        onClick={resetSettings}
+                        className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"
+                    >
+                        Reset to defaults
+                    </button>
                 </div>
             );
 

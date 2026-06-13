@@ -26,6 +26,7 @@ import EmojiPicker from '@components/ui/EmojiPicker';
 import { HeadingContent, InputContent } from '@components/ui/ToolbarDropdownsContent';
 import { useMarkdown } from '@hooks/useMarkdown';
 import { useEditor } from "@hooks/useEditor";
+import { useSettings } from "@hooks/useSettings";
 import { useMarkdownActions } from "@hooks/useMarkdownActions";
 import ClearMarkdownModal from "@components/ui/ClearMarkdownModal";
 import { SHORTCUTS } from '@constants/shortcuts';
@@ -58,8 +59,10 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
     const { undo, redo, canUndo, canRedo } = useEditor();
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const { markdown } = useMarkdown();
+    const { settings } = useSettings();
 
     const isMarkdownEmpty = markdown.trim() === "";
+    const isEditorVisible = settings.workspace.viewMode === 'editor' || settings.workspace.viewMode === 'split';
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -248,68 +251,70 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
     return (
         <>
             <div className="bg-[#1e1e1e] px-2 py-1 flex flex-wrap gap-1 items-center justify-between" ref={dropdownRef}>
-                <nav className="flex flex-wrap gap-0.5 items-center">
-                    <button
-                        onClick={undo}
-                        disabled={!canUndo}
-                        className={`
-                            w-10 aspect-square p-2 rounded transition-colors
-                            flex items-center justify-center
-                            ${canUndo
-                                ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
-                                : 'text-[#555] cursor-not-allowed opacity-50'}
-                        `}
-                        title="Undo"
-                    >
-                        <LuUndo size={24} />
-                    </button>
+                {isEditorVisible && (
+                    <nav className="flex flex-wrap gap-0.5 items-center">
+                        <button
+                            onClick={undo}
+                            disabled={!canUndo}
+                            className={`
+                                w-10 aspect-square p-2 rounded transition-colors
+                                flex items-center justify-center
+                                ${canUndo
+                                    ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
+                                    : 'text-[#555] cursor-not-allowed opacity-50'}
+                            `}
+                            title="Undo"
+                        >
+                            <LuUndo size={24} />
+                        </button>
 
-                    <button
-                        onClick={redo}
-                        disabled={!canRedo}
-                        className={`
-                            w-10 aspect-square p-2 rounded transition-colors
-                            flex items-center justify-center
-                            ${canRedo
-                                ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
-                                : 'text-[#555] cursor-not-allowed opacity-50'}
-                        `}
-                        title="Redo"
-                    >
-                        <LuRedo size={24} />
-                    </button>
+                        <button
+                            onClick={redo}
+                            disabled={!canRedo}
+                            className={`
+                                w-10 aspect-square p-2 rounded transition-colors
+                                flex items-center justify-center
+                                ${canRedo
+                                    ? 'text-[#bbbbbb] hover:bg-[#4d4d4d] cursor-pointer'
+                                    : 'text-[#555] cursor-not-allowed opacity-50'}
+                            `}
+                            title="Redo"
+                        >
+                            <LuRedo size={24} />
+                        </button>
 
-                    <div className="w-px h-6 bg-[#4d4d4d] mx-1" />
+                        <div className="w-px h-6 bg-[#4d4d4d] mx-1" />
 
-                    {toolbarButtons.map((button, index) => (
-                        <React.Fragment key={button.name}>
-                            <div className="relative">
-                                <button
-                                    onClick={() => {
-                                        if (button.type === 'action') {
-                                            closeDropdown();
-                                            button.onClick();
-                                        } else {
-                                            toggleDropdown(button.name);
-                                        }
-                                    }}
-                                    className="w-10 aspect-square group p-2 hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
-                                    title={button.tooltip}
-                                >
-                                    <button.icon size={button.iconSize} className="text-[#bbbbbb] group-hover:text-white transition-colors" />
-                                </button>
-                                {button.type === 'dropdown' && (
-                                    <Dropdown isOpen={openDropdown === button.name}>
-                                        {button.dropdownContent}
-                                    </Dropdown>
+                        {toolbarButtons.map((button, index) => (
+                            <React.Fragment key={button.name}>
+                                <div className="relative">
+                                    <button
+                                        onClick={() => {
+                                            if (button.type === 'action') {
+                                                closeDropdown();
+                                                button.onClick();
+                                            } else {
+                                                toggleDropdown(button.name);
+                                            }
+                                        }}
+                                        className="w-10 aspect-square group p-2 hover:bg-[#4d4d4d] rounded transition-colors flex items-center justify-center cursor-pointer"
+                                        title={button.tooltip}
+                                    >
+                                        <button.icon size={button.iconSize} className="text-[#bbbbbb] group-hover:text-white transition-colors" />
+                                    </button>
+                                    {button.type === 'dropdown' && (
+                                        <Dropdown isOpen={openDropdown === button.name}>
+                                            {button.dropdownContent}
+                                        </Dropdown>
+                                    )}
+                                </div>
+                                {(index === 6 || index === 9) && (
+                                    <div className="w-px h-6 bg-[#4d4d4d] mx-1" />
                                 )}
-                            </div>
-                            {(index === 6 || index === 9) && (
-                                <div className="w-px h-6 bg-[#4d4d4d] mx-1" />
-                            )}
-                        </React.Fragment>
-                    ))}
-                </nav>
+                            </React.Fragment>
+                        ))}
+                    </nav>
+                )}
                 <div className="flex items-center gap-1 ml-auto">
                     <button
                         onClick={() => {

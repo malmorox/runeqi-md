@@ -10,40 +10,36 @@ const MarkdownWorkspace = () => {
     const { settings } = useSettings();
     const { viewMode, swapPanels } = settings.workspace;
 
-    if (viewMode !== "split") {
-        return (
-            <div className="w-full h-full">
-                {viewMode === "editor" ? <MarkdownEditor /> : <MarkdownInterpreter />}
-            </div>
-        );
+    const editorNode = <MarkdownEditor />;
+    const previewNode = <MarkdownInterpreter />;
+
+    if (viewMode === "editor") {
+        return <div className="w-full h-full">{editorNode}</div>;
     }
 
-    const editorPanel = (
-        <Panel defaultSize={50} minSize={20}>
-            <MarkdownEditor />
-        </Panel>
-    );
-
-    const previewPanel = (
-        <Panel defaultSize={50} minSize={20}>
-            <div className="w-full h-full">
-                <MarkdownInterpreter />
-            </div>
-        </Panel>
-    );
+    if (viewMode === "preview") {
+        return <div className="w-full h-full">{previewNode}</div>;
+    }
 
     return (
         <PanelGroup direction="horizontal" className="w-full h-full">
-            {swapPanels ? previewPanel : editorPanel}
-
-            {/* Barra de redimensión */}
-            <PanelResizeHandle className={`w-2 cursor-col-resize ${
-                    theme === "vs-dark"
-                        ? "bg-[#252526] hover:bg-[#212122]"
-                        : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"}`}
-            />
-
-            {swapPanels ? editorPanel : previewPanel}
+            {swapPanels ? (
+                <>
+                    <Panel defaultSize={50} minSize={20}>{previewNode}</Panel>
+                    <PanelResizeHandle className={`w-2 cursor-col-resize ${
+                        theme === "vs-dark" ? "bg-[#252526] hover:bg-[#212122]" : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
+                    }`} />
+                    <Panel defaultSize={50} minSize={20}>{editorNode}</Panel>
+                </>
+            ) : (
+                <>
+                    <Panel defaultSize={50} minSize={20}>{editorNode}</Panel>
+                    <PanelResizeHandle className={`w-2 cursor-col-resize ${
+                        theme === "vs-dark" ? "bg-[#252526] hover:bg-[#212122]" : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
+                    }`} />
+                    <Panel defaultSize={50} minSize={20}>{previewNode}</Panel>
+                </>
+            )}
         </PanelGroup>
     );
 };
