@@ -4,13 +4,13 @@ import { DEFAULT_SETTINGS } from "@constants/defaultSettings";
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
 
-interface SettingsContextValue {
+type SettingsContextType = {
     settings: AppSettings;
     updateSettings: (patch: DeepPartial<AppSettings>) => void;
     resetSettings: () => void;
 }
 
-export const SettingsContext = createContext<SettingsContextValue | null>(null);
+export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 const STORAGE_KEY = "markdown-editor-settings";
 

@@ -175,8 +175,8 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             dropdownContent: (
                 <InputContent
                     fields={[
-                        { name: 'text', label: 'Texto del enlace', placeholder: 'Ej: Ir al sitio' },
-                        { name: 'url', label: 'URL del enlace', placeholder: 'https://ejemplo.com' }
+                        { name: 'text', label: 'Link text', placeholder: 'Ex: Go to site' },
+                        { name: 'url', label: 'Link URL', placeholder: 'https://example.com' }
                     ]}
                     onSubmit={handleLinkInsert}
                 />
@@ -231,8 +231,8 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             dropdownContent:  (
                 <InputContent
                     fields={[
-                        { name: 'alt', label: 'Texto alternativo', placeholder: 'Descripción' },
-                        { name: 'url', label: 'URL de la imagen', placeholder: 'https://ejemplo.com/img.jpg' }
+                        { name: 'alt', label: 'Alt text', placeholder: 'Description' },
+                        { name: 'url', label: 'Image URL', placeholder: 'https://example.com/image.jpg' }
                     ]}
                     onSubmit={handleImageInsert}
                 />

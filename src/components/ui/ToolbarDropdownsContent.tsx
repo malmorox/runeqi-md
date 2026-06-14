@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const InputContent = ({ 
     fields, 
     onSubmit, 
-    buttonText = "Insertar" 
+    buttonText = "Insert" 
 }: { 
     fields: { name: string; label: string; placeholder: string; defaultValue?: string }[];
     onSubmit: (values: Record<string, string>) => void;

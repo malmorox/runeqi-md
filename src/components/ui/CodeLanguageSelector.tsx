@@ -48,7 +48,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
             <div className="p-3 min-w-[280px]">
                 <div className="mb-3">
                     <label className="block text-xs font-medium text-[#cccccc] mb-2">
-                        Especificar lenguaje
+                        Specify language
                     </label>
                     <input
                         type="text"
@@ -65,7 +65,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
                         onClick={handleCustomSubmit}
                         className="flex-1 bg-sky-500 text-white px-3 py-2 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer"
                     >
-                        Insertar
+                        Insert
                     </button>
                     <button
                         onClick={() => {
@@ -74,7 +74,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
                         }}
                         className="flex-1 bg-[#cccccc] text-[#1e1e1e] px-3 py-2 rounded text-sm hover:bg-[#A8A8A8] transition-colors cursor-pointer"
                     >
-                        Cancelar
+                        Cancel
                     </button>
                 </div>
             </div>
@@ -107,7 +107,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
                     onClick={() => setShowCustomInput(true)}
                     className="w-full px-3 py-1 text-sm font-medium text-sky-600 bg-sky-50 border border-sky-200 rounded hover:bg-sky-100 hover:border-sky-400 transition-colors cursor-pointer"
                 >
-                    Otro lenguaje...
+                    Other language...
                 </button>
             </div>
         </div>

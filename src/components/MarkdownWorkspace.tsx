@@ -23,23 +23,11 @@ const MarkdownWorkspace = () => {
 
     return (
         <PanelGroup direction="horizontal" className="w-full h-full">
-            {swapPanels ? (
-                <>
-                    <Panel defaultSize={50} minSize={20}>{previewNode}</Panel>
-                    <PanelResizeHandle className={`w-2 cursor-col-resize ${
-                        theme === "vs-dark" ? "bg-[#252526] hover:bg-[#212122]" : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
-                    }`} />
-                    <Panel defaultSize={50} minSize={20}>{editorNode}</Panel>
-                </>
-            ) : (
-                <>
-                    <Panel defaultSize={50} minSize={20}>{editorNode}</Panel>
-                    <PanelResizeHandle className={`w-2 cursor-col-resize ${
-                        theme === "vs-dark" ? "bg-[#252526] hover:bg-[#212122]" : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
-                    }`} />
-                    <Panel defaultSize={50} minSize={20}>{previewNode}</Panel>
-                </>
-            )}
+            <Panel defaultSize={50} minSize={20}>{swapPanels ? previewNode : editorNode}</Panel>
+            <PanelResizeHandle className={`w-2 cursor-col-resize ${
+                theme === "vs-dark" ? "bg-[#252526] hover:bg-[#212122]" : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
+            }`} />
+            <Panel defaultSize={50} minSize={20}>{swapPanels ? editorNode : previewNode}</Panel>
         </PanelGroup>
     );
 };

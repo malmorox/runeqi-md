@@ -18,7 +18,7 @@ const EmojiSelector = ({ onSelect }: EmojiSelectorProps) => {
                 width={320}
                 height={400}
                 theme={Theme.DARK}
-                searchPlaceHolder="Buscar emoji..."
+                searchPlaceHolder="Search emoji..."
                 previewConfig={{
                     showPreview: false
                 }}

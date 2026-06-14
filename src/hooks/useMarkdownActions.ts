@@ -9,7 +9,7 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
     const generateTable = useCallback((rows: number, cols: number) => {
         let table = '|';
         for (let i = 0; i < cols; i++) {
-            table += ` Columna ${i + 1} |`;
+            table += ` Column ${i + 1} |`;
         }
         table += '\n|';
         for (let i = 0; i < cols; i++) {
@@ -18,7 +18,7 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
         for (let i = 0; i < rows; i++) {
             table += '\n|';
             for (let j = 0; j < cols; j++) {
-                table += ` Celda ${i + 1}-${j + 1} |`;
+                table += ` Cell ${i + 1}-${j + 1} |`;
             }
         }
         //table += '\n';
@@ -31,22 +31,22 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
     }, [onInsert]);
 
     const insertBold = useCallback(() => {
-        const text = 'texto en negrita';
+        const text = 'bold text';
         onInsert(`**${text}**`, -2);
     }, [onInsert]);
 
     const insertItalic = useCallback(() => {
-        const text = 'texto en cursiva';
+        const text = 'italic text';
         onInsert(`*${text}*`, -1);
     }, [onInsert]);
 
     const insertStrikethrough = useCallback(() => {
-        const text = 'texto tachado';
+        const text = 'strikethrough text';
         onInsert(`~${text}~`, -1);
     }, [onInsert]);
 
     const insertQuote = useCallback(() => {
-        const text = 'texto citado';
+        const text = 'quoted text';
         onInsert(`> ${text}`);
     }, [onInsert]);
 
@@ -56,30 +56,30 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
     }, [onInsert]);
 
     const insertLink = useCallback((text?: string, url?: string) => {
-        const linkText = text || 'texto del enlace';
-        const linkUrl = url || 'https://ejemplo.com';
+        const linkText = text || 'link text';
+        const linkUrl = url || 'https://example.com';
         onInsert(`[${linkText}](${linkUrl})`);
     }, [onInsert]);
 
     const insertImage = useCallback((alt?: string, url?: string) => {
-        const altText = alt || 'descripción';
-        const imageUrl = url || 'https://ejemplo.com/imagen.jpg';
+        const altText = alt || 'description';
+        const imageUrl = url || 'https://example.com/image.jpg';
         onInsert(`![${altText}](${imageUrl})`);
     }, [onInsert]);
 
     // Listas
     const insertUnorderedList = useCallback(() => {
-        const content = '- Elemento 1\n- Elemento 2\n- Elemento 3';
+        const content = '- Element 1\n- Element 2\n- Element 3';
         onInsert(content);
     }, [onInsert]);
 
     const insertOrderedList = useCallback(() => {
-        const content = '1. Elemento 1\n2. Elemento 2\n3. Elemento 3';
+        const content = '1. Element 1\n2. Element 2\n3. Element 3';
         onInsert(content);
     }, [onInsert]);
 
     const insertTaskList = useCallback(() => {
-        const content = '- [x] Tarea 1\n- [x] Tarea 2\n- [ ] Tarea 3';
+        const content = '- [x] Task 1\n- [x] Task 2\n- [ ] Task 3';
         onInsert(content);
     }, [onInsert]);
 
