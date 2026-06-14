@@ -250,9 +250,9 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
 
     return (
         <>
-            <div className="bg-[#1e1e1e] px-2 py-1 flex flex-wrap gap-1 items-center justify-between" ref={dropdownRef}>
+            <div className="bg-[#1e1e1e] px-2 py-1 flex gap-1 items-center justify-between" ref={dropdownRef}>
                 {isEditorVisible && (
-                    <nav className="flex flex-wrap gap-0.5 items-center">
+                    <nav className="flex gap-0.5 items-center">
                         <button
                             onClick={undo}
                             disabled={!canUndo}
@@ -315,7 +315,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
                         ))}
                     </nav>
                 )}
-                <div className="flex items-center gap-1 ml-auto">
+                <div className="flex items-center gap-1 ml-auto shrink-0">
                     <button
                         onClick={() => {
                             if (isMarkdownEmpty) return;

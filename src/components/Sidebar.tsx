@@ -64,7 +64,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
     return (
         <>
-            <aside className="h-full w-80 bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
+            <aside className="fixed inset-y-0 right-0 w-full sm:relative sm:w-80 h-full bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
                 {/* Header */}
                 <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
                     {currentView !== 'main' && (
