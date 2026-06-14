@@ -22,8 +22,8 @@ A friendly, powerful, and fully customizable open-source in-browser Markdown edi
 
 ```bash
 # Clone the repository
-git clone https://github.com/malmorox/YOUR_REPO.git
-cd YOUR_REPO
+git clone https://github.com/malmorox/nurqi-md.git
+cd nurqi-md
 
 # Install dependencies
 npm install
