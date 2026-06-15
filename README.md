@@ -1,4 +1,4 @@
-# NurQi – Markdown Editor
+# RunQi – Markdown Editor
 
 A friendly, powerful, and fully customizable open-source in-browser Markdown editor with real-time preview.
 
@@ -22,8 +22,8 @@ A friendly, powerful, and fully customizable open-source in-browser Markdown edi
 
 ```bash
 # Clone the repository
-git clone https://github.com/malmorox/nurqi-md.git
-cd nurqi-md
+git clone https://github.com/malmorox/runqi-md.git
+cd runqi-md
 
 # Install dependencies
 npm install
