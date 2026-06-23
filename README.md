@@ -1,4 +1,4 @@
-# RunQi – Markdown Editor
+# RuneQi – Markdown Editor
 
 A friendly, powerful, and fully customizable open-source in-browser Markdown editor with real-time preview.
 
@@ -22,8 +22,8 @@ A friendly, powerful, and fully customizable open-source in-browser Markdown edi
 
 ```bash
 # Clone the repository
-git clone https://github.com/malmorox/runqi-md.git
-cd runqi-md
+git clone https://github.com/malmorox/runeqi-md.git
+cd runeqi-md
 
 # Install dependencies
 npm install
