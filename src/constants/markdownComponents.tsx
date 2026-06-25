@@ -130,7 +130,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 {children}
             </blockquote>
         ),
-        code: ({ node, className, children, ...props }) => {
+        code: ({ className, children }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             const isInline = !className;

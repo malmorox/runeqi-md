@@ -109,9 +109,8 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
         closeDropdown();
     };
 
-    //const formatShortcutKeys = (keys: string[]) => keys.join('+');
-    //const buildTooltip = (label: string, keys: string[]) => `${label} – ${formatShortcutKeys(keys)}`;
-    const buildTooltip = (label: string, keys: string[]) => label;
+    const formatShortcutKeys = (keys: string[]) => keys.join('+');
+    const buildTooltip = (label: string, keys: string[]) => `${label} – ${formatShortcutKeys(keys)}`;
 
     // Botones del la barra de herramientas
     const toolbarButtons: ToolbarButton[] = [
