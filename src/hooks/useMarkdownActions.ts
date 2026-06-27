@@ -13,7 +13,7 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
         }
         table += '\n|';
         for (let i = 0; i < cols; i++) {
-            table += ' --------- |';
+            table += ' -------- |';
         }
         for (let i = 0; i < rows; i++) {
             table += '\n|';
