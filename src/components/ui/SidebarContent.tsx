@@ -139,12 +139,7 @@ const SidebarContent = ({
                                 return (
                                     <button
                                         key={mode}
-                                        onClick={() => updateSettings({
-                                            workspace: {
-                                                viewMode: mode,
-                                                swapPanels: mode === 'split' ? settings.workspace.swapPanels : false,
-                                            }
-                                        })}
+                                        onClick={() => updateSettings({ workspace: { viewMode: mode } })}
                                         className={`px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] cursor-pointer ${
                                             settings.workspace.viewMode === mode
                                                 ? 'bg-[#D4D4D4]'
@@ -156,13 +151,6 @@ const SidebarContent = ({
                                 );
                             })}
                         </div>
-                        {settings.workspace.viewMode === 'split' && (
-                            <SettingsToggle
-                                label="Swap panels (show preview on the left)"
-                                checked={settings.workspace.swapPanels}
-                                onChange={v => updateSettings({ workspace: { swapPanels: v } })}
-                            />
-                        )}
                     </SettingsSection>
                     
                     {(settings.workspace.viewMode === 'split' || settings.workspace.viewMode === 'editor') && (
