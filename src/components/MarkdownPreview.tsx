@@ -8,7 +8,7 @@ import { useSettings } from "@hooks/useSettings";
 import { getMarkdownComponents } from "@constants/markdownComponents";
 
 // Interprete del código Markdown que viene del contexto (lo captura del editor). Muestra por pantalla la salida final con el tema seleccionado.
-const MarkdownInterpreter = () => {
+const MarkdownPreview = () => {
     const { markdown } = useMarkdown();
     const { theme } = useTheme();
     const { settings } = useSettings();
@@ -41,4 +41,4 @@ const MarkdownInterpreter = () => {
     );
 }
 
-export default MarkdownInterpreter
+export default MarkdownPreview

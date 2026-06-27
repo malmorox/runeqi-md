@@ -3,7 +3,6 @@ export type FontFamily = "mono" | "sans" | "serif";
 
 export interface WorkspaceSettings {
     viewMode: ViewMode;
-    swapPanels: boolean;
 }
 
 export interface EditorSettings {

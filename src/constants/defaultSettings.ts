@@ -2,8 +2,7 @@ import type { AppSettings } from "@/types/settings";
 
 export const DEFAULT_SETTINGS: AppSettings = {
     workspace: {
-        viewMode: "split",
-        swapPanels: false,
+        viewMode: "split"
     },
     editor: {
         fontSize: 14,

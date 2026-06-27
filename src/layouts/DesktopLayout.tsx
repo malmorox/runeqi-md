@@ -11,17 +11,16 @@ const DesktopLayout = () => {
     return (
         <div className="w-screen h-screen flex overflow-hidden">
             <div className="flex-1 min-w-0 h-full flex flex-col">
+                {/* Toolbar */}
                 <div className="shrink-0">
-                    {/* Toolbar */}
                     <Toolbar 
                         onInsert={insertMarkdown} 
                         onSidebarToggle={() => setSidebarOpen(!sidebarOpen)} 
                         isSidebarOpen={sidebarOpen}
                     />
                 </div>
-                {/* Paneles */}
+                {/* Espacio de trabajo */}
                 <div className="w-full h-full bg-[#1e1e1e] overflow-hidden"> 
-                    {/* Espacio de trabajo */}
                     <MarkdownWorkspace />
                 </div>
             </div>
