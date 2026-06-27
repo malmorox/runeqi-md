@@ -94,16 +94,22 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 {children}
             </p>
         ),
-        a: ({ href, children }) => (
-            <a
-                href={href}
-                className="text-sky-500 hover:text-sky-600 hover:underline transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {children}
-            </a>
-        ),
+        a: ({ href, children }) => {
+            const url = href && !href.startsWith('http') && !href.startsWith('mailto') 
+                ? `https://${href}` 
+                : href;
+            
+            return (
+                <a
+                    href={url}
+                    className="text-sky-500 hover:text-sky-600 hover:underline transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {children}
+                </a>
+            );
+        },
         ul: ({ children }) => (
             <ul className={`list-disc list-inside my-4 space-y-2 ${
                 isDark ? "text-neutral-200" : "text-neutral-700"
@@ -118,9 +124,28 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 {children}
             </ol>
         ),
-        li: ({ children }) => (
-            <li className="ml-4">{children}</li>
-        ),
+        li: ({ children, node }) => {
+            const isTaskItem = node?.properties?.className?.toString().includes('task-list-item');
+            
+            return (
+                <li className={`ml-4 ${isTaskItem ? 'list-none flex items-center gap-2' : ''}`}>
+                    {children}
+                </li>
+            );
+        },
+        input: ({ type, checked }) => {
+            if (type === 'checkbox') {
+                return (
+                    <input
+                        type="checkbox"
+                        checked={checked}
+                        readOnly
+                        className="mr-2 accent-sky-500"
+                    />
+                );
+            }
+            return <input type={type} />;
+        },
         blockquote: ({ children }) => (
             <blockquote className={`border-l-4 border-sky-500 pl-4 my-4 italic py-2 ${
                 isDark 
@@ -130,10 +155,13 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                 {children}
             </blockquote>
         ),
-        code: ({ className, children }) => {
+        code: ({ className, children, node }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
-            const isInline = !className;
+            const isInline = node?.position && !className;
+            const content = String(children ?? '').trim();
+
+            if (!isInline && !content.trim()) return null;
             
             return isInline ? (
                 <code className={`px-1.5 py-0.5 rounded text-sm font-mono ${
@@ -141,12 +169,12 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                         ? "bg-[#545459] text-white" 
                         : "bg-neutral-200 text-neutral-700"
                 }`}>
-                    {children}
+                    {content}
                 </code>
             ) : (
                 <SyntaxHighlighter
                     style={isDark ? vscDarkPlus : prism}
-                    language={language}
+                    language={language || 'plaintext'}
                     PreTag="div"
                     className="my-4 rounded-lg overflow-hidden"
                     customStyle={{
@@ -156,7 +184,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
                         backgroundColor: isDark ? '#3C3C40' : 'white'
                     }}
                 >
-                    {String(children).replace(/\n$/, '')}
+                    {content}
                 </SyntaxHighlighter>
             );
         },
