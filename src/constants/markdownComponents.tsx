@@ -129,7 +129,7 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             
             return (
                 <li className={`ml-4 ${isTaskItem ? 'list-none flex items-center gap-2' : ''}`}>
-                    {children}
+                    <span className="[&>p]:my-0 [&>p]:inline">{children}</span>
                 </li>
             );
         },
