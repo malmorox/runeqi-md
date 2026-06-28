@@ -4,6 +4,7 @@ import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
 import { useEditor } from "@hooks/useEditor";
 import { useSettings } from "@hooks/useSettings";
+import { useScrollSync } from "@hooks/useScrollSync";
 import type { editor } from 'monaco-editor';
 
 // Editor de Markdown con Monaco que sincroniza el contenido y aplica el tema seleccionado.
@@ -12,6 +13,7 @@ const MarkdownEditor = () => {
     const { theme } = useTheme();
     const { setEditorInstance } = useEditor();
     const { settings } = useSettings();
+    const { setEditorScroll, onEditorScroll } = useScrollSync();
 
     const handleEditorWillMount: BeforeMount = (monaco) => {
         // tema oscuro personalizado con fondo más claro
@@ -29,6 +31,21 @@ const MarkdownEditor = () => {
 
     const handleEditorDidMount: OnMount = (editor, monaco) => {
         setEditorInstance(editor);
+
+        let isSyncing = false;
+
+        editor.onDidScrollChange((e) => {
+            if (isSyncing || !settings.workspace.syncScroll) return
+            const percentage = e.scrollTop / (editor.getScrollHeight() - editor.getLayoutInfo().height);
+            setEditorScroll(percentage);
+        });
+
+        onEditorScroll((percentage) => {
+            if (!settings.workspace.syncScroll) return;
+            isSyncing = true;
+            editor.setScrollTop(percentage * (editor.getScrollHeight() - editor.getLayoutInfo().height));
+            setTimeout(() => isSyncing = false, 50);
+        });
 
         editor.addCommand(monaco.KeyCode.Enter, () => {
             const model = editor.getModel();
