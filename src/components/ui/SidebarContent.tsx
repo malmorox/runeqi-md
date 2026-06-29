@@ -152,7 +152,7 @@ const SidebarContent = ({
                         </div>
                         {settings.workspace.viewMode === 'split' && (
                             <SettingsToggle
-                                label="Sync scroll with editor"
+                                label="Sync scroll"
                                 checked={settings.workspace.syncScroll}
                                 onChange={v => updateSettings({ workspace: { syncScroll: v } })}
                             />
