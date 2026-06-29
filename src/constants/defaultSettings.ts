@@ -2,7 +2,8 @@ import type { AppSettings } from "@/types/settings";
 
 export const DEFAULT_SETTINGS: AppSettings = {
     workspace: {
-        viewMode: "split"
+        viewMode: "split",
+        syncScroll: true
     },
     editor: {
         fontSize: 14,
@@ -17,7 +18,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
         gfm: true,
         breaks: false,
         allowHtml: true,
-        codeHighlight: true,
-        syncScroll: true,
+        codeHighlight: true
     },
 };

@@ -3,6 +3,7 @@ export type FontFamily = "mono" | "sans" | "serif";
 
 export interface WorkspaceSettings {
     viewMode: ViewMode;
+    syncScroll: boolean;
 }
 
 export interface EditorSettings {
@@ -20,7 +21,6 @@ export interface InterpreterSettings {
     breaks: boolean;
     allowHtml: boolean;
     codeHighlight: boolean;
-    syncScroll: boolean;
 }
 
 export interface AppSettings {

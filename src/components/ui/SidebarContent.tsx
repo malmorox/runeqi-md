@@ -127,7 +127,6 @@ const SidebarContent = ({
         case 'settings':
             return (
                 <div className="overflow-y-auto flex-1 p-3 space-y-3">
-
                     <SettingsSection title="Workspace" description="Choose how you want to work with the editor and preview.">
                         <div className="flex gap-2 flex-wrap">
                             {(['split', 'editor', 'preview'] as const).map(mode => {
@@ -151,6 +150,13 @@ const SidebarContent = ({
                                 );
                             })}
                         </div>
+                        {settings.workspace.viewMode === 'split' && (
+                            <SettingsToggle
+                                label="Sync scroll with editor"
+                                checked={settings.workspace.syncScroll}
+                                onChange={v => updateSettings({ workspace: { syncScroll: v } })}
+                            />
+                        )}
                     </SettingsSection>
                     
                     {(settings.workspace.viewMode === 'split' || settings.workspace.viewMode === 'editor') && (
@@ -190,13 +196,6 @@ const SidebarContent = ({
                                 checked={settings.interpreter.allowHtml}
                                 onChange={v => updateSettings({ interpreter: { allowHtml: v } })}
                             />
-                            {settings.workspace.viewMode === 'split' && (
-                                <SettingsToggle
-                                    label="Sync scroll with editor"
-                                    checked={settings.interpreter.syncScroll}
-                                    onChange={v => updateSettings({ interpreter: { syncScroll: v } })}
-                                />
-                            )}
                         </SettingsSection>
                     )}
 
