@@ -30,7 +30,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             label: 'Keyboard Shortcuts',
             description: 'View all available shortcuts.',
             view: 'shortcuts',
-            hasSubview: true
+            hasSubview: true,
+            disabled: true // Enable this when shortcuts are implemented
         },
         {
             icon: IoIosSave,

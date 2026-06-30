@@ -98,9 +98,6 @@ const SidebarContent = ({
         case 'shortcuts':
             return (
                 <div className="overflow-y-auto space-y-2 flex-1 p-3">
-                    <div className="mb-3 px-3 py-2 bg-[#fcd527] rounded-md text-xs text-[#252526] border border-[#2d2d30]">
-                        Keyboard shortcuts are coming in a future update.
-                    </div>
                     {shortcuts.map((shortcut) => (
                         <div
                             key={shortcut.id}

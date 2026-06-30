@@ -109,16 +109,17 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
         closeDropdown();
     };
 
-    const formatShortcutKeys = (keys: string[]) => keys.join('+');
-    const buildTooltip = (label: string, keys: string[]) => `${label} – ${formatShortcutKeys(keys)}`;
-
+    //const formatShortcutKeys = (keys: string[]) => keys.join('+');
+    //const buildTooltip = (label: string, keys: string[]) => `${label} – ${formatShortcutKeys(keys)}`;
+    const buildTooltip = (label: string) => label;
+    
     // Botones del la barra de herramientas
     const toolbarButtons: ToolbarButton[] = [
         {
             type: 'dropdown',
             icon: FaTextHeight,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.heading.label, SHORTCUTS.heading.keys),
+            tooltip: buildTooltip(SHORTCUTS.heading.label/*, SHORTCUTS.heading.keys*/),
             name: 'heading',
             dropdownContent: (
                 <HeadingContent 
@@ -131,7 +132,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaBold,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.bold.label, SHORTCUTS.bold.keys),
+            tooltip: buildTooltip(SHORTCUTS.bold.label/*, SHORTCUTS.bold.keys*/),
             name: 'bold',
             onClick: () => actions.insertBold()
         },
@@ -139,7 +140,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaItalic,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.italic.label, SHORTCUTS.italic.keys),
+            tooltip: buildTooltip(SHORTCUTS.italic.label/*, SHORTCUTS.italic.keys*/),
             name: 'italic',
             onClick: () => actions.insertItalic()
         },
@@ -147,7 +148,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaStrikethrough,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.strikethrough.label, SHORTCUTS.strikethrough.keys),
+            tooltip: buildTooltip(SHORTCUTS.strikethrough.label/*, SHORTCUTS.strikethrough.keys*/),
             name: 'strikethrough',
             onClick: () => actions.insertStrikethrough()
         },
@@ -155,7 +156,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaQuoteRight,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.quote.label, SHORTCUTS.quote.keys),
+            tooltip: buildTooltip(SHORTCUTS.quote.label/*, SHORTCUTS.quote.keys*/),
             name: 'quote',
             onClick: () => actions.insertQuote()
         },
@@ -163,7 +164,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: IoCode,
             iconSize: 22,
-            tooltip: buildTooltip(SHORTCUTS.code.label, SHORTCUTS.code.keys),
+            tooltip: buildTooltip(SHORTCUTS.code.label/*, SHORTCUTS.code.keys*/),
             name: 'code',
             onClick: () => actions.insertCode()
         },
@@ -171,7 +172,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'dropdown',
             icon: FaLink,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.link.label, SHORTCUTS.link.keys),
+            tooltip: buildTooltip(SHORTCUTS.link.label/*, SHORTCUTS.link.keys*/),
             name: 'link',
             dropdownContent: (
                 <InputContent
@@ -187,7 +188,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaListUl,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['unordered-list'].label, SHORTCUTS['unordered-list'].keys),
+            tooltip: buildTooltip(SHORTCUTS['unordered-list'].label/*, SHORTCUTS['unordered-list'].keys*/),
             name: 'unordered-list',
             onClick: () => actions.insertUnorderedList()
         },
@@ -195,7 +196,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaListOl,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['ordered-list'].label, SHORTCUTS['ordered-list'].keys),
+            tooltip: buildTooltip(SHORTCUTS['ordered-list'].label/*, SHORTCUTS['ordered-list'].keys*/),
             name: 'ordered-list',
             onClick: () => actions.insertOrderedList()
         },
@@ -203,7 +204,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'action',
             icon: FaListCheck,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['task-list'].label, SHORTCUTS['task-list'].keys),
+            tooltip: buildTooltip(SHORTCUTS['task-list'].label/*, SHORTCUTS['task-list'].keys*/),
             name: 'task-list',
             onClick: () => actions.insertTaskList()
         },
@@ -211,7 +212,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'dropdown',
             icon: PiCodeBlockBold,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.codeblock.label, SHORTCUTS.codeblock.keys),
+            tooltip: buildTooltip(SHORTCUTS.codeblock.label/*, SHORTCUTS.codeblock.keys*/),
             name: 'codeblock',
             dropdownContent: <CodeLanguageSelector onSelect={handleCodeBlockSelect} />
         },
@@ -219,7 +220,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'dropdown',
             icon: BiTable,
             iconSize: 21,
-            tooltip: buildTooltip(SHORTCUTS.table.label, SHORTCUTS.table.keys),
+            tooltip: buildTooltip(SHORTCUTS.table.label/*, SHORTCUTS.table.keys*/),
             name: 'table',
             dropdownContent: <TableRowsColumnsSelector onSelect={handleTableSelect} />
         },
@@ -227,7 +228,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'dropdown',
             icon: FaRegImage,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.image.label, SHORTCUTS.image.keys),
+            tooltip: buildTooltip(SHORTCUTS.image.label/*, SHORTCUTS.image.keys*/),
             name: 'image',
             dropdownContent:  (
                 <InputContent
@@ -243,7 +244,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen }: MarkdownToolbarPr
             type: 'dropdown',
             icon: MdInsertEmoticon,
             iconSize: 21,
-            tooltip: buildTooltip(SHORTCUTS.emoji.label, SHORTCUTS.emoji.keys),
+            tooltip: buildTooltip(SHORTCUTS.emoji.label/*, SHORTCUTS.emoji.keys*/),
             name: 'emoji',
             dropdownContent: <EmojiPicker onSelect={actions.insertEmoji} />
         }
