@@ -14,7 +14,7 @@ const MarkdownEditor = () => {
     const { theme } = useTheme();
     const { setEditorInstance, loadFileModel } = useEditor();
     const { settings } = useSettings();
-    const { setEditorScroll, onEditorScroll } = useScrollSync();
+    const { registerEditor } = useScrollSync();
     const { activeFileId } = useActiveFile();
     const { handleChange } = useFileContent(activeFileId, (content) => loadFileModel(activeFileId!, content));
 
@@ -34,21 +34,7 @@ const MarkdownEditor = () => {
 
     const handleEditorDidMount: OnMount = (editor, monaco) => {
         setEditorInstance(editor, monaco);
-
-        let isSyncing = false;
-
-        editor.onDidScrollChange((e) => {
-            if (isSyncing || !settings.workspace.syncScroll) return
-            const percentage = e.scrollTop / (editor.getScrollHeight() - editor.getLayoutInfo().height);
-            setEditorScroll(percentage);
-        });
-
-        onEditorScroll((percentage) => {
-            if (!settings.workspace.syncScroll) return;
-            isSyncing = true;
-            editor.setScrollTop(percentage * (editor.getScrollHeight() - editor.getLayoutInfo().height));
-            setTimeout(() => isSyncing = false, 50);
-        });
+        registerEditor(editor);
 
         editor.addCommand(monaco.KeyCode.Enter, () => {
             const model = editor.getModel();

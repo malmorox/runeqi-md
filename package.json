@@ -15,6 +15,7 @@
     "dexie": "^4.4.5",
     "dexie-react-hooks": "^4.4.0",
     "emoji-picker-react": "^4.16.1",
+    "mixpanel-browser": "^2.82.1",
     "react": "^19.2.0",
     "react-arborist": "^3.16.0",
     "react-dom": "^19.2.0",
