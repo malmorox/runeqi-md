@@ -2,6 +2,8 @@ import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
 import { SHORTCUTS } from '@constants/shortcuts';
 import { useSettings } from '@hooks/useSettings';
+import SidebarMenuItem from '@components/ui/SidebarMenuItem';
+import ImportExportPanel from '@components/ui/ImportExportPanel';
 
 const shortcuts = Object.values(SHORTCUTS);
 
@@ -59,41 +61,18 @@ const SidebarContent = ({
         case 'main':
             return (
                 <div className="overflow-y-auto flex-1 p-3">
-                    {mainMenuItems.map((item, index) => (
-                        <div
-                            key={index}
-                            onClick={() => {
-                                if (!item.disabled) onMenuItemClick(item);
-                            }}
-                            className={`w-full flex items-start gap-3 px-4 py-3 rounded-md text-left transition-colors
-                                ${item.disabled
-                                    ? 'opacity-50 cursor-not-allowed'
-                                    : item.inlineComponent
-                                        ? 'cursor-default'
-                                        : 'cursor-pointer hover:bg-[#C4C4C4]'
-                                }
-                            `}
-                        >
-                            <div className="shrink-0 flex items-center self-stretch">
-                                <item.icon size={18} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <span className="font-medium">{item.label}</span>
-                                {item.description && (
-                                    <p className="text-xs text-[#2d2d30] mt-0.5">
-                                        {item.description}
-                                    </p>
-                                )}
-                            </div>
-                            {item.inlineComponent && (
-                                <div className="shrink-0 flex items-center self-stretch">
-                                    {item.inlineComponent}
-                                </div>
-                            )}
-                        </div>
+                    {mainMenuItems.map((item) => (
+                        <SidebarMenuItem
+                            key={item.label}
+                            item={item}
+                            onSelect={() => onMenuItemClick(item)}
+                        />
                     ))}
                 </div>
             );
+
+        case 'import-export':
+            return <ImportExportPanel />;
 
         case 'shortcuts':
             return (

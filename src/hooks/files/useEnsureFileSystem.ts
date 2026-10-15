@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useFiles } from './useFiles';
 import { useActiveFile } from '../useActiveFile';
+import { db } from '@helpers/db';
 import { createFileSystemEntry } from '@helpers/createEntry';
 import { ensureSystemFolders } from '@helpers/systemFolders';
 import { pickFallbackFile } from '@helpers/fallbackFile';
@@ -39,17 +40,32 @@ export function useEnsureFileSystem() {
             return;
         }
 
-        const fallback = pickFallbackFile(files);
-        if (fallback) {
-            isCreatingFile.current = false;
-            setActiveFileId(fallback.id);
+        const replaceActiveFile = () => {
+            const fallback = pickFallbackFile(files);
+            if (fallback) {
+                isCreatingFile.current = false;
+                setActiveFileId(fallback.id);
+                return;
+            }
+
+            // No files at all: first visit, or the last one was deleted for good
+            if (isCreatingFile.current) return;
+            isCreatingFile.current = true;
+            createFileSystemEntry(hadFiles.current ? 'New file' : 'Welcome file', { type: 'file', parentId: null })
+                .then((entry) => setActiveFileId(entry.id));
+        };
+
+        if (!activeFileId) {
+            replaceActiveFile();
             return;
         }
 
-        // No files at all: first visit, or the last one was deleted for good
-        if (isCreatingFile.current) return;
-        isCreatingFile.current = true;
-        createFileSystemEntry(hadFiles.current ? 'New file' : 'Welcome file', { type: 'file', parentId: null })
-            .then((entry) => setActiveFileId(entry.id));
+        // A file opened right after being added (e.g. imported) may not be in the live query's results yet:
+        // it's only replaced if it's really gone. Once the query catches up, this effect finds it.
+        let cancelled = false;
+        db.entries.get(activeFileId).then((entry) => {
+            if (!cancelled && entry?.type !== 'file') replaceActiveFile();
+        });
+        return () => { cancelled = true; };
     }, [files, activeFileId, setActiveFileId]);
 }
