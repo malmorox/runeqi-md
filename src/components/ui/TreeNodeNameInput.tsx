@@ -1,8 +1,9 @@
 import type { CSSProperties } from 'react';
 import { HiChevronRight, HiChevronDown } from 'react-icons/hi2';
+import type { FileSystemEntryType } from '@/types/file';
 
 interface TreeNodeNameInputProps {
-    type: 'file' | 'folder';
+    type: FileSystemEntryType;
     style: CSSProperties;
     isOpen?: boolean;
     defaultValue?: string;

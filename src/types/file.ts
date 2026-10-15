@@ -1,9 +1,13 @@
+export type FileSystemEntryType = 'file' | 'folder' | 'image';
+
 export interface FileSystemEntry {
     id: string;
     name: string;
-    type: 'file' | 'folder';
+    type: FileSystemEntryType;
     parentId: string | null;
     content?: string;
+    // Image data (only for `image` entries)
+    blob?: Blob;
     createdAt: number;
     updatedAt: number;
 }

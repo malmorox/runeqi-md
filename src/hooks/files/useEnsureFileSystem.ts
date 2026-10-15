@@ -3,48 +3,48 @@ import { useFiles } from './useFiles';
 import { useActiveFile } from '../useActiveFile';
 import { createFileSystemEntry } from '@helpers/createEntry';
 import { ensureSystemFolders } from '@helpers/systemFolders';
-import { TRASH_ID, TEMP_ID } from '@constants/fileSystem';
+import { pickFallbackFile } from '@helpers/fallbackFile';
 
 /**
- * Ensures the file system is ready to use on app start:
- * - Trash and Temp system folders always exist
- * - A real, persisted welcome file exists on first-time visits
- * - There's always an active file selected once files exist
+ * Keeps the file system usable at all times:
+ * - The system folders (Images and Trash) always exist
+ * - There's always an active file, so the editor is never left empty:
+ *   if the active one is missing (app start, deleted for good...) the most recently edited file is opened,
+ *   preferring the ones outside Trash; if there are no files at all, a new welcome file is created
  */
 export function useEnsureFileSystem() {
-    // Live-queried list of files from Dexie (undefined while loading).
+    // Live-queried list of entries from Dexie (undefined while loading).
     const files = useFiles();
     const { activeFileId, setActiveFileId } = useActiveFile();
-    // Prevents this logic from running more than once per session,
-    // even if the effect re-runs due to dependency changes.
-    const hasRun = useRef(false);
+    const hasEnsuredFolders = useRef(false);
+    // A welcome file is being created: the live query may not include it yet, so no other one is created meanwhile
+    const isCreatingWelcomeFile = useRef(false);
+
+    useEffect(() => {
+        if (hasEnsuredFolders.current) return;
+        hasEnsuredFolders.current = true;
+        ensureSystemFolders();
+    }, []);
 
     useEffect(() => {
         // Dexie hasn't resolved the query yet — wait for real data.
         if (files === undefined) return;
-        // Guard clause: only run the "first load" logic once.
-        if (hasRun.current) return;
-        hasRun.current = true;
+        if (activeFileId && files.some((f) => f.id === activeFileId && f.type === 'file')) {
+            isCreatingWelcomeFile.current = false;
+            return;
+        }
 
-        (async () => {
-            await ensureSystemFolders();
-            // Ignore Trash/Temp themselves when deciding if this is a first-time visit
-            const userFiles = files.filter((f) => f.id !== TRASH_ID && f.id !== TEMP_ID);
-            // No files exist yet, this is a first-time visit.
-            // Create a real, persisted welcome file and select it.
-            if (userFiles.length === 0) {
-                createFileSystemEntry('Welcome file', { type: 'file', parentId: null })
-                    .then((entry) => setActiveFileId(entry.id));
-                return;
-            }
+        const fallback = pickFallbackFile(files);
+        if (fallback) {
+            isCreatingWelcomeFile.current = false;
+            setActiveFileId(fallback.id);
+            return;
+        }
 
-            // Files exist but none is active (e.g. after a page reload) —
-            // fall back to the first FILE (skip folders), so the editor isn't
-            // handed a folder to load as if it were a document.
-            if (!activeFileId) {
-                const firstFile = userFiles.find((f) => f.type === 'file');
-                if (firstFile) setActiveFileId(firstFile.id);
-            }
-        })();
+        // No files at all: first visit, or the last one was deleted for good
+        if (isCreatingWelcomeFile.current) return;
+        isCreatingWelcomeFile.current = true;
+        createFileSystemEntry('Welcome file', { type: 'file', parentId: null })
+            .then((entry) => setActiveFileId(entry.id));
     }, [files, activeFileId, setActiveFileId]);
 }

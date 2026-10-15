@@ -18,8 +18,10 @@ import { BiTable } from 'react-icons/bi';
 import TableRowsColumnsSelector from '@components/ui/TableRowsColumnsSelector';
 import CodeLanguageSelector from '@components/ui/CodeLanguageSelector';
 import EmojiPicker from '@components/ui/EmojiPicker';
-import { HeadingContent, InputContent } from '@components/ui/ToolbarDropdownsContent';
+import { HeadingContent, ImageContent, InputContent } from '@components/ui/ToolbarDropdownsContent';
 import { useMarkdownActions } from '@hooks/markdown/useMarkdownActions';
+import { saveImage } from '@helpers/images';
+import { imageAlt, imageMarkdownPath } from '@utils/imagePaths';
 import { SHORTCUTS } from '@constants/shortcuts';
 import type { ToolbarButton } from '@/types/toolbar';
 
@@ -41,8 +43,15 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
         closeDropdown();
     };
 
-    const handleImageInsert = (values: Record<string, string>) => {
-        actions.insertImage(values.alt, values.url);
+    const handleImageInsert = (alt: string, url: string) => {
+        actions.insertImage(alt, url);
+        closeDropdown();
+    };
+
+    // Saves the image into the Images folder (throws if it's rejected, so the dropdown can show why)
+    const handleImageUpload = async (file: File, alt: string) => {
+        const entry = await saveImage(file);
+        actions.insertImage(alt || imageAlt(entry.name), imageMarkdownPath(entry.name));
         closeDropdown();
     };
 
@@ -176,15 +185,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             iconSize: 18,
             tooltip: buildTooltip(SHORTCUTS.image.label/*, SHORTCUTS.image.keys*/),
             name: 'image',
-            dropdownContent:  (
-                <InputContent
-                    fields={[
-                        { name: 'alt', label: 'Alt text', placeholder: 'Description' },
-                        { name: 'url', label: 'Image URL', placeholder: 'https://example.com/image.jpg' }
-                    ]}
-                    onSubmit={handleImageInsert}
-                />
-            )
+            dropdownContent: <ImageContent onSubmit={handleImageInsert} onUpload={handleImageUpload} />
         },
         {
             type: 'dropdown',

@@ -24,6 +24,8 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
 
     const monacoRef = useRef<Monaco | null>(null);
     const modelsRef = useRef<Map<string, editor.ITextModel>>(new Map());
+    // Models of deleted files that the editor is still showing: they're disposed once the next file is loaded
+    const orphanModelsRef = useRef<editor.ITextModel[]>([]);
     const undoRedoDisposableRef = useRef<{ dispose: () => void } | null>(null);
 
     const bindUndoRedoListener = (model: editor.ITextModel) => {
@@ -58,11 +60,22 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
 
         editorInstance.setModel(model);
         bindUndoRedoListener(model);
+
+        orphanModelsRef.current.forEach((orphan) => orphan.dispose());
+        orphanModelsRef.current = [];
     }, [editorInstance]);
 
     const disposeFileModel = (fileId: string) => {
-        modelsRef.current.get(fileId)?.dispose();
+        const model = modelsRef.current.get(fileId);
+        if (!model) return;
         modelsRef.current.delete(fileId);
+
+        // Disposing the model the editor is showing would break it until the next file loads
+        if (editorInstance?.getModel() === model) {
+            orphanModelsRef.current.push(model);
+        } else {
+            model.dispose();
+        }
     };
 
     const insertMarkdown = (text: string, cursorOffset: number = 0) => {

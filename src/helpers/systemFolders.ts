@@ -1,59 +1,46 @@
 import { db } from './db';
-import { TRASH_ID, TEMP_ID } from '@constants/fileSystem';
+import { TRASH_ID, IMAGES_ID, IMAGES_FOLDER_NAME } from '@constants/fileSystem';
 import type { FileSystemEntry } from '@/types/file';
 
+const SYSTEM_FOLDERS = [
+    { id: TRASH_ID, name: 'Trash' },
+    { id: IMAGES_ID, name: IMAGES_FOLDER_NAME },
+];
+
+// System folders are fixed: they can't be renamed, deleted or moved
 export function isSpecialFolderId(id: string): boolean {
-    return id === TRASH_ID || id === TEMP_ID;
+    return SYSTEM_FOLDERS.some((folder) => folder.id === id);
 }
 
-// Walks up the parentId chain to find whether an entry lives inside Trash or Temp.
-// Returns null if the entry is not inside either (or doesn't exist).
-export function getContainingSpecialFolder(
-    entryId: string | null,
-    entries: FileSystemEntry[]
-): typeof TRASH_ID | typeof TEMP_ID | null {
+// Walks up the parentId chain to find the system folder an entry lives in (or the entry itself, if it is one).
+// Returns null if it isn't inside any (or the entry doesn't exist).
+export function getContainingSpecialFolder(entryId: string | null, entries: FileSystemEntry[]): string | null {
     if (!entryId) return null;
     const map = new Map(entries.map((e) => [e.id, e]));
     let current = map.get(entryId);
 
     while (current) {
-        if (current.id === TRASH_ID) return TRASH_ID;
-        if (current.id === TEMP_ID) return TEMP_ID;
+        if (isSpecialFolderId(current.id)) return current.id;
         if (!current.parentId) return null;
         current = map.get(current.parentId);
     }
     return null;
 }
 
-// Creates Trash and Temp as fixed, top-level folders if they don't exist yet.
-// Safe to call on every app start — no-ops if they're already there.
+// Creates the system folders as fixed, top-level folders if they don't exist yet.
+// Safe to call on every app start — no-ops for the ones already there.
 export async function ensureSystemFolders() {
-    const [trash, temp] = await Promise.all([
-        db.entries.get(TRASH_ID),
-        db.entries.get(TEMP_ID),
-    ]);
-
+    const existing = await db.entries.bulkGet(SYSTEM_FOLDERS.map((folder) => folder.id));
     const now = Date.now();
+    const missing = SYSTEM_FOLDERS.filter((_, i) => !existing[i]);
+    if (missing.length === 0) return;
 
-    if (!trash) {
-        await db.entries.add({
-            id: TRASH_ID,
-            name: 'Trash',
-            type: 'folder',
-            parentId: null,
-            createdAt: now,
-            updatedAt: now,
-        });
-    }
-
-    if (!temp) {
-        await db.entries.add({
-            id: TEMP_ID,
-            name: 'Temp',
-            type: 'folder',
-            parentId: null,
-            createdAt: now,
-            updatedAt: now,
-        });
-    }
+    await db.entries.bulkAdd(missing.map(({ id, name }) => ({
+        id,
+        name,
+        type: 'folder' as const,
+        parentId: null,
+        createdAt: now,
+        updatedAt: now,
+    })));
 }
