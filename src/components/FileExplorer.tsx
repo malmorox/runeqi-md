@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { HiDocumentPlus, HiFolderPlus, HiPhoto, HiOutlinePhoto } from 'react-icons/hi2';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
@@ -50,6 +50,8 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     // Files from the OS are being dragged over the explorer
     const [isDraggingFiles, setDraggingFiles] = useState(false);
     const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null);
+    const treeContainerRef = useRef<HTMLDivElement>(null);
+    const [treeHeight, setTreeHeight] = useState(0);
     const allEntries = files ?? [];
 
     /*
@@ -71,6 +73,18 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
             treeApiRef.current?.open(pendingNode.parentId);
         }
     }, [pendingNode]);
+
+    // react-arborist virtualizes the list, so it needs its height in pixels (it defaults to a fixed 500px):
+    // it gets the space left under the toolbar, and follows it when the window is resized
+    useLayoutEffect(() => {
+        const container = treeContainerRef.current;
+        if (!container) return;
+        // Measured right away so the first paint already has the right height; the observer handles later resizes
+        setTreeHeight(container.clientHeight);
+        const observer = new ResizeObserver(([entry]) => setTreeHeight(entry.contentRect.height));
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -218,6 +232,8 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     const isBusy = !!pendingNode || !!renamingNodeId;
     // System folders (Images, Trash) can't be renamed, deleted or moved
     const isSystemFolderSelected = !!effectiveSelectedNode && isSpecialFolderId(effectiveSelectedNode.id);
+    // The upload button only shows while working in the Images folder (the folder itself or one of its images)
+    const isInImages = !!effectiveSelectedNode && getContainingSpecialFolder(effectiveSelectedNode.id, allEntries) === IMAGES_ID;
     // What the delete button does for the selection (null: nothing, e.g. the Images folder or an empty Trash)
     const deleteLabel = (() => {
         if (!effectiveSelectedNode) return null;
@@ -235,7 +251,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`w-72 h-full bg-[#D4D4D4] text-[#252526] flex flex-col shrink-0 ${
+            className={`w-80 h-full bg-[#D4D4D4] text-[#252526] flex flex-col shrink-0 ${
                 isDraggingFiles ? 'outline-2 -outline-offset-2 outline-dashed outline-sky-500' : ''
             }`}
         >
@@ -256,14 +272,16 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                 >
                     <HiFolderPlus size={20} />
                 </button>
-                <button
-                    onClick={() => imageInputRef.current?.click()}
-                    disabled={isBusy}
-                    className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-                    title="Upload images"
-                >
-                    <HiPhoto size={20} />
-                </button>
+                {isInImages && (
+                    <button
+                        onClick={() => imageInputRef.current?.click()}
+                        disabled={isBusy}
+                        className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                        title="Upload images"
+                    >
+                        <HiPhoto size={20} />
+                    </button>
+                )}
                 <input
                     ref={imageInputRef}
                     type="file"
@@ -302,13 +320,17 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                 </button>
             </div>
 
-            <div className="flex-1 overflow-auto">
+            <div ref={treeContainerRef} className="flex-1 min-h-0 overflow-hidden">
                 <Tree<TreeNode>
                     data={displayTreeData}
                     openByDefault={false}
                     ref={treeApiRef}
                     rowHeight={24}
                     width="100%"
+                    height={treeHeight}
+                    // Rows come with `min-width: max-content` and grow with long names (horizontal scroll):
+                    // they're kept to the panel's width and the names are truncated instead
+                    rowClassName="min-w-0!"
                     disableDrag={(data) => isSpecialFolderId(data.id)}
                     onSelect={(nodes) => {
                         const node = nodes[0]?.data ?? null;
@@ -354,18 +376,22 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                                 onClick={() => {
                                     if (isFolder) node.toggle();
                                 }}
-                                className={`h-full box-border px-2 cursor-pointer text-sm leading-5 flex items-center gap-1 ${
+                                title={node.data.name}
+                                className={`h-full min-w-0 box-border px-2 cursor-pointer text-sm leading-5 flex items-center gap-1 ${
                                     isSelected ? 'bg-[#A8A8A8]' : ''
                                 }`}
                             >
                                 {isFolder ? (
-                                    node.isOpen ? <GoTriangleDown size={14} /> : <GoTriangleRight size={14} />
+                                    node.isOpen
+                                        ? <GoTriangleDown size={14} className="shrink-0" />
+                                        : <GoTriangleRight size={14} className="shrink-0" />
                                 ) : node.data.type === 'image' ? (
                                     <HiOutlinePhoto size={14} className="shrink-0" aria-hidden />
                                 ) : (
-                                    <span className="w-3.5" />
+                                    <span className="w-3.5 shrink-0" />
                                 )}
-                                <span className="text-xm">{node.data.name}</span>
+                                {/* Long names end in "…" (the full name shows on hover) */}
+                                <span className="truncate">{node.data.name}</span>
                             </div>
                         );
                     }}

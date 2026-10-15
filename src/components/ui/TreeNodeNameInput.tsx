@@ -25,7 +25,7 @@ const TreeNodeNameInput = ({ type, style, isOpen = false, defaultValue = '', onC
                 autoFocus
                 defaultValue={defaultValue}
                 onFocus={(e) => e.currentTarget.select()}
-                className="flex-1 bg-white text-black text-sm px-1 py-0.5 rounded outline-none border border-[#888]"
+                className="flex-1 min-w-0 bg-white text-black text-sm px-1 py-0.5 rounded outline-none border border-[#888]"
                 onBlur={(e) => onConfirm(e.currentTarget.value)}
                 onKeyDown={(e) => {
                     e.stopPropagation();

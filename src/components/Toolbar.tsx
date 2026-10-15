@@ -41,7 +41,10 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen, onExplorerToggle, i
     }, []);
 
     return (
-        <div className="bg-[#1e1e1e] px-1 py-1 flex gap-2 items-center justify-between" ref={dropdownRef}>
+        // Columnas: explorador | botones de formato | nombre del archivo | opciones.
+        // Los botones ocupan todo su ancho mientras quepan (si no, pasan a otra fila) y el nombre se queda con el
+        // espacio que sobre: se acorta con "..." e incluso desaparece antes de que nada se salga de la pantalla.
+        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_minmax(0,max-content)_minmax(0,1fr)_auto] gap-2 items-center" ref={dropdownRef}>
             <ToolbarToggleButton
                 icon={FaFolder}
                 isActive={isExplorerOpen}
@@ -62,15 +65,16 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen, onExplorerToggle, i
                 />
             )}
 
-            <div className="flex items-center gap-3 ml-auto shrink-0">
+            {/* Columna fija: aunque no haya botones de formato (solo preview), el nombre sigue a la derecha */}
+            <div className="col-start-3 flex justify-end mr-1 min-w-0">
                 <ActiveFileName />
-                <ToolbarToggleButton
-                    icon={SlOptions}
-                    isActive={isSidebarOpen}
-                    onClick={onSidebarToggle}
-                    title="Toggle sidebar"
-                />
             </div>
+            <ToolbarToggleButton
+                icon={SlOptions}
+                isActive={isSidebarOpen}
+                onClick={onSidebarToggle}
+                title="Toggle sidebar"
+            />
         </div>
     );
 };
