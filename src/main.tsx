@@ -6,7 +6,6 @@ import { EditorProvider } from "@contexts/EditorContext";
 import { ThemeProvider } from "@contexts/ThemeContext";
 import App from './App.tsx'
 import './index.css'
-import '@utils/analytics';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -21,3 +20,6 @@ createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
     </StrictMode>,
 )
+
+// La analítica no es crítica: se carga en un chunk aparte después de arrancar la app
+void import('@utils/analytics');
