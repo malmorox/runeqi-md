@@ -16,12 +16,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, './src/components'),
-      '@contexts': path.resolve(__dirname, './src/contexts'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
       '@constants': path.resolve(__dirname, './src/constants'),
+      '@contexts': path.resolve(__dirname, './src/contexts'),
+      '@helpers': path.resolve(__dirname, './src/helpers'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
       '@layouts': path.resolve(__dirname, './src/layouts'),
-      '@types': path.resolve(__dirname, './src/types'),
       '@styles': path.resolve(__dirname, './src/styles'),
+      '@types': path.resolve(__dirname, './src/types'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@': path.resolve(__dirname, './src'),
     },

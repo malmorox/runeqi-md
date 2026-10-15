@@ -5,15 +5,57 @@ import { useTheme } from "@hooks/useTheme";
 import { useEditor } from "@hooks/useEditor";
 import { useSettings } from "@hooks/useSettings";
 import { useScrollSync } from "@hooks/useScrollSync";
+import { useActiveFile } from "@hooks/useActiveFile";
+import { useFileContent } from "@hooks/files/useFileContent";
+import { useImageImport } from "@hooks/files/useImageImport";
+import { imageMarkdown } from "@utils/imagePaths";
+import AlertModal from "@components/ui/AlertModal";
 import type { editor } from 'monaco-editor';
 
-// Editor de Markdown con Monaco que sincroniza el contenido y aplica el tema seleccionado.
+// Se están arrastrando archivos desde fuera (no texto seleccionado dentro del editor)
+const hasFiles = (data: DataTransfer | null) => !!data && Array.from(data.types).includes("Files");
+
 const MarkdownEditor = () => {
-    const { markdown, setMarkdown } = useMarkdown();
+    const { markdown } = useMarkdown();
     const { theme } = useTheme();
-    const { setEditorInstance } = useEditor();
+    const { editorInstance, setEditorInstance, loadFileModel, insertMarkdown } = useEditor();
     const { settings } = useSettings();
     const { registerEditor } = useScrollSync();
+    const { activeFileId } = useActiveFile();
+    const { handleChange } = useFileContent(activeFileId, (content) => loadFileModel(activeFileId!, content));
+    const { importImages, importError, clearImportError } = useImageImport();
+
+    // Guarda las imágenes en la carpeta Images e inserta su Markdown en el cursor
+    const insertImages = async (files: File[], pasted: boolean) => {
+        const saved = await importImages(files, { pasted });
+        if (saved.length) insertMarkdown(saved.map((entry) => imageMarkdown(entry.name)).join("\n"));
+    };
+
+    // Los eventos se capturan antes de que lleguen a Monaco, que pegaría o soltaría la imagen como texto
+    const handlePaste = (e: React.ClipboardEvent) => {
+        const { files, types } = e.clipboardData;
+        // Si también hay texto (p. ej. al copiar de Word, que añade una imagen del fragmento) se pega el texto
+        if (files.length === 0 || types.includes("text/plain")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        insertImages(Array.from(files), true);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        if (!hasFiles(e.dataTransfer)) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "copy";
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        if (!hasFiles(e.dataTransfer)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        // Las imágenes se insertan donde se sueltan, no donde estaba el cursor
+        const position = editorInstance?.getTargetAtClientPoint(e.clientX, e.clientY)?.position;
+        if (position) editorInstance?.setPosition(position);
+        insertImages(Array.from(e.dataTransfer.files), false);
+    };
 
     const handleEditorWillMount: BeforeMount = (monaco) => {
         // tema oscuro personalizado con fondo más claro
@@ -30,7 +72,7 @@ const MarkdownEditor = () => {
     };
 
     const handleEditorDidMount: OnMount = (editor, monaco) => {
-        setEditorInstance(editor);
+        setEditorInstance(editor, monaco);
         registerEditor(editor);
 
         editor.addCommand(monaco.KeyCode.Enter, () => {
@@ -85,17 +127,29 @@ const MarkdownEditor = () => {
     }), [settings.editor]);
 
     return (
-        <div className="w-full h-full">
+        <div
+            className="w-full h-full"
+            onPasteCapture={handlePaste}
+            onDragOverCapture={handleDragOver}
+            onDropCapture={handleDrop}
+        >
             <Editor
                 height="100%"
                 defaultLanguage="markdown"
                 theme={theme === 'vs-dark' ? 'customDark' : theme}
                 defaultValue={markdown}
-                onChange={(v) => setMarkdown(v ?? "")}
+                onChange={(v) => handleChange(v ?? '')}
                 beforeMount={handleEditorWillMount}
                 onMount={handleEditorDidMount}
                 options={editorOptions}
             />
+            {importError && (
+                <AlertModal
+                    title="Some images couldn't be added"
+                    message={importError}
+                    onClose={clearImportError}
+                />
+            )}
         </div>
     );
 }

@@ -38,7 +38,7 @@ function deepMerge<T extends object>(base: T, override: DeepPartial<T>): T {
     return result;
 }
 
-export function SettingsProvider({ children }: { children: React.ReactNode }) {
+export const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
     const [settings, setSettings] = useState<AppSettings>(loadSettings);
 
     useEffect(() => {

@@ -45,7 +45,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
 
     if (showCustomInput) {
         return (
-            <div className="p-3 min-w-[280px]">
+            <div className="p-3 min-w-70">
                 <div className="mb-3">
                     <label className="block text-xs font-medium text-[#cccccc] mb-2">
                         Specify language
@@ -82,18 +82,17 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
     }
 
     return (
-        <div className="p-3 min-w-[200px]">
+        <div className="p-3 min-w-50">
             <div className="grid grid-cols-4 gap-2 mb-3">
                 {popularLanguages.map((lang) => {
-                    const Icon = lang.icon;
                     return (
                         <button
                             key={lang.value}
                             onClick={() => handleLanguageClick(lang.value)}
-                            className="aspect-square cursor-pointer flex items-center justify-center p-1 bg-white border border-[#bbbbbb] rounded hover:bg-[#EDEDED] hover:border-[#8C8C8C] transition-all transition-colors group"
+                            className="aspect-square cursor-pointer flex items-center justify-center p-1 bg-white border border-[#bbbbbb] rounded hover:bg-[#EDEDED] hover:border-[#8C8C8C] transition-all group"
                             title={lang.name}
                         >
-                            <Icon 
+                            <lang.icon 
                                 size={20} 
                                 className="text-[#3e3e42] group-hover:scale-110 group-hover:text-[#252526] transition-transform"
                             />

@@ -1,0 +1,1 @@
+export const DEFAULT_FILE_CONTENT = '## Write your markdown here';

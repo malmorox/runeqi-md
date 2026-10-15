@@ -3,6 +3,7 @@ import type { MonacoTheme } from "@/types/monaco";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { findAnchorTarget } from "@utils/headingAnchors";
+import PreviewImage from "@components/ui/PreviewImage";
 
 type HastElement = NonNullable<ExtraProps["node"]>;
 type HastChild = HastElement["children"][number];
@@ -265,10 +266,10 @@ export const getMarkdownComponents = (theme: MonacoTheme): Components => {
             </td>
         ),
         img: ({ src, alt }) => (
-            <img
-                src={src}
+            <PreviewImage
+                src={typeof src === "string" ? src : undefined}
                 alt={alt}
-                className="my-4 max-w-full inline-block"
+                isDark={isDark}
             />
         ),
         hr: ({ node }) => (

@@ -8,12 +8,13 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@contexts/*": ["src/contexts/*"],
-      "@hooks/*": ["src/hooks/*"],
       "@constants/*": ["src/constants/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@types/*": ["src/types/*"],
       "@styles/*": ["src/styles/*"],
+      "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
       "@/*": ["src/*"]
     }

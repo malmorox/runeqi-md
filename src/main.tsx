@@ -4,6 +4,7 @@ import { MarkdownProvider } from "@contexts/MarkdownContext";
 import { SettingsProvider } from "@contexts/SettingsContext";
 import { EditorProvider } from "@contexts/EditorContext";
 import { ThemeProvider } from "@contexts/ThemeContext";
+import { ActiveFileProvider } from "@contexts/ActiveFileContext";
 import App from './App.tsx'
 import './index.css'
 
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')!).render(
         <SettingsProvider>
         <MarkdownProvider>
         <EditorProvider>
+        <ActiveFileProvider>
             <App />
+        </ActiveFileProvider>
         </EditorProvider>
         </MarkdownProvider>
         </SettingsProvider>
