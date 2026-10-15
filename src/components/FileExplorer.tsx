@@ -34,8 +34,8 @@ interface FileExplorerProps {
 const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     const files = useFiles();
     const treeData = useMemo(() => (files ? buildTree(files) : []), [files]);
-    // Explicit user selection made inside the tree (click on a node).
-    const [selectedNode, setSelectedNode] = useState<TreeNode | null>(null);
+    // Explicit user selection made inside the tree (click on a node), along with the file that was active after it
+    const [selection, setSelection] = useState<{ node: TreeNode; activeFileId: string | null } | null>(null);
     // Node currently being created (file/folder), rendered as an inline input
     const [pendingNode, setPendingNode] = useState<PendingNodeInfo | null>(null);
     // Id of the node currently being renamed, rendered as an inline input
@@ -54,11 +54,15 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     const [treeHeight, setTreeHeight] = useState(0);
     const allEntries = files ?? [];
 
+    // The explicit selection only lasts while the same file stays active: once another one is opened
+    // from outside the explorer (e.g. an imported file), the selection follows it
+    const selectedNode = selection?.activeFileId === activeFileId ? selection.node : null;
+
     /*
     ** Resolves what the tree should visually treat as "selected":
     ** - the user's explicit selection, if any
     ** - otherwise, the currently active file (e.g. set externally by
-    **   useEnsureFileSystem on first launch, or after deleting a file)
+    **   useEnsureFileSystem on first launch, or after deleting a file, or by an import)
     ** Derived with useMemo instead of synced via useEffect + setState.
     */
     const effectiveSelectedNode = useMemo(() => {
@@ -67,12 +71,26 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         return findNodeById(treeData, activeFileId);
     }, [selectedNode, activeFileId, treeData]);
 
+    // Selecting a file also opens it; folders and images keep the current file open
+    const selectNode = (node: TreeNode | null) => {
+        const nextActiveFileId = node?.type === 'file' ? node.id : activeFileId;
+        setSelection(node && { node, activeFileId: nextActiveFileId });
+        if (nextActiveFileId !== activeFileId) setActiveFileId(nextActiveFileId);
+    };
+
     // Auto-expand the parent folder so the inline "new node" input is visible
     useEffect(() => {
         if (pendingNode?.parentId) {
             treeApiRef.current?.open(pendingNode.parentId);
         }
     }, [pendingNode]);
+
+    // Brings the active file into view when it changes (e.g. a file imported while the explorer is open):
+    // the tree only renders the rows that fit, so a new file at the end could be out of sight.
+    // react-arborist waits for the row to exist, since the file list may not include it yet
+    useEffect(() => {
+        if (activeFileId) treeApiRef.current?.scrollTo(activeFileId);
+    }, [activeFileId]);
 
     // react-arborist virtualizes the list, so it needs its height in pixels (it defaults to a fixed 500px):
     // it gets the space left under the toolbar, and follows it when the window is resized
@@ -114,10 +132,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         const name = rawName.trim();
         if (name) {
             const newEntry = await createFileSystemEntry(name, pendingNode);
-            setSelectedNode(newEntry);
-            if (newEntry.type === 'file') {
-                setActiveFileId(newEntry.id);
-            }
+            selectNode(newEntry);
         }
 
         setPendingNode(null);
@@ -172,7 +187,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         // Only files outside Trash are candidates: if there are none, the trashed file stays open
         moveActiveFileOutOf(withDescendants(node.id), { allowTrash: false });
         await moveToTrash(node.id);
-        setSelectedNode(null);
+        setSelection(null);
     };
 
     const runConfirmedAction = async () => {
@@ -191,7 +206,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         }
 
         setConfirmAction(null);
-        setSelectedNode(null);
+        setSelection(null);
     };
 
     // Saves the images into the Images folder, then opens it and selects the last one
@@ -199,7 +214,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         const saved = await importImages(Array.from(fileList ?? []));
         if (saved.length === 0) return;
         treeApiRef.current?.open(IMAGES_ID);
-        setSelectedNode(saved[saved.length - 1]);
+        selectNode(saved[saved.length - 1]);
     };
 
     const isFileDrag = (e: React.DragEvent) => e.dataTransfer.types.includes('Files');
@@ -336,8 +351,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                         const node = nodes[0]?.data ?? null;
                         // Ignore selection events for the temporary placeholder node
                         if (node?.id === PENDING_NODE_ID) return;
-                        setSelectedNode(node);
-                        if (node?.type === 'file') setActiveFileId(node.id);
+                        selectNode(node);
                     }}
                 >
                     {({ node, style, dragHandle }) => {

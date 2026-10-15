@@ -13,3 +13,7 @@ export const IMAGE_EXTENSIONS: Record<string, string> = {
     'image/svg+xml': 'svg',
 };
 export const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
+// Markdown files imported from the computer
+export const MARKDOWN_EXTENSIONS = ['.md', '.markdown'];
+export const MAX_MARKDOWN_SIZE = 5 * 1024 * 1024;

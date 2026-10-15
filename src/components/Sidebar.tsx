@@ -6,9 +6,7 @@ import { IoIosSave } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
 import SidebarContent from '@components/ui/SidebarContent';
 import { viewTitles } from '@constants/sidebarData';
-import ExportMarkdownModal from '@components/ui/DownloadModal';
 import ThemeSwitcher from '@components/ThemeSwitcher';
-import { useMarkdown } from '@hooks/useMarkdown';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -17,12 +15,8 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const [currentView, setCurrentView] = useState<MenuView>('main');
-    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-    const { markdown } = useMarkdown();
 
     if (!isOpen) return null;
-
-    const hasMarkdown = markdown.trim().length > 0;
 
     const mainMenuItems: MenuItem[] = [
         {
@@ -35,10 +29,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         },
         {
             icon: IoIosSave,
-            label: 'Export',
-            description: 'Export current document.',
-            onClick: () => setIsExportModalOpen(true),
-            disabled: !hasMarkdown
+            label: 'Import/Export',
+            description: 'Import or export Markdown files.',
+            view: 'import-export',
+            hasSubview: true
         },
         {
             icon: FaPalette,
@@ -64,42 +58,36 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     };
 
     return (
-        <>
-            <aside className="fixed inset-y-0 right-0 w-full sm:relative sm:w-80 h-full bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
-                {/* Header */}
-                <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
-                    {currentView !== 'main' && (
-                        <button
-                            onClick={() => setCurrentView('main')}
-                            className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
-                            title='Back to menu'
-                        >
-                            <FaAngleLeft size={20} />
-                        </button>
-                    )}
-                    <span className="text-lg font-semibold flex-1">
-                        {viewTitles[currentView]}
-                    </span>
+        <aside className="fixed inset-y-0 right-0 w-full sm:relative sm:w-80 h-full bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
+            {/* Header */}
+            <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
+                {currentView !== 'main' && (
                     <button
-                        onClick={onClose}
+                        onClick={() => setCurrentView('main')}
                         className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
-                        title='Close sidebar'
+                        title='Back to menu'
                     >
-                        <IoClose size={25} color="#2d2d30" />
+                        <FaAngleLeft size={20} />
                     </button>
-                </div>
-                {/* Contenido */}
-                <SidebarContent 
-                    currentView={currentView} 
-                    mainMenuItems={mainMenuItems} 
-                    onMenuItemClick={handleMenuItemClick}
-                />
-            </aside>
-            <ExportMarkdownModal
-                isOpen={isExportModalOpen}
-                onClose={() => setIsExportModalOpen(false)}
+                )}
+                <span className="text-lg font-semibold flex-1">
+                    {viewTitles[currentView]}
+                </span>
+                <button
+                    onClick={onClose}
+                    className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
+                    title='Close sidebar'
+                >
+                    <IoClose size={25} color="#2d2d30" />
+                </button>
+            </div>
+            {/* Contenido */}
+            <SidebarContent 
+                currentView={currentView} 
+                mainMenuItems={mainMenuItems} 
+                onMenuItemClick={handleMenuItemClick}
             />
-        </>
+        </aside>
     );
 };
 
