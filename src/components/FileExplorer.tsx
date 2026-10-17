@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { HiDocumentPlus, HiFolderPlus, HiPhoto, HiOutlinePhoto } from 'react-icons/hi2';
+import { HiDocumentPlus, HiFolderPlus, HiOutlinePhoto } from 'react-icons/hi2';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { GoTriangleRight, GoTriangleDown } from "react-icons/go";
+import { RiImageAddFill } from "react-icons/ri";
 import { Tree, type TreeApi } from 'react-arborist';
 import { insertPendingNode } from '@helpers/insertPendingNode';
 import { createFileSystemEntry } from '@helpers/createEntry';
@@ -343,7 +344,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                         className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                         title="Upload images"
                     >
-                        <HiPhoto size={20} />
+                        <RiImageAddFill size={20} />
                     </button>
                 )}
                 <input
