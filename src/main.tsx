@@ -5,12 +5,14 @@ import { SettingsProvider } from "@contexts/SettingsContext";
 import { EditorProvider } from "@contexts/EditorContext";
 import { ThemeProvider } from "@contexts/ThemeContext";
 import { ActiveFileProvider } from "@contexts/ActiveFileContext";
+import { AlertsProvider } from "@contexts/AlertsContext";
 import App from './App.tsx'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ThemeProvider>
+        <AlertsProvider>
         <SettingsProvider>
         <MarkdownProvider>
         <EditorProvider>
@@ -20,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
         </EditorProvider>
         </MarkdownProvider>
         </SettingsProvider>
+        </AlertsProvider>
         </ThemeProvider>
     </StrictMode>,
 )

@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { HiDocumentPlus, HiFolderPlus, HiPhoto, HiOutlinePhoto } from 'react-icons/hi2';
+import { HiDocumentPlus, HiFolderPlus, HiOutlinePhoto } from 'react-icons/hi2';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { GoTriangleRight, GoTriangleDown } from "react-icons/go";
+import { RiImageAddFill } from "react-icons/ri";
 import { Tree, type TreeApi } from 'react-arborist';
 import { insertPendingNode } from '@helpers/insertPendingNode';
 import { createFileSystemEntry } from '@helpers/createEntry';
@@ -11,14 +12,15 @@ import { findNodeById } from '@helpers/findNodeById';
 import { buildTree } from '@helpers/buildTree';
 import { getContainingSpecialFolder, isSpecialFolderId } from '@helpers/systemFolders';
 import { ACCEPTED_IMAGE_TYPES } from '@helpers/images';
-import { collectDescendantIds, emptyFolder, hardDeleteEntry, moveToTrash } from '@helpers/deleteEntry';
+import { collectDescendantIds, emptyFolder, hardDeleteEntry, moveToTrash, restoreFromTrash } from '@helpers/deleteEntry';
 import { pickFallbackFile } from '@helpers/fallbackFile';
 import { useFiles } from '@hooks/files/useFiles';
 import { useImageImport } from '@hooks/files/useImageImport';
 import { useActiveFile } from '@hooks/useActiveFile';
 import { useEditor } from '@hooks/useEditor';
+import { useAlerts } from '@hooks/useAlerts';
+import { storageErrorMessage } from '@utils/alertMessages';
 import TreeNodeNameInput from '@components/ui/TreeNodeNameInput';
-import AlertModal from '@components/ui/AlertModal';
 import ConfirmModal from '@components/ui/ConfirmModal';
 import type { TreeNode, PendingNodeInfo } from '@/types/file';
 import { PENDING_NODE_ID, IMAGES_ID, TRASH_ID } from '@constants/fileSystem';
@@ -46,7 +48,8 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     const isCreatingRef = useRef(false);
     const treeApiRef = useRef<TreeApi<TreeNode> | null>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
-    const { importImages, importError, clearImportError } = useImageImport();
+    const { importImages } = useImageImport({ notifySuccess: true });
+    const alerts = useAlerts();
     // Files from the OS are being dragged over the explorer
     const [isDraggingFiles, setDraggingFiles] = useState(false);
     const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null);
@@ -130,13 +133,17 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         isCreatingRef.current = true;
 
         const name = rawName.trim();
-        if (name) {
-            const newEntry = await createFileSystemEntry(name, pendingNode);
-            selectNode(newEntry);
+        try {
+            if (name) {
+                const newEntry = await createFileSystemEntry(name, pendingNode);
+                selectNode(newEntry);
+            }
+        } catch (error) {
+            alerts.error({ title: `The ${pendingNode.type} couldn't be created`, message: storageErrorMessage(error) });
+        } finally {
+            setPendingNode(null);
+            isCreatingRef.current = false;
         }
-
-        setPendingNode(null);
-        isCreatingRef.current = false;
     };
 
     const discardPendingNode = () => setPendingNode(null);
@@ -150,11 +157,15 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         if (!renamingNodeId) return;
 
         const name = rawName.trim();
-        if (name) {
-            await renameFileSystemEntry(renamingNodeId, name);
+        try {
+            if (name) {
+                await renameFileSystemEntry(renamingNodeId, name);
+            }
+        } catch (error) {
+            alerts.error({ title: "It couldn't be renamed", message: storageErrorMessage(error) });
+        } finally {
+            setRenamingNodeId(null);
         }
-
-        setRenamingNodeId(null);
     };
 
     const cancelRename = () => setRenamingNodeId(null);
@@ -184,10 +195,36 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
             return;
         }
 
+        // Where it was (the selection may be older than the file list) and what was open, for "Undo"
+        const parentId = allEntries.find((e) => e.id === node.id)?.parentId ?? node.parentId;
+        const ids = withDescendants(node.id);
+        const openFileId = activeFileId && ids.has(activeFileId) ? activeFileId : null;
+
         // Only files outside Trash are candidates: if there are none, the trashed file stays open
-        moveActiveFileOutOf(withDescendants(node.id), { allowTrash: false });
-        await moveToTrash(node.id);
+        moveActiveFileOutOf(ids, { allowTrash: false });
+        try {
+            await moveToTrash(node.id);
+        } catch (error) {
+            alerts.error({ title: `"${node.name}" couldn't be moved to Trash`, message: storageErrorMessage(error) });
+            return;
+        }
         setSelection(null);
+
+        alerts.info({
+            title: 'Moved to Trash',
+            message: `"${node.name}" stays in Trash until it's emptied.`,
+            action: { label: 'Undo', onClick: () => undoMoveToTrash(node, parentId, openFileId) },
+        });
+    };
+
+    // Puts it back where it was and, if the open file was in it, opens that file again
+    const undoMoveToTrash = async (node: TreeNode, parentId: string | null, openFileId: string | null) => {
+        try {
+            const isRestored = await restoreFromTrash(node.id, parentId);
+            if (isRestored && openFileId) setActiveFileId(openFileId);
+        } catch (error) {
+            alerts.error({ title: `"${node.name}" couldn't be restored`, message: storageErrorMessage(error) });
+        }
     };
 
     const runConfirmedAction = async () => {
@@ -199,14 +236,27 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
         // If no file is left at all, useEnsureFileSystem creates a new welcome file
         moveActiveFileOutOf(ids, { allowTrash: true });
         ids.forEach(disposeFileModel);
-        if (confirmAction.kind === 'empty') {
-            await emptyFolder(TRASH_ID);
-        } else {
-            await hardDeleteEntry(confirmAction.node.id);
+        try {
+            if (confirmAction.kind === 'empty') {
+                const count = allEntries.filter((e) => e.parentId === TRASH_ID).length;
+                await emptyFolder(TRASH_ID);
+                alerts.success({
+                    title: 'Trash emptied',
+                    message: `${count} ${count === 1 ? 'item was' : 'items were'} permanently deleted.`,
+                });
+            } else {
+                await hardDeleteEntry(confirmAction.node.id);
+                alerts.success({ title: 'Deleted permanently', message: `"${confirmAction.node.name}" is gone for good.` });
+            }
+        } catch (error) {
+            alerts.error({
+                title: confirmAction.kind === 'empty' ? "Trash couldn't be emptied" : `"${confirmAction.node.name}" couldn't be deleted`,
+                message: storageErrorMessage(error),
+            });
+        } finally {
+            setConfirmAction(null);
+            setSelection(null);
         }
-
-        setConfirmAction(null);
-        setSelection(null);
     };
 
     // Saves the images into the Images folder, then opens it and selects the last one
@@ -294,7 +344,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                         className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                         title="Upload images"
                     >
-                        <HiPhoto size={20} />
+                        <RiImageAddFill size={20} />
                     </button>
                 )}
                 <input
@@ -411,13 +461,6 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                     }}
                 </Tree>
             </div>
-            {importError && (
-                <AlertModal
-                    title="Some images couldn't be added"
-                    message={importError}
-                    onClose={clearImportError}
-                />
-            )}
             {confirmAction && (
                 <ConfirmModal
                     title={

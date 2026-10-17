@@ -9,7 +9,6 @@ import { useActiveFile } from "@hooks/useActiveFile";
 import { useFileContent } from "@hooks/files/useFileContent";
 import { useImageImport } from "@hooks/files/useImageImport";
 import { imageMarkdown } from "@utils/imagePaths";
-import AlertModal from "@components/ui/AlertModal";
 import type { editor } from 'monaco-editor';
 
 // Se están arrastrando archivos desde fuera (no texto seleccionado dentro del editor)
@@ -23,7 +22,8 @@ const MarkdownEditor = () => {
     const { registerEditor } = useScrollSync();
     const { activeFileId } = useActiveFile();
     const { handleChange } = useFileContent(activeFileId, (content) => loadFileModel(activeFileId!, content));
-    const { importImages, importError, clearImportError } = useImageImport();
+    // The inserted image is the feedback: only rejected images get an alert
+    const { importImages } = useImageImport();
 
     // Guarda las imágenes en la carpeta Images e inserta su Markdown en el cursor
     const insertImages = async (files: File[], pasted: boolean) => {
@@ -143,13 +143,6 @@ const MarkdownEditor = () => {
                 onMount={handleEditorDidMount}
                 options={editorOptions}
             />
-            {importError && (
-                <AlertModal
-                    title="Some images couldn't be added"
-                    message={importError}
-                    onClose={clearImportError}
-                />
-            )}
         </div>
     );
 }

@@ -76,6 +76,43 @@ export function markdownFileName(name: string) {
     return MARKDOWN_FILE.test(safeName) ? safeName : `${safeName}.md`;
 }
 
+// File System Access API: only in Chromium browsers (Chrome, Edge...) and not in TypeScript's DOM types yet
+type SaveFilePicker = (options: {
+    suggestedName?: string;
+    types?: { description: string; accept: Record<string, string[]> }[];
+}) => Promise<FileSystemFileHandle>;
+
+// Saves the content as a .md file on the computer. Where the browser allows it, the app opens the system's
+// "Save as" dialog itself, so it knows when the file has really been saved (and with which name).
+// Elsewhere (Firefox, Safari) it's handed to the browser as a download, and whether it ends up saved is unknown.
+// Returns null if the dialog was closed without saving.
+export async function exportMarkdown(name: string, content: string) {
+    const fileName = markdownFileName(name);
+    const showSaveFilePicker = (window as Window & { showSaveFilePicker?: SaveFilePicker }).showSaveFilePicker;
+    if (!showSaveFilePicker) {
+        downloadMarkdown(name, content);
+        return { fileName, downloaded: true };
+    }
+
+    let handle: FileSystemFileHandle;
+    try {
+        handle = await showSaveFilePicker({
+            suggestedName: fileName,
+            types: [{ description: 'Markdown', accept: { 'text/markdown': MARKDOWN_EXTENSIONS } }],
+        });
+    } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return null;
+        // The dialog isn't allowed here (e.g. inside an iframe): the download still works
+        downloadMarkdown(name, content);
+        return { fileName, downloaded: true };
+    }
+
+    const writable = await handle.createWritable();
+    await writable.write(content);
+    await writable.close();
+    return { fileName: handle.name, downloaded: false };
+}
+
 // Downloads the content as a .md file to the computer
 export function downloadMarkdown(name: string, content: string) {
     const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });

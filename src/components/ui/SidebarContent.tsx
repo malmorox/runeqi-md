@@ -2,6 +2,7 @@ import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
 import { SHORTCUTS } from '@constants/shortcuts';
 import { useSettings } from '@hooks/useSettings';
+import { useAlerts } from '@hooks/useAlerts';
 import SidebarMenuItem from '@components/ui/SidebarMenuItem';
 import ImportExportPanel from '@components/ui/ImportExportPanel';
 
@@ -56,6 +57,12 @@ const SidebarContent = ({
     onMenuItemClick
 }: SidebarContentProps) => {
     const { settings, updateSettings, resetSettings } = useSettings();
+    const alerts = useAlerts();
+
+    const handleReset = () => {
+        resetSettings();
+        alerts.success({ title: 'Settings reset', message: 'All preferences are back to their defaults.' });
+    };
 
     switch (currentView) {
         case 'main':
@@ -176,7 +183,7 @@ const SidebarContent = ({
                     )}
 
                     <button
-                        onClick={resetSettings}
+                        onClick={handleReset}
                         className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"
                     >
                         Reset to defaults

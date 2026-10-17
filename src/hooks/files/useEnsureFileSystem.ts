@@ -5,6 +5,8 @@ import { db } from '@helpers/db';
 import { createFileSystemEntry } from '@helpers/createEntry';
 import { ensureSystemFolders } from '@helpers/systemFolders';
 import { pickFallbackFile } from '@helpers/fallbackFile';
+import { useAlerts } from '@hooks/useAlerts';
+import { storageErrorMessage } from '@utils/alertMessages';
 
 /**
  * Keeps the file system usable at all times:
@@ -18,6 +20,7 @@ export function useEnsureFileSystem() {
     // Live-queried list of entries from Dexie (undefined while loading).
     const files = useFiles();
     const { activeFileId, setActiveFileId } = useActiveFile();
+    const alerts = useAlerts();
     const hasEnsuredFolders = useRef(false);
     // A file is being created: the live query may not include it yet, so no other one is created meanwhile
     const isCreatingFile = useRef(false);
@@ -27,8 +30,10 @@ export function useEnsureFileSystem() {
     useEffect(() => {
         if (hasEnsuredFolders.current) return;
         hasEnsuredFolders.current = true;
-        ensureSystemFolders();
-    }, []);
+        ensureSystemFolders().catch((error) => {
+            alerts.error({ title: "The Images and Trash folders couldn't be created", message: storageErrorMessage(error) });
+        });
+    }, [alerts]);
 
     useEffect(() => {
         // Dexie hasn't resolved the query yet — wait for real data.
@@ -51,8 +56,12 @@ export function useEnsureFileSystem() {
             // No files at all: first visit, or the last one was deleted for good
             if (isCreatingFile.current) return;
             isCreatingFile.current = true;
+            // If it fails it isn't tried again on every update: the alert explains why the editor is empty
             createFileSystemEntry(hadFiles.current ? 'New file' : 'Welcome file', { type: 'file', parentId: null })
-                .then((entry) => setActiveFileId(entry.id));
+                .then((entry) => setActiveFileId(entry.id))
+                .catch((error) => {
+                    alerts.error({ title: "A new file couldn't be created", message: storageErrorMessage(error) });
+                });
         };
 
         if (!activeFileId) {
@@ -67,5 +76,5 @@ export function useEnsureFileSystem() {
             if (!cancelled && entry?.type !== 'file') replaceActiveFile();
         });
         return () => { cancelled = true; };
-    }, [files, activeFileId, setActiveFileId]);
+    }, [files, activeFileId, setActiveFileId, alerts]);
 }

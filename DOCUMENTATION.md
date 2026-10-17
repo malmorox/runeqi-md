@@ -17,6 +17,7 @@ Live at: [runeqimd.dev](https://runeqimd.dev)
   - [File explorer](#file-explorer)
   - [Settings](#settings)
   - [Theming](#theming)
+  - [Alerts](#alerts)
 - [Data persistence](#data-persistence)
 - [Platform support](#platform-support)
 - [Deployment](#deployment)
@@ -92,6 +93,19 @@ Available from the sidebar menu, settings are grouped by area — workspace layo
 
 A light/dark toggle switches both the Monaco editor theme and the preview's color scheme in sync.
 
+### Alerts
+
+Short notifications in the bottom-right corner tell the user how an action went, without blocking the editor:
+
+- **Success** — Markdown files imported, a file exported, images uploaded from the explorer, Trash emptied, settings reset.
+- **Warning** — an import where only some of the files made it in, listing why the rest were rejected.
+- **Error** — rejected files (not Markdown, unsupported image, too big) and failures of the browser's storage, such as changes that couldn't be saved or running out of space.
+- **Info** — important notices, like an item moved to Trash, with an **Undo** button that puts it back where it was.
+
+Any component can raise one with the `useAlerts` hook (`alerts.success({ title, message })`, `alerts.error(...)`...).
+
+See [documentation/alerts.md](documentation/alerts.md) for how they behave, the API, every alert in the app and how the system is built.
+
 ## Data persistence
 
 RuneQi MD stores everything locally in the browser via **IndexedDB**, wrapped with **Dexie** for a simpler query API and React integration (`dexie-react-hooks`). There is currently no cloud sync or account system — data lives on the device/browser it was created in.
@@ -111,6 +125,6 @@ RuneQi currently targets **desktop browsers only**. On small viewports or mobile
 
 This file is meant to stay current as the project evolves. When you ship a feature, fix, or architectural change worth knowing about at a glance:
 
-- Add or update the relevant section above rather than creating a separate doc, unless the topic is large enough to deserve its own file (in which case, link it from here).
+- Add or update the relevant section above rather than creating a separate doc, unless the topic is large enough to deserve its own file. Those files live in the [`documentation/`](documentation/) folder and are linked from their section here (e.g. [Alerts](documentation/alerts.md)).
 - Keep the tone at "what does this do and why would I use/extend it," not implementation detail — that belongs in code comments or inline docs, not here.
 - If you're unsure whether something belongs here, err on the side of adding a short note — it's easier to trim later than to reconstruct context after the fact.
