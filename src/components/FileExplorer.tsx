@@ -316,7 +316,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`w-80 h-full bg-[#D4D4D4] text-[#252526] flex flex-col shrink-0 ${
+            className={`w-80 max-w-full h-full bg-[#D4D4D4] text-[#252526] flex flex-col shrink-0 panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:left-0 panel-overlay:z-50 panel-overlay:shadow-xl ${
                 isDraggingFiles ? 'outline-2 -outline-offset-2 outline-dashed outline-sky-500' : ''
             }`}
         >

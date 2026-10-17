@@ -4,6 +4,10 @@
    (the preview), so switching themes only changes styles and nothing has to be rendered again */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Below this width the toolbar (815px on one row) and a side panel (320px) don't fit side by side: the explorer and
+   the menu open over the workspace instead of pushing it (see SINGLE_PANEL_QUERY for when only one can be open) */
+@custom-variant panel-overlay (@media (width < 1140px));
+
 root {
     font-synthesis: none;
     text-rendering: optimizeLegibility;

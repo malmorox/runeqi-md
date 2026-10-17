@@ -42,9 +42,9 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen, onExplorerToggle, i
 
     return (
         // Columnas: explorador | botones de formato | nombre del archivo | opciones.
-        // Los botones ocupan todo su ancho mientras quepan (si no, pasan a otra fila) y el nombre se queda con el
-        // espacio que sobre: se acorta con "..." e incluso desaparece antes de que nada se salga de la pantalla.
-        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_minmax(0,max-content)_minmax(0,1fr)_auto] gap-2 items-center" ref={dropdownRef}>
+        // Los botones ocupan siempre todo su ancho en una sola fila y el nombre se queda con el espacio que sobre:
+        // se acorta con "..." e incluso desaparece antes de que nada se salga de la pantalla.
+        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_max-content_minmax(0,1fr)_auto] gap-2 items-center" ref={dropdownRef}>
             <ToolbarToggleButton
                 icon={FaFolder}
                 isActive={isExplorerOpen}

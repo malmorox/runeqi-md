@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     };
 
     return (
-        <aside className="fixed inset-y-0 right-0 w-full sm:relative sm:w-80 h-full bg-[#D4D4D4] text-[#252526] z-50 flex flex-col">
+        <aside className="w-80 max-w-full h-full shrink-0 bg-[#D4D4D4] text-[#252526] flex flex-col panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:right-0 panel-overlay:z-50 panel-overlay:shadow-xl">
             {/* Header */}
             <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
                 {currentView !== 'main' && (

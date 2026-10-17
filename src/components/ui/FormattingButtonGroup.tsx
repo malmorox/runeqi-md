@@ -25,8 +25,8 @@ const FormattingButtonGroup = ({
     canUndo, 
     canRedo
 }: FormattingButtonGroupProps) => (
-    // Si la toolbar no tiene sitio para todos los botones, pasan a otra fila en vez de salirse de la pantalla
-    <nav className="flex flex-wrap gap-0.5 items-center min-w-0">
+    // Siempre en una sola fila: el layout deja sitio a la toolbar cerrando o superponiendo los paneles laterales
+    <nav className="flex gap-0.5 items-center">
         <ToolbarIconButton 
             icon={LuUndo} 
             iconSize={24} 
