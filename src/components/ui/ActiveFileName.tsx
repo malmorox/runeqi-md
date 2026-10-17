@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useActiveFileEntry } from '@hooks/files/useActiveFileEntry';
 import { renameFileSystemEntry } from '@helpers/renameEntry';
+import { useAlerts } from '@hooks/useAlerts';
+import { storageErrorMessage } from '@utils/alertMessages';
 
 // Shared by the name and its rename input, so switching between them doesn't change the size or move the text
 const NAME_TEXT = "text-xl font-semibold text-center px-2 py-1 rounded";
@@ -9,6 +11,7 @@ const ActiveFileName = () => {
     const activeEntry = useActiveFileEntry();
     const [isEditing, setIsEditing] = useState(false);
     const [draft, setDraft] = useState('');
+    const alerts = useAlerts();
 
     if (!activeEntry) return null;
 
@@ -19,10 +22,15 @@ const ActiveFileName = () => {
 
     const commitRename = async (rawName: string) => {
         const name = rawName.trim();
-        if (name && name !== activeEntry.name) {
-            await renameFileSystemEntry(activeEntry.id, name);
+        try {
+            if (name && name !== activeEntry.name) {
+                await renameFileSystemEntry(activeEntry.id, name);
+            }
+        } catch (error) {
+            alerts.error({ title: "The file couldn't be renamed", message: storageErrorMessage(error) });
+        } finally {
+            setIsEditing(false);
         }
-        setIsEditing(false);
     };
 
     if (isEditing) {

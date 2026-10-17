@@ -3,11 +3,20 @@ import { db } from '@helpers/db';
 import { debounce } from '@utils/debounce';
 import { persistFileToDb } from '@helpers/persistFile';
 import { useMarkdown } from '@hooks/useMarkdown';
+import { useAlerts } from '@hooks/useAlerts';
+import { storageErrorMessage } from '@utils/alertMessages';
 
 export function useFileContent(activeFileId: string | null, onLoad: (content: string) => void) {
     const { setMarkdown } = useMarkdown();
+    const alerts = useAlerts();
 
-    const persistFile = useMemo(() => debounce(persistFileToDb, 400), []);
+    // A failed save would otherwise go unnoticed: the text stays in the editor but would be lost on reload.
+    // While it keeps failing, the same alert is shown again instead of a new one per change
+    const persistFile = useMemo(() => debounce((id: string, content: string) => {
+        persistFileToDb(id, content).catch((error) => {
+            alerts.error({ title: "Your changes couldn't be saved", message: storageErrorMessage(error) });
+        });
+    }, 400), [alerts]);
 
     useEffect(() => {
         if (!activeFileId) return;

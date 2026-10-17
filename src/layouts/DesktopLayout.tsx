@@ -3,6 +3,7 @@ import Toolbar from "@components/Toolbar";
 import MarkdownWorkspace from "@components/MarkdownWorkspace";
 import Sidebar from "@components/Sidebar";
 import FileExplorer from "@components/FileExplorer";
+import Alerts from "@components/Alerts";
 import { useEditor } from "@hooks/useEditor"
 import { useEnsureFileSystem } from "@hooks/files/useEnsureFileSystem";
 
@@ -38,6 +39,7 @@ const DesktopLayout = () => {
                 isOpen={isSidebarOpen} 
                 onClose={() => setSidebarOpen(false)} 
             />
+            <Alerts />
         </div>
     );
 }

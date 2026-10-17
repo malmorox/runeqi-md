@@ -6,3 +6,45 @@ root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+/* Alerts: they come in from below and leave to the right (see ALERT_EXIT_MS).
+   When the system asks for reduced motion they only fade in and out, without moving */
+@theme {
+    --animate-alert-in: alert-in 200ms ease-out;
+    --animate-alert-out: alert-out 150ms ease-in forwards;
+    --animate-alert-fade-in: alert-fade-in 200ms ease-out;
+    --animate-alert-fade-out: alert-fade-out 150ms ease-in forwards;
+}
+
+@keyframes alert-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes alert-fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes alert-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+}
+
+@keyframes alert-out {
+    to {
+        opacity: 0;
+        transform: translateX(16px);
+    }
+}
+
+/* Timer bar of an alert, set inline with the alert's duration */
+@keyframes alert-progress {
+    to {
+        transform: scaleX(0);
+    }
+}
