@@ -7,10 +7,10 @@ import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
 import { useSettings } from "@hooks/useSettings";
 import { useScrollSync } from "@hooks/useScrollSync";
-import { markdownComponentsDark, markdownComponentsLight } from "@constants/markdownComponents";
+import { markdownComponents } from "@constants/markdownComponents";
 import { splitMarkdownChunks } from "@utils/markdownChunks";
 
-// Un trozo solo se vuelve a parsear y renderizar si cambia su texto, los plugins o el tema
+// Un trozo solo se vuelve a parsear y renderizar si cambia su texto o los plugins (el tema solo cambia estilos)
 const MarkdownChunk = memo(ReactMarkdown);
 
 // Interprete del código Markdown que viene del contexto (lo captura del editor). Muestra por pantalla la salida final con el tema seleccionado.
@@ -22,10 +22,6 @@ const MarkdownPreview = () => {
     const { settings } = useSettings();
     const { registerPreview, invalidateAnchors } = useScrollSync();
     const { gfm, breaks, allowHtml } = settings.interpreter;
-    const isDark = theme === "vs-dark";
-    // Dependiendo si es claro u oscuro los componentes de salida del markdown seran de un color u otro, que se lo pasamos a la libreria que interpreta.
-    // Son mapas precalculados: mantienen la referencia entre renders, que es lo que compara el memo de cada trozo.
-    const components = isDark ? markdownComponentsDark : markdownComponentsLight;
 
     const remarkPlugins = useMemo(() => [
         ...(gfm ? [remarkGfm] : []),
@@ -43,8 +39,10 @@ const MarkdownPreview = () => {
     }, [deferredMarkdown, invalidateAnchors]);
 
     return (
-        <div ref={registerPreview} className={`w-full h-full overflow-auto ${
-            isDark ? "bg-[#2d2d30]" : "bg-[#f3f3f3]"
+        // The theme only toggles the `dark` class: the components are the same in both themes, so switching
+        // only changes styles and the Markdown isn't rendered again (images stay loaded)
+        <div ref={registerPreview} className={`w-full h-full overflow-auto bg-[#f3f3f3] dark:bg-[#2d2d30] ${
+            theme === "vs-dark" ? "dark" : ""
         }`}>
             {/* El primer encabezado del documento no lleva margen superior */}
             <div data-markdown-root className="p-6 max-w-4xl mx-auto wrap-break-word overflow-wrap-anywhere [&>:first-child>:first-child:is(h1,h2,h3,h4,h5,h6)]:mt-0">
@@ -54,7 +52,7 @@ const MarkdownPreview = () => {
                         <MarkdownChunk
                             remarkPlugins={remarkPlugins}
                             rehypePlugins={rehypePlugins}
-                            components={components}
+                            components={markdownComponents}
                         >
                             {chunk.source}
                         </MarkdownChunk>

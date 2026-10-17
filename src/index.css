@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* `dark:` follows the app's theme toggle instead of the system's: it applies inside an element with the `dark` class
+   (the preview), so switching themes only changes styles and nothing has to be rendered again */
+@custom-variant dark (&:where(.dark, .dark *));
+
 root {
     font-synthesis: none;
     text-rendering: optimizeLegibility;
