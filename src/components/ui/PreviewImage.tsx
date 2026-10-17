@@ -22,7 +22,8 @@ const PreviewImage = ({ src, alt }: PreviewImageProps) => {
     // Still loading from the database
     if (!image.src) return null;
 
-    return <img src={image.src} alt={alt} className="my-4 max-w-full inline-block" />;
+    // Not draggable: the browser would carry it as a file and dropping it on the editor would import a copy
+    return <img src={image.src} alt={alt} draggable={false} className="my-4 max-w-full inline-block" />;
 };
 
 export default PreviewImage;
