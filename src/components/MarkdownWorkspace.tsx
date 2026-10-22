@@ -29,7 +29,7 @@ const MarkdownWorkspace = () => {
                     disabled={!isSplit}
                     style={{ display: isSplit ? undefined : "none" }}
                     className={`w-2 cursor-col-resize ${
-                        theme === "vs-dark"
+                        theme === "dark"
                             ? "bg-[#252526] hover:bg-[#212122]"
                             : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
                     }`}

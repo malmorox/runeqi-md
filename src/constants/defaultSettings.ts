@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
         lineNumbers: true,
         minimap: false,
     },
-    interpreter: {
+    previewer: {
         gfm: true,
         breaks: false,
         allowHtml: true,

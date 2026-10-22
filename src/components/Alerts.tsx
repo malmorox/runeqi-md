@@ -19,7 +19,7 @@ const Alerts = () => {
                     <AlertToast
                         key={alert.id}
                         alert={alert}
-                        isDark={theme === "vs-dark"}
+                        isDark={theme === "dark"}
                         onDismiss={() => dismiss(alert.id)}
                     />
                 ))}

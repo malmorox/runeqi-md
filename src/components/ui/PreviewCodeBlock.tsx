@@ -11,7 +11,7 @@ interface PreviewCodeBlockProps {
 // are inline styles), so only code blocks re-render when the theme changes; the rest switches with `dark:` classes
 const PreviewCodeBlock = ({ language, content }: PreviewCodeBlockProps) => {
     const { theme } = useTheme();
-    const isDark = theme === 'vs-dark';
+    const isDark = theme === 'dark';
 
     return (
         <SyntaxHighlighter

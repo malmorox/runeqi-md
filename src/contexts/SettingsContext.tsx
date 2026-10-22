@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import type { AppSettings } from "@/types/settings";
+import type { AppSettings, PreviewerSettings } from "@/types/settings";
 import { DEFAULT_SETTINGS } from "@constants/defaultSettings";
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
@@ -14,11 +14,16 @@ export const SettingsContext = createContext<SettingsContextType | undefined>(un
 
 const STORAGE_KEY = "markdown-editor-settings";
 
+// The preview options used to be saved under `interpreter`
+type StoredSettings = DeepPartial<AppSettings> & { interpreter?: DeepPartial<PreviewerSettings> };
+
 function loadSettings(): AppSettings {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (!stored) return DEFAULT_SETTINGS;
-        const parsed = JSON.parse(stored) as DeepPartial<AppSettings>;
+        // Dropping `interpreter` keeps the old key from being saved again
+        const { interpreter, ...parsed } = JSON.parse(stored) as StoredSettings;
+        if (interpreter && !parsed.previewer) parsed.previewer = interpreter;
         return deepMerge(DEFAULT_SETTINGS, parsed);
     } catch {
         return DEFAULT_SETTINGS;

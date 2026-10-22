@@ -91,7 +91,7 @@ Available from the sidebar menu, settings are grouped by area — workspace layo
 
 ### Theming
 
-A light/dark toggle switches both the Monaco editor theme and the preview's color scheme in sync.
+A light/dark toggle switches both the Monaco editor theme and the preview's color scheme in sync. The chosen theme is remembered in the browser, separately from the settings, so resetting them doesn't change it.
 
 ### Alerts
 

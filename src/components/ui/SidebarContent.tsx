@@ -166,18 +166,18 @@ const SidebarContent = ({
                         <SettingsSection title="Preview" description="Control how your document is displayed in the preview.">
                             <SettingsToggle
                                 label="Enable tables and task lists"
-                                checked={settings.interpreter.gfm}
-                                onChange={v => updateSettings({ interpreter: { gfm: v } })}
+                                checked={settings.previewer.gfm}
+                                onChange={v => updateSettings({ previewer: { gfm: v } })}
                             />
                             <SettingsToggle
                                 label="Preserve line breaks"
-                                checked={settings.interpreter.breaks}
-                                onChange={v => updateSettings({ interpreter: { breaks: v } })}
+                                checked={settings.previewer.breaks}
+                                onChange={v => updateSettings({ previewer: { breaks: v } })}
                             />
                             <SettingsToggle
                                 label="Allow embedded HTML"
-                                checked={settings.interpreter.allowHtml}
-                                onChange={v => updateSettings({ interpreter: { allowHtml: v } })}
+                                checked={settings.previewer.allowHtml}
+                                onChange={v => updateSettings({ previewer: { allowHtml: v } })}
                             />
                         </SettingsSection>
                     )}

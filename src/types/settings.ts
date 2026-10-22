@@ -16,7 +16,7 @@ export interface EditorSettings {
     minimap: boolean;
 }
 
-export interface InterpreterSettings {
+export interface PreviewerSettings {
     gfm: boolean;
     breaks: boolean;
     allowHtml: boolean;
@@ -26,5 +26,5 @@ export interface InterpreterSettings {
 export interface AppSettings {
     workspace: WorkspaceSettings;
     editor: EditorSettings;
-    interpreter: InterpreterSettings;
+    previewer: PreviewerSettings;
 }

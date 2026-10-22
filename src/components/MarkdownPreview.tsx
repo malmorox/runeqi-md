@@ -21,7 +21,7 @@ const MarkdownPreview = () => {
     const { theme } = useTheme();
     const { settings } = useSettings();
     const { registerPreview, invalidateAnchors } = useScrollSync();
-    const { gfm, breaks, allowHtml } = settings.interpreter;
+    const { gfm, breaks, allowHtml } = settings.previewer;
 
     const remarkPlugins = useMemo(() => [
         ...(gfm ? [remarkGfm] : []),
@@ -42,7 +42,7 @@ const MarkdownPreview = () => {
         // The theme only toggles the `dark` class: the components are the same in both themes, so switching
         // only changes styles and the Markdown isn't rendered again (images stay loaded)
         <div ref={registerPreview} className={`w-full h-full overflow-auto bg-[#f3f3f3] dark:bg-[#2d2d30] ${
-            theme === "vs-dark" ? "dark" : ""
+            theme === "dark" ? "dark" : ""
         }`}>
             {/* El primer encabezado del documento no lleva margen superior */}
             <div data-markdown-root className="p-6 max-w-4xl mx-auto wrap-break-word overflow-wrap-anywhere [&>:first-child>:first-child:is(h1,h2,h3,h4,h5,h6)]:mt-0">

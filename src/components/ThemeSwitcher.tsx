@@ -1,13 +1,13 @@
 import { useTheme } from "@hooks/useTheme";
-import type { MonacoTheme } from "@/types/monaco";
+import type { Theme } from "@/types/theme";
 
 export default function ThemeSwitcher() {
     const { theme, setTheme } = useTheme();
 
-    const isDark = theme === "vs-dark";
+    const isDark = theme === "dark";
 
     const handleToggle = () => {
-        const nextTheme: MonacoTheme = isDark ? "light" : "vs-dark";
+        const nextTheme: Theme = isDark ? "light" : "dark";
         setTheme(nextTheme);
     };
 

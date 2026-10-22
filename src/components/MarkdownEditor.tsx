@@ -136,7 +136,7 @@ const MarkdownEditor = () => {
             <Editor
                 height="100%"
                 defaultLanguage="markdown"
-                theme={theme === 'vs-dark' ? 'customDark' : theme}
+                theme={theme === 'dark' ? 'customDark' : theme}
                 defaultValue={markdown}
                 onChange={(v) => handleChange(v ?? '')}
                 beforeMount={handleEditorWillMount}
