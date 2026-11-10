@@ -1,12 +1,13 @@
 import React from 'react';
 import type { MenuItem, MenuView } from '@/types/sidebar';
 import { SHORTCUTS } from '@constants/shortcuts';
+import { shortcutKeys } from '@utils/shortcuts';
 import { useSettings } from '@hooks/useSettings';
 import { useAlerts } from '@hooks/useAlerts';
 import SidebarMenuItem from '@components/ui/SidebarMenuItem';
 import ImportExportPanel from '@components/ui/ImportExportPanel';
 
-const shortcuts = Object.values(SHORTCUTS);
+const shortcuts = Object.values(SHORTCUTS).map(({ id, label, key }) => ({ id, label, keys: shortcutKeys(key) }));
 
 interface SidebarContentProps {
     currentView: MenuView;

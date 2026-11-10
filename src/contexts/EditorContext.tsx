@@ -4,8 +4,10 @@ import type { Monaco } from '@monaco-editor/react';
 
 type EditorContextType = {
     editorInstance: editor.IStandaloneCodeEditor | null;
+    monaco: Monaco | null;
     setEditorInstance: (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => void;
     insertMarkdown: (text: string, offset?: number) => void;
+    wrapSelection: (before: string, after: string, placeholder: string) => void;
     undo: () => void;
     redo: () => void;
     clearEditor: () => void;
@@ -19,10 +21,10 @@ export const EditorContext = createContext<EditorContextType | undefined>(undefi
 
 export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
     const [editorInstance, setEditorInstanceState] = useState<editor.IStandaloneCodeEditor | null>(null);
+    const [monaco, setMonaco] = useState<Monaco | null>(null);
     const [canUndo, setCanUndo] = useState(false);
     const [canRedo, setCanRedo] = useState(false);
 
-    const monacoRef = useRef<Monaco | null>(null);
     const modelsRef = useRef<Map<string, editor.ITextModel>>(new Map());
     // Models of deleted files that the editor is still showing: they're disposed once the next file is loaded
     const orphanModelsRef = useRef<editor.ITextModel[]>([]);
@@ -44,13 +46,12 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
 
     const setEditorInstance = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
         setEditorInstanceState(editor);
-        monacoRef.current = monaco;
+        setMonaco(monaco);
     };
 
     const loadFileModel = useCallback((fileId: string, content: string) => {
-        if (!editorInstance || !monacoRef.current) return;
+        if (!editorInstance || !monaco) return;
 
-        const monaco = monacoRef.current;
         const existingModel = modelsRef.current.get(fileId);
         const model = existingModel ?? monaco.editor.createModel(content, 'markdown');
 
@@ -63,7 +64,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
 
         orphanModelsRef.current.forEach((orphan) => orphan.dispose());
         orphanModelsRef.current = [];
-    }, [editorInstance]);
+    }, [editorInstance, monaco]);
 
     const disposeFileModel = (fileId: string) => {
         const model = modelsRef.current.get(fileId);
@@ -104,7 +105,39 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
         const targetPos = model.getPositionAt(Math.max(0, targetOffset));
 
         editorInstance.setPosition(targetPos);
-        editorInstance.revealPositionInCenter(targetPos);
+        // Only scrolls when needed, so repeated shortcuts don't keep moving the view
+        editorInstance.revealPositionInCenterIfOutsideViewport(targetPos);
+        editorInstance.focus();
+    };
+
+    // Wraps the selected text (e.g. **text**), or inserts the placeholder wrapped when nothing is selected.
+    // The wrapped text ends up selected, so the placeholder can be typed over right away
+    const wrapSelection = (before: string, after: string, placeholder: string) => {
+        if (!editorInstance) return;
+
+        const model = editorInstance.getModel();
+        const selection = editorInstance.getSelection();
+        if (!model || !selection) return;
+
+        const content = selection.isEmpty() ? placeholder : model.getValueInRange(selection);
+        const contentStart = model.getOffsetAt(selection.getStartPosition()) + before.length;
+
+        editorInstance.pushUndoStop();
+        editorInstance.executeEdits("toolbar", [
+            {
+            range: selection,
+            text: `${before}${content}${after}`,
+            forceMoveMarkers: true,
+            },
+        ]);
+        editorInstance.pushUndoStop();
+
+        const start = model.getPositionAt(contentStart);
+        const end = model.getPositionAt(contentStart + content.length);
+        const range = { startLineNumber: start.lineNumber, startColumn: start.column, endLineNumber: end.lineNumber, endColumn: end.column };
+
+        editorInstance.setSelection(range);
+        editorInstance.revealRangeInCenterIfOutsideViewport(range);
         editorInstance.focus();
     };
 
@@ -143,7 +176,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <EditorContext.Provider value={{
-            editorInstance, setEditorInstance, insertMarkdown, undo, redo, clearEditor,
+            editorInstance, monaco, setEditorInstance, insertMarkdown, wrapSelection, undo, redo, clearEditor,
             canUndo, canRedo, loadFileModel, disposeFileModel
         }}>
             {children}

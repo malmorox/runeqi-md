@@ -4,7 +4,6 @@ import MarkdownWorkspace from "@components/MarkdownWorkspace";
 import Sidebar from "@components/Sidebar";
 import FileExplorer from "@components/FileExplorer";
 import Alerts from "@components/Alerts";
-import { useEditor } from "@hooks/useEditor"
 import { useEnsureFileSystem } from "@hooks/files/useEnsureFileSystem";
 
 type SidePanel = 'explorer' | 'menu';
@@ -16,7 +15,6 @@ const SINGLE_PANEL_QUERY = '(width < 1480px)';
 
 const DesktopLayout = () => {
     useEnsureFileSystem();
-    const { insertMarkdown } = useEditor();
     // Open side panels, the most recently opened last
     const [openPanels, setOpenPanels] = useState<SidePanel[]>([]);
 
@@ -53,7 +51,6 @@ const DesktopLayout = () => {
                 {/* Toolbar */}
                 <div className="shrink-0">
                     <Toolbar
-                        onInsert={insertMarkdown}
                         onSidebarToggle={() => togglePanel('menu')}
                         isSidebarOpen={isSidebarOpen}
                         onExplorerToggle={() => togglePanel('explorer')}

@@ -60,9 +60,27 @@ The editor is powered by Monaco, configured for Markdown syntax highlighting. Th
 - Emoji picker
 - Undo / redo
 
-This actions have a keyboard shortcut.
+#### Keyboard shortcuts
 
-> These actions have a keyboard shortcut. Shortcuts are a work in progress — a couple of actions currently share the same binding, and this is expected to be cleaned up as the toolbar stabilizes.
+Every toolbar button has a Ctrl+Shift keyboard shortcut that works while the editor has focus (Cmd+Shift on macOS) and does the same as clicking the button:
+
+| Action | Shortcut | | Action | Shortcut |
+|---|---|---|---|---|
+| Heading | Ctrl+Shift+H | | Link | Ctrl+Shift+L |
+| Bold | Ctrl+Shift+B | | Unordered list | Ctrl+Shift+U |
+| Italic | Ctrl+Shift+I | | Ordered list | Ctrl+Shift+O |
+| Strikethrough | Ctrl+Shift+S | | Task list | Ctrl+Shift+X |
+| Blockquote | Ctrl+Shift+Q | | Code block | Ctrl+Shift+C |
+| Inline code | Ctrl+Shift+K | | Table | Ctrl+Shift+T |
+| | | | Image | Ctrl+Shift+M |
+| | | | Emoji | Ctrl+Shift+E |
+
+- Bold, italic, strikethrough and inline code wrap the selected text; with nothing selected they insert a placeholder that is already selected, ready to type over. Links and images left without a text use the selected text the same way.
+- The shortcuts of buttons with a dropdown open it with its first field focused. Enter submits the link and image forms, and Escape closes the dropdown and goes back to the editor.
+- While the editor has focus, Ctrl+Shift+K and Ctrl+Shift+L replace Monaco's "delete line" and "select all occurrences", and Ctrl+Shift+C / Ctrl+Shift+I replace the browser's DevTools shortcuts (F12 still opens DevTools).
+- Chrome and Edge keep Ctrl+Shift+T for reopening a closed tab, so the table shortcut doesn't reach the page there.
+
+The toolbar tooltips and the *Keyboard Shortcuts* view of the sidebar list them too. The bindings live in `src/constants/shortcuts.ts` (one per toolbar button) and are registered as Monaco actions by `useEditorShortcuts`, so they also appear in the editor's command palette (F1).
 
 ### Live preview
 

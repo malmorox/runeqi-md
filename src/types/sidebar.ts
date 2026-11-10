@@ -13,25 +13,3 @@ export interface MenuItem {
     inlineComponent?: React.ReactNode;
     disabled?: boolean;
 }
-
-export type ShortcutId =
-    | 'heading'
-    | 'bold'
-    | 'italic'
-    | 'strikethrough'
-    | 'quote'
-    | 'code'
-    | 'link'
-    | 'unordered-list'
-    | 'ordered-list'
-    | 'task-list'
-    | 'codeblock'
-    | 'table'
-    | 'image'
-    | 'emoji';
-
-export interface ShortcutDefinition {
-    id: ShortcutId;
-    label: string;
-    keys: string[];
-}

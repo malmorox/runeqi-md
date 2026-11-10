@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
+import { useEditor } from '@hooks/useEditor';
 
-interface MarkdownActionsProps {
-    onInsert: (markdown: string, cursorOffset?: number) => void;
-}
+// Markdown insertions shared by the toolbar buttons and their shortcuts, applied at the editor's selection
+export const useMarkdownActions = () => {
+    const { insertMarkdown, wrapSelection } = useEditor();
 
-export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
     // Función para generar tablas
     const generateTable = useCallback((rows: number, cols: number) => {
         let table = '|';
@@ -27,82 +27,80 @@ export const useMarkdownActions = ({ onInsert }: MarkdownActionsProps) => {
 
     // Acciones de formato
     const insertHeading = useCallback((level: 1 | 2 | 3 | 4 | 5 | 6, label: string) => {
-        onInsert(`${'#'.repeat(level)} ${label}`);
-    }, [onInsert]);
+        insertMarkdown(`${'#'.repeat(level)} ${label}`);
+    }, [insertMarkdown]);
 
     const insertBold = useCallback(() => {
-        const text = 'bold text';
-        onInsert(`**${text}**`, -2);
-    }, [onInsert]);
+        wrapSelection('**', '**', 'bold text');
+    }, [wrapSelection]);
 
     const insertItalic = useCallback(() => {
-        const text = 'italic text';
-        onInsert(`*${text}*`, -1);
-    }, [onInsert]);
+        wrapSelection('*', '*', 'italic text');
+    }, [wrapSelection]);
 
     const insertStrikethrough = useCallback(() => {
-        const text = 'strikethrough text';
-        onInsert(`~${text}~`, -1);
-    }, [onInsert]);
+        wrapSelection('~', '~', 'strikethrough text');
+    }, [wrapSelection]);
 
     const insertQuote = useCallback(() => {
         const text = 'quoted text';
-        onInsert(`> ${text}`);
-    }, [onInsert]);
+        insertMarkdown(`> ${text}`);
+    }, [insertMarkdown]);
 
     const insertCode = useCallback(() => {
-        const text = 'enter code here';
-        onInsert(`\`${text}\``, -1);
-    }, [onInsert]);
+        wrapSelection('`', '`', 'enter code here');
+    }, [wrapSelection]);
 
+    // Without a text, the selected text (or the placeholder) becomes the link text
     const insertLink = useCallback((text?: string, url?: string) => {
-        const linkText = text || 'link text';
         const linkUrl = url || 'https://example.com';
-        onInsert(`[${linkText}](${linkUrl})`);
-    }, [onInsert]);
+        if (text) insertMarkdown(`[${text}](${linkUrl})`);
+        else wrapSelection('[', `](${linkUrl})`, 'link text');
+    }, [insertMarkdown, wrapSelection]);
 
+    // Without an alt text, the selected text (or the placeholder) becomes the alt text
     const insertImage = useCallback((alt?: string, url?: string) => {
-        const altText = alt || 'description';
         const imageUrl = url || 'https://example.com/image.jpg';
-        onInsert(`![${altText}](${imageUrl})`);
-    }, [onInsert]);
+        if (alt) insertMarkdown(`![${alt}](${imageUrl})`);
+        else wrapSelection('![', `](${imageUrl})`, 'description');
+    }, [insertMarkdown, wrapSelection]);
 
     // Listas
     const insertUnorderedList = useCallback(() => {
         const content = '- Element 1\n- Element 2\n- Element 3';
-        onInsert(content);
-    }, [onInsert]);
+        insertMarkdown(content);
+    }, [insertMarkdown]);
 
     const insertOrderedList = useCallback(() => {
         const content = '1. Element 1\n2. Element 2\n3. Element 3';
-        onInsert(content);
-    }, [onInsert]);
+        insertMarkdown(content);
+    }, [insertMarkdown]);
 
     const insertTaskList = useCallback(() => {
         const content = '- [x] Task 1\n- [x] Task 2\n- [ ] Task 3';
-        onInsert(content);
-    }, [onInsert]);
+        insertMarkdown(content);
+    }, [insertMarkdown]);
 
     // Bloques de código
     const insertCodeBlock = useCallback((language: string = 'javascript') => {
-        onInsert(`\`\`\`${language}\n\n\`\`\``, -4);
-    }, [onInsert]);
+        insertMarkdown(`\`\`\`${language}\n\n\`\`\``, -4);
+    }, [insertMarkdown]);
 
     // Tabla
     const insertTable = useCallback((rows: number = 3, cols: number = 3) => {
         const table = generateTable(rows, cols);
-        onInsert(table);
-    }, [onInsert, generateTable]);
+        insertMarkdown(table);
+    }, [insertMarkdown, generateTable]);
 
     // Emoji
     const insertEmoji = useCallback((emoji: string) => {
-        onInsert(emoji);
-    }, [onInsert]);
+        insertMarkdown(emoji);
+    }, [insertMarkdown]);
 
     // Divisor
     /*const insertDivider = useCallback(() => {
-        onInsert('\n---\n');
-    }, [onInsert]);*/
+        insertMarkdown('\n---\n');
+    }, [insertMarkdown]);*/
 
     return {
         // Formato de texto

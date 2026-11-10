@@ -1,11 +1,12 @@
 import type { IconType } from 'react-icons';
+import type { ShortcutId } from '@/types/shortcut';
 
 export type ActionButton = {
     type: 'action';
     icon: IconType;
     iconSize: number;
     tooltip: string;
-    name: string;
+    name: ShortcutId;
     onClick: () => void;
 };
 
@@ -14,7 +15,7 @@ export type DropdownButton = {
     icon: IconType;
     iconSize: number;
     tooltip: string;
-    name: string;
+    name: ShortcutId;
     dropdownContent: React.ReactNode;
 };
 

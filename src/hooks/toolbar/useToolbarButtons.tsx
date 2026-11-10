@@ -23,15 +23,16 @@ import { useMarkdownActions } from '@hooks/markdown/useMarkdownActions';
 import { saveImage } from '@helpers/images';
 import { imageAlt, imageMarkdownPath } from '@utils/imagePaths';
 import { SHORTCUTS } from '@constants/shortcuts';
+import { formatShortcut } from '@utils/shortcuts';
 import type { ToolbarButton } from '@/types/toolbar';
+import type { ShortcutDefinition } from '@/types/shortcut';
 
 interface UseToolbarButtonsParams {
-    onInsert: (markdown: string, cursorOffset?: number) => void;
     closeDropdown: () => void;
 }
 
-export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtonsParams): ToolbarButton[] => {
-    const actions = useMarkdownActions({ onInsert });
+export const useToolbarButtons = ({ closeDropdown }: UseToolbarButtonsParams): ToolbarButton[] => {
+    const actions = useMarkdownActions();
 
     const handleHeadingSelect = (level: 1 | 2 | 3 | 4 | 5 | 6, label: string) => {
         actions.insertHeading(level, label);
@@ -65,16 +66,14 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
         closeDropdown();
     };
 
-    //const formatShortcutKeys = (keys: string[]) => keys.join('+');
-    //const buildTooltip = (label: string, keys: string[]) => `${label} – ${formatShortcutKeys(keys)}`;
-    const buildTooltip = (label: string) => label;
+    const buildTooltip = ({ label, key }: ShortcutDefinition) => `${label} – ${formatShortcut(key)}`;
 
     return [
         {
             type: 'dropdown',
             icon: FaTextHeight,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.heading.label/*, SHORTCUTS.heading.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.heading),
             name: 'heading',
             dropdownContent: (
                 <HeadingContent 
@@ -87,7 +86,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaBold,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.bold.label/*, SHORTCUTS.bold.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.bold),
             name: 'bold',
             onClick: () => actions.insertBold()
         },
@@ -95,7 +94,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaItalic,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.italic.label/*, SHORTCUTS.italic.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.italic),
             name: 'italic',
             onClick: () => actions.insertItalic()
         },
@@ -103,7 +102,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaStrikethrough,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.strikethrough.label/*, SHORTCUTS.strikethrough.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.strikethrough),
             name: 'strikethrough',
             onClick: () => actions.insertStrikethrough()
         },
@@ -111,7 +110,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaQuoteRight,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.quote.label/*, SHORTCUTS.quote.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.quote),
             name: 'quote',
             onClick: () => actions.insertQuote()
         },
@@ -119,7 +118,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: IoCode,
             iconSize: 22,
-            tooltip: buildTooltip(SHORTCUTS.code.label/*, SHORTCUTS.code.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.code),
             name: 'code',
             onClick: () => actions.insertCode()
         },
@@ -127,7 +126,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'dropdown',
             icon: FaLink,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.link.label/*, SHORTCUTS.link.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.link),
             name: 'link',
             dropdownContent: (
                 <InputContent
@@ -143,7 +142,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaListUl,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['unordered-list'].label/*, SHORTCUTS['unordered-list'].keys*/),
+            tooltip: buildTooltip(SHORTCUTS['unordered-list']),
             name: 'unordered-list',
             onClick: () => actions.insertUnorderedList()
         },
@@ -151,7 +150,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaListOl,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['ordered-list'].label/*, SHORTCUTS['ordered-list'].keys*/),
+            tooltip: buildTooltip(SHORTCUTS['ordered-list']),
             name: 'ordered-list',
             onClick: () => actions.insertOrderedList()
         },
@@ -159,7 +158,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'action',
             icon: FaListCheck,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS['task-list'].label/*, SHORTCUTS['task-list'].keys*/),
+            tooltip: buildTooltip(SHORTCUTS['task-list']),
             name: 'task-list',
             onClick: () => actions.insertTaskList()
         },
@@ -167,7 +166,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'dropdown',
             icon: PiCodeBlockBold,
             iconSize: 20,
-            tooltip: buildTooltip(SHORTCUTS.codeblock.label/*, SHORTCUTS.codeblock.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.codeblock),
             name: 'codeblock',
             dropdownContent: <CodeLanguageSelector onSelect={handleCodeBlockSelect} />
         },
@@ -175,7 +174,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'dropdown',
             icon: BiTable,
             iconSize: 21,
-            tooltip: buildTooltip(SHORTCUTS.table.label/*, SHORTCUTS.table.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.table),
             name: 'table',
             dropdownContent: <TableRowsColumnsSelector onSelect={handleTableSelect} />
         },
@@ -183,7 +182,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'dropdown',
             icon: FaRegImage,
             iconSize: 18,
-            tooltip: buildTooltip(SHORTCUTS.image.label/*, SHORTCUTS.image.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.image),
             name: 'image',
             dropdownContent: <ImageContent onSubmit={handleImageInsert} onUpload={handleImageUpload} />
         },
@@ -191,7 +190,7 @@ export const useToolbarButtons = ({ onInsert, closeDropdown }: UseToolbarButtons
             type: 'dropdown',
             icon: MdInsertEmoticon,
             iconSize: 21,
-            tooltip: buildTooltip(SHORTCUTS.emoji.label/*, SHORTCUTS.emoji.keys*/),
+            tooltip: buildTooltip(SHORTCUTS.emoji),
             name: 'emoji',
             dropdownContent: <EmojiPicker onSelect={actions.insertEmoji} />
         }
