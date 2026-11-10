@@ -41,7 +41,7 @@ const MarkdownPreview = () => {
     return (
         // The theme only toggles the `dark` class: the components are the same in both themes, so switching
         // only changes styles and the Markdown isn't rendered again (images stay loaded)
-        <div ref={registerPreview} className={`w-full h-full overflow-auto bg-[#f3f3f3] dark:bg-[#2d2d30] ${
+        <div ref={registerPreview} className={`preview-scroll w-full h-full overflow-auto bg-[#f3f3f3] dark:bg-[#2d2d30] ${
             theme === "dark" ? "dark" : ""
         }`}>
             {/* El primer encabezado del documento no lleva margen superior */}
