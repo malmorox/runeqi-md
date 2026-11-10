@@ -17,7 +17,9 @@ export const InputContent = ({
         setValues(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmitClick = () => {
+    // A form, so Enter in any field submits it too
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         const finalValues: Record<string, string> = {};
         fields.forEach(field => {
             finalValues[field.name] = values[field.name] || field.defaultValue || '';
@@ -28,7 +30,7 @@ export const InputContent = ({
 
     return (
         <div className="p-3 min-w-[250px]">
-            <div className="space-y-2">
+            <form className="space-y-2" onSubmit={handleSubmit}>
                 {fields.map(field => (
                     <div key={field.name}>
                         <label className="block text-xs font-medium text-[#cccccc] mb-1">
@@ -44,12 +46,12 @@ export const InputContent = ({
                     </div>
                 ))}
                 <button
-                    onClick={handleSubmitClick}
+                    type="submit"
                     className="w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors mt-2 cursor-pointer"
                 >
                     {buttonText}
                 </button>
-            </div>
+            </form>
         </div>
     );
 };
@@ -115,44 +117,50 @@ export const ImageContent = ({
 
     const inputClassName = "w-full px-2 py-1.5 text-sm text-[#1e1e1e] bg-white border border-[#cccccc] rounded focus:outline-none focus:ring-2 focus:ring-sky-500";
 
+    // A form, so Enter in either field inserts the image
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(alt, url);
+        setAlt('');
+        setUrl('');
+    };
+
     return (
         <div className="p-3 min-w-[250px] space-y-2">
-            <div>
-                <label htmlFor="image-alt" className="block text-xs font-medium text-[#cccccc] mb-1">
-                    Alt text
-                </label>
-                <input
-                    id="image-alt"
-                    type="text"
-                    value={alt}
-                    onChange={(e) => setAlt(e.target.value)}
-                    placeholder="Description"
-                    className={inputClassName}
-                />
-            </div>
-            <div>
-                <label htmlFor="image-url" className="block text-xs font-medium text-[#cccccc] mb-1">
-                    Image URL
-                </label>
-                <input
-                    id="image-url"
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                    className={inputClassName}
-                />
-            </div>
-            <button
-                onClick={() => {
-                    onSubmit(alt, url);
-                    setAlt('');
-                    setUrl('');
-                }}
-                className="w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer"
-            >
-                Insert
-            </button>
+            <form className="space-y-2" onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="image-alt" className="block text-xs font-medium text-[#cccccc] mb-1">
+                        Alt text
+                    </label>
+                    <input
+                        id="image-alt"
+                        type="text"
+                        value={alt}
+                        onChange={(e) => setAlt(e.target.value)}
+                        placeholder="Description"
+                        className={inputClassName}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="image-url" className="block text-xs font-medium text-[#cccccc] mb-1">
+                        Image URL
+                    </label>
+                    <input
+                        id="image-url"
+                        type="text"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://example.com/image.jpg"
+                        className={inputClassName}
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer"
+                >
+                    Insert
+                </button>
+            </form>
 
             <div className="flex items-center gap-2 text-xs text-[#999999]">
                 <span className="h-px flex-1 bg-[#555555]" />
@@ -161,6 +169,7 @@ export const ImageContent = ({
             </div>
 
             <button
+                type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
                 className="w-full flex items-center justify-center gap-2 border border-[#555555] text-[#cccccc] px-3 py-1.5 rounded text-sm hover:bg-[#3e3e42] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-wait"

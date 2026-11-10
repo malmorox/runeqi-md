@@ -7,27 +7,58 @@ import ActiveFileName from '@components/ui/ActiveFileName';
 import { useToolbarButtons } from '@hooks/toolbar/useToolbarButtons';
 import { useEditor } from "@hooks/useEditor";
 import { useSettings } from "@hooks/useSettings";
+import { useEditorShortcuts } from '@hooks/editor/useEditorShortcuts';
+import type { ToolbarButton } from '@/types/toolbar';
+import type { ShortcutId } from '@/types/shortcut';
 
 
 interface MarkdownToolbarProps {
-    onInsert: (markdown: string, cursorOffset?: number) => void;
     onSidebarToggle: () => void;
     isSidebarOpen: boolean;
     onExplorerToggle: () => void;
     isExplorerOpen: boolean;
 }
 
-const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerOpen }: MarkdownToolbarProps) => {
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerOpen }: MarkdownToolbarProps) => {
+    const [openDropdown, setOpenDropdown] = useState<ShortcutId | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const { undo, redo, canUndo, canRedo } = useEditor();
+    const { editorInstance, undo, redo, canUndo, canRedo } = useEditor();
     const { settings } = useSettings();
 
     const isEditorVisible = settings.workspace.viewMode === 'editor' || settings.workspace.viewMode === 'split';
-    const toggleDropdown = (name: string) => setOpenDropdown((prev) => (prev === name ? null : name));
     const closeDropdown = () => setOpenDropdown(null);
 
-    const toolbarButtons = useToolbarButtons({ onInsert, closeDropdown });
+    const toolbarButtons = useToolbarButtons({ closeDropdown });
+
+    // Shared by the button click and its keyboard shortcut, so both always do the same
+    const handleButton = (button: ToolbarButton) => {
+        if (button.type === 'action') {
+            closeDropdown();
+            button.onClick();
+        } else {
+            setOpenDropdown((prev) => (prev === button.name ? null : button.name));
+        }
+    };
+
+    useEditorShortcuts((id) => {
+        const button = toolbarButtons.find((b) => b.name === id);
+        if (button) handleButton(button);
+    });
+
+    // Escape closes the open dropdown and gives the focus back to the editor.
+    // Captured before Monaco, which would otherwise use it to clear the selection and keep the dropdown open
+    useEffect(() => {
+        if (!openDropdown) return;
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key !== 'Escape') return;
+            setOpenDropdown(null);
+            editorInstance?.focus();
+        };
+
+        document.addEventListener('keydown', handleEscape, true);
+        return () => document.removeEventListener('keydown', handleEscape, true);
+    }, [openDropdown, editorInstance]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -56,8 +87,7 @@ const Toolbar = ({ onInsert, onSidebarToggle, isSidebarOpen, onExplorerToggle, i
                 <FormattingButtonGroup
                     buttons={toolbarButtons}
                     openDropdown={openDropdown}
-                    onToggleDropdown={toggleDropdown}
-                    onCloseDropdown={closeDropdown}
+                    onButtonClick={handleButton}
                     undo={undo}
                     redo={redo}
                     canUndo={canUndo}

@@ -2,13 +2,13 @@ import React from 'react';
 import { LuUndo, LuRedo } from 'react-icons/lu';
 import Dropdown from '@components/Dropdown';
 import type { ToolbarButton } from '@/types/toolbar';
+import type { ShortcutId } from '@/types/shortcut';
 import ToolbarIconButton from './ToolbarIconButton';
 
 interface FormattingButtonGroupProps {
     buttons: ToolbarButton[];
-    openDropdown: string | null;
-    onToggleDropdown: (name: string) => void;
-    onCloseDropdown: () => void;
+    openDropdown: ShortcutId | null;
+    onButtonClick: (button: ToolbarButton) => void;
     undo: () => void;
     redo: () => void;
     canUndo: boolean;
@@ -17,10 +17,9 @@ interface FormattingButtonGroupProps {
 
 const FormattingButtonGroup = ({
     buttons, 
-    openDropdown, 
-    onToggleDropdown, 
-    onCloseDropdown, 
-    undo, 
+    openDropdown,
+    onButtonClick,
+    undo,
     redo, 
     canUndo, 
     canRedo
@@ -51,14 +50,7 @@ const FormattingButtonGroup = ({
                         icon={button.icon}
                         iconSize={button.iconSize}
                         title={button.tooltip}
-                        onClick={() => {
-                            if (button.type === 'action') {
-                                onCloseDropdown();
-                                button.onClick();
-                            } else {
-                                onToggleDropdown(button.name);
-                            }
-                        }}
+                        onClick={() => onButtonClick(button)}
                     />
                     {button.type === 'dropdown' && (
                         <Dropdown isOpen={openDropdown === button.name}>

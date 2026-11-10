@@ -1,74 +1,78 @@
-import type { ShortcutId, ShortcutDefinition } from '@/types/sidebar';
+import type { ShortcutId, ShortcutDefinition } from '@/types/shortcut';
 
+// One shortcut per toolbar button, always pressed with Ctrl+Shift (Cmd+Shift on macOS) plus its key.
+// useEditorShortcuts registers them in Monaco and they do what clicking the button does.
+// While the editor has focus some of them replace a Monaco or browser shortcut: K (delete line), L (select all occurrences)
+// and C / I (DevTools inspect / open)
 export const SHORTCUTS: Record<ShortcutId, ShortcutDefinition> = {
     heading: {
         id: 'heading',
         label: 'Heading',
-        keys: ['Ctrl', 'Shift', 'H'],
+        key: 'KeyH',
     },
     bold: {
         id: 'bold',
         label: 'Bold',
-        keys: ['Ctrl', 'Shift', 'B'],
+        key: 'KeyB',
     },
     italic: {
         id: 'italic',
         label: 'Italic',
-        keys: ['Ctrl', 'Shift', 'I'],
+        key: 'KeyI',
     },
     strikethrough: {
         id: 'strikethrough',
         label: 'Strikethrough',
-        keys: ['Ctrl', 'Shift', 'S'],
+        key: 'KeyS',
     },
     quote: {
         id: 'quote',
         label: 'Blockquote',
-        keys: ['Ctrl', 'Shift', 'Q'],
+        key: 'KeyQ',
     },
     code: {
         id: 'code',
         label: 'Code',
-        keys: ['Ctrl', 'Shift', 'C'],
+        key: 'KeyK',
     },
     link: {
         id: 'link',
         label: 'Link',
-        keys: ['Ctrl', 'Shift', 'L'],
+        key: 'KeyL',
     },
     'unordered-list': {
         id: 'unordered-list',
         label: 'Unordered list',
-        keys: ['Ctrl', 'Shift', 'U'],
+        key: 'KeyU',
     },
     'ordered-list': {
         id: 'ordered-list',
         label: 'Ordered list',
-        keys: ['Ctrl', 'Shift', 'O'],
+        key: 'KeyO',
     },
     'task-list': {
         id: 'task-list',
         label: 'Task list',
-        keys: ['Ctrl', 'Shift', 'T'],
+        key: 'KeyX',
     },
     codeblock: {
         id: 'codeblock',
         label: 'Code block',
-        keys: ['Ctrl', 'Shift', 'K'],
+        key: 'KeyC',
     },
     table: {
         id: 'table',
         label: 'Table',
-        keys: ['Ctrl', 'Shift', 'M'],
+        key: 'KeyM',
     },
     image: {
         id: 'image',
         label: 'Image',
-        keys: ['Ctrl', 'Shift', 'I'],
+        key: 'KeyG',
     },
     emoji: {
         id: 'emoji',
         label: 'Emoji',
-        keys: ['Ctrl', 'Shift', 'E'],
+        key: 'KeyE',
     },
 };
