@@ -9,6 +9,8 @@ export type MarkdownChunk = {
 
 const BLANK = /^\s*$/;
 const FENCE = /^\s*(`{3,}|~{3,})/;
+// Formula block of remark-math: $$ on its own line works like a code fence (a `$` after it makes it an inline formula)
+const MATH_FENCE = /^\s*(\${2,})[^$]*$/;
 const INDENTED = /^[ \t]/;
 const LIST_ITEM = /^ {0,3}([-*+]|\d{1,9}[.)])(\s|$)/;
 const INLINE_CODE = /`+[^`]*`+/g;
@@ -93,13 +95,13 @@ export function splitMarkdownChunks(markdown: string): MarkdownChunk[] {
         end = i;
 
         if (fence) {
-            const match = FENCE.exec(line);
+            const match = FENCE.exec(line) ?? MATH_FENCE.exec(line);
             const closes = match && match[1][0] === fence[0] && match[1].length >= fence.length && BLANK.test(line.slice(line.indexOf(match[1]) + match[1].length));
             if (closes) fence = null;
             continue;
         }
 
-        const opening = FENCE.exec(line);
+        const opening = FENCE.exec(line) ?? MATH_FENCE.exec(line);
         if (opening) {
             fence = opening[1];
             continue;

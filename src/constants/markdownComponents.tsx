@@ -2,6 +2,8 @@ import type { Components, ExtraProps } from "react-markdown";
 import { findAnchorTarget } from "@utils/headingAnchors";
 import PreviewImage from "@components/ui/PreviewImage";
 import PreviewCodeBlock from "@components/ui/PreviewCodeBlock";
+import MermaidDiagram from "@components/ui/MermaidDiagram";
+import MathFormula from "@components/ui/MathFormula";
 
 type HastElement = NonNullable<ExtraProps["node"]>;
 type HastChild = HastElement["children"][number];
@@ -138,11 +140,18 @@ export const markdownComponents: Components = {
         </blockquote>
     ),
     // Solo código inline: los bloques ``` los resuelve `pre`
-    code: ({ children }) => (
-        <code className="px-1.5 py-0.5 rounded text-sm font-mono bg-neutral-200 text-neutral-700 dark:bg-[#545459] dark:text-white">
-            {children}
-        </code>
-    ),
+    code: ({ children, className, node }) => {
+        // Inline formulas ($...$) come from remark-math as code with this class
+        if (className?.includes("math-inline")) {
+            return <MathFormula tex={node ? getNodeText(node) : String(children)} />;
+        }
+
+        return (
+            <code className="px-1.5 py-0.5 rounded text-sm font-mono bg-neutral-200 text-neutral-700 dark:bg-[#545459] dark:text-white">
+                {children}
+            </code>
+        );
+    },
     pre: ({ children, node }) => {
         // Los bloques ``` llegan como <pre><code>. Se resuelven aquí porque desde `code` no se puede distinguir
         // un bloque sin lenguaje de un código inline: ninguno de los dos trae className.
@@ -155,6 +164,24 @@ export const markdownComponents: Components = {
         // Solo se quita el salto de línea final que añade el parser, para conservar la sangría de la primera línea
         const content = getNodeText(codeNode).replace(/\n$/, "");
         if (!content.trim()) return null;
+
+        // Mermaid blocks are drawn as diagrams instead of shown as code
+        if (language === "mermaid") {
+            return (
+                <div data-line={sourceLine(node)} className="my-4">
+                    <MermaidDiagram code={content} line={sourceLine(node)} />
+                </div>
+            );
+        }
+
+        // Formula blocks: $$ ... $$ (remark-math) and ```math, the way GitHub draws them
+        if (language === "math") {
+            return (
+                <div data-line={sourceLine(node)} className="my-4">
+                    <MathFormula tex={content} display />
+                </div>
+            );
+        }
 
         return (
             <pre data-line={sourceLine(node)} className="my-4">

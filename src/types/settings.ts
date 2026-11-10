@@ -21,6 +21,8 @@ export interface PreviewerSettings {
     breaks: boolean;
     allowHtml: boolean;
     codeHighlight: boolean;
+    // $...$ and $$...$$ formulas (KaTeX). Off for documents that use $ for prices
+    math: boolean;
 }
 
 export interface AppSettings {
