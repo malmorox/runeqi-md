@@ -1,21 +1,71 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>RuneQi – Markdown Editor</title>
 		<meta charset="UTF-8" />
-		<meta name="description" content="A friendly and powerful Markdown editor with real-time preview." />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>RuneQi – Free Online Markdown Editor with Live Preview</title>
+		<meta name="description" content="Free, open-source Markdown editor that runs in your browser. Write with a live preview, organize your notes in folders and import or export .md files. No sign-up." />
+		<link rel="canonical" href="https://runeqimd.dev/" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<meta name="theme-color" content="#1e1e1e" />
 		<meta name="author" content="Marcos Almorox" />
-		<meta name="keywords" content="markdown editor, markdown, online markdown, runeqi" />
-		<meta property="og:title" content="RuneQi – Markdown Editor" />
-		<meta property="og:site_name" content="RuneQi MD" />
-		<meta property="og:description" content="A friendly and powerful Markdown editor with real-time preview.">
-		<meta property="og:url" content="https://runeqimd.dev" />
+		<meta name="keywords" content="markdown editor, online markdown editor, markdown preview, md editor, runeqi" />
+
+		<!-- Open Graph (link previews on WhatsApp, LinkedIn, Slack, Discord...) -->
 		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="RuneQi MD" />
+		<meta property="og:title" content="RuneQi – Free Online Markdown Editor with Live Preview" />
+		<meta property="og:description" content="Free, open-source Markdown editor that runs in your browser. Write with a live preview, organize your notes in folders and import or export .md files." />
+		<meta property="og:url" content="https://runeqimd.dev/" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:image" content="https://runeqimd.dev/og-image.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="The RuneQi editor: Markdown on the left, live preview on the right" />
+
+		<!-- X / Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="RuneQi – Free Online Markdown Editor with Live Preview" />
+		<meta name="twitter:description" content="Free, open-source Markdown editor that runs in your browser, with a live preview." />
+		<meta name="twitter:image" content="https://runeqimd.dev/og-image.png" />
+
+		<!-- Structured data: tells search engines this page is a free web app -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebApplication",
+				"name": "RuneQi",
+				"alternateName": "RuneQi MD",
+				"url": "https://runeqimd.dev/",
+				"description": "Free, open-source Markdown editor that runs in your browser, with a live preview, a file explorer and Markdown import and export.",
+				"applicationCategory": "UtilitiesApplication",
+				"operatingSystem": "Windows, macOS, Linux",
+				"browserRequirements": "Requires JavaScript. Designed for desktop browsers.",
+				"inLanguage": "en",
+				"isAccessibleForFree": true,
+				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+				"image": "https://runeqimd.dev/og-image.png",
+				"screenshot": "https://runeqimd.dev/og-image.png",
+				"featureList": [
+					"Live preview side by side with the editor",
+					"GitHub Flavored Markdown: tables, task lists and footnotes",
+					"Code blocks with syntax highlighting",
+					"File explorer with folders, trash and images",
+					"Import and export .md files",
+					"Light and dark themes",
+					"Files saved in the browser, no sign-up"
+				],
+				"author": { "@type": "Person", "name": "Marcos Almorox" },
+				"sameAs": ["https://github.com/malmorox/runeqi-md"]
+			}
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>
+		<noscript>
+			<h1>RuneQi – Free online Markdown editor</h1>
+			<p>Write Markdown with a real-time preview, right in your browser. Free, open source and no sign-up. RuneQi needs JavaScript to run.</p>
+		</noscript>
 		<script type="module" src="/src/main.tsx"></script>
 	</body>
 </html>
