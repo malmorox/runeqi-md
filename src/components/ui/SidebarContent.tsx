@@ -180,6 +180,11 @@ const SidebarContent = ({
                                 checked={settings.previewer.allowHtml}
                                 onChange={v => updateSettings({ previewer: { allowHtml: v } })}
                             />
+                            <SettingsToggle
+                                label="Render math formulas"
+                                checked={settings.previewer.math}
+                                onChange={v => updateSettings({ previewer: { math: v } })}
+                            />
                         </SettingsSection>
                     )}
 

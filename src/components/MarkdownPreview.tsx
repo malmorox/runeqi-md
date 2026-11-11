@@ -2,11 +2,13 @@ import { memo, useDeferredValue, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
 import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
 import { useSettings } from "@hooks/useSettings";
 import { useScrollSync } from "@hooks/useScrollSync";
+import { ChunkLineContext } from "@contexts/ChunkLineContext";
 import { markdownComponents } from "@constants/markdownComponents";
 import { splitMarkdownChunks } from "@utils/markdownChunks";
 
@@ -21,12 +23,14 @@ const MarkdownPreview = () => {
     const { theme } = useTheme();
     const { settings } = useSettings();
     const { registerPreview, invalidateAnchors } = useScrollSync();
-    const { gfm, breaks, allowHtml } = settings.previewer;
+    const { gfm, breaks, allowHtml, math } = settings.previewer;
 
     const remarkPlugins = useMemo(() => [
         ...(gfm ? [remarkGfm] : []),
         ...(breaks ? [remarkBreaks] : []),
-    ], [gfm, breaks]);
+        // $...$ and $$...$$ formulas, drawn by MathFormula (see markdownComponents)
+        ...(math ? [remarkMath] : []),
+    ], [gfm, breaks, math]);
 
     const rehypePlugins = useMemo(() => allowHtml ? [rehypeRaw] : [], [allowHtml]);
 
@@ -49,13 +53,15 @@ const MarkdownPreview = () => {
                 {chunks.map((chunk) => (
                     // `contents`: el envoltorio no genera caja, así que el layout es el mismo que sin trocear
                     <div key={chunk.key} className="contents" data-chunk-line={chunk.line}>
-                        <MarkdownChunk
-                            remarkPlugins={remarkPlugins}
-                            rehypePlugins={rehypePlugins}
-                            components={markdownComponents}
-                        >
-                            {chunk.source}
-                        </MarkdownChunk>
+                        <ChunkLineContext.Provider value={chunk.line}>
+                            <MarkdownChunk
+                                remarkPlugins={remarkPlugins}
+                                rehypePlugins={rehypePlugins}
+                                components={markdownComponents}
+                            >
+                                {chunk.source}
+                            </MarkdownChunk>
+                        </ChunkLineContext.Provider>
                     </div>
                 ))}
             </div>

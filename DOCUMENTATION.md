@@ -39,6 +39,8 @@ The app is organized around two layouts (`DesktopLayout`, `MobileLayout`), switc
 | Code editor | Monaco Editor (`@monaco-editor/react`) |
 | Markdown rendering | `react-markdown` + `remark-gfm`, `remark-breaks`, `rehype-raw` |
 | Syntax highlighting | `react-syntax-highlighter` (Prism themes) |
+| Diagrams | `mermaid` (loaded on demand) |
+| Math formulas | `remark-math` + KaTeX (loaded on demand) |
 | File tree UI | `react-arborist` |
 | Local persistence | Dexie (IndexedDB wrapper) |
 | Resizable panels | `react-resizable-panels` |
@@ -85,6 +87,39 @@ The toolbar tooltips and the *Keyboard Shortcuts* view of the sidebar list them 
 ### Live preview
 
 Markdown is rendered via `react-markdown` with a custom component map per HTML element (headings, tables, code blocks, task-list checkboxes, etc.), themed for both light and dark mode. Code blocks get syntax highlighting through Prism.
+
+#### Diagrams
+
+Code blocks marked as `mermaid` are drawn as diagrams with [Mermaid](https://mermaid.js.org/), the same syntax GitHub, GitLab and Obsidian render, so exported files keep their diagrams there. It covers the UML diagrams most used in documentation (class, sequence, state, entity-relationship, activity as a flowchart) and others such as Gantt charts, mind maps and C4.
+
+````markdown
+```mermaid
+classDiagram
+    Folder "1" o-- "*" File : contains
+```
+````
+
+- Everything is drawn in the browser, so it works offline and the diagram's text never leaves the device. Mermaid is only downloaded the first time a document shows a diagram, so it doesn't slow down opening the editor.
+- Diagrams follow the app's theme (Mermaid's `default` and `dark` themes) and use `securityLevel: 'strict'`: labels can't carry HTML or click handlers.
+- While a diagram is being edited the preview keeps its last valid drawing. If the code stays invalid for a moment, Mermaid's error shows under it; a diagram that was never valid shows its code instead.
+- Drawings are cached by code and theme (`src/utils/mermaid.ts`), so switching the theme back or showing the preview again doesn't draw them again.
+
+#### Math formulas
+
+LaTeX formulas are drawn with [KaTeX](https://katex.org/), with the same syntax GitHub, GitLab and Obsidian use: `$...$` inside the text, and `$$ ... $$` or a ```` ```math ```` block for a formula on its own lines.
+
+```markdown
+The area of a circle is $A = \pi r^2$.
+
+$$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$$
+```
+
+- `remark-math` parses the formulas and `MathFormula` draws them. KaTeX, its stylesheet and its fonts are only downloaded the first time a document shows a formula; once loaded, formulas are drawn while rendering, so editing one never goes through a loading state.
+- Invalid TeX shows as its source in red, with KaTeX's error as tooltip. `trust` stays off, so `\href`, `\url` and the `\html...` commands can't add links or HTML.
+- Formulas follow the text color of the theme, and KaTeX also outputs MathML for screen readers.
+- *Render math formulas* in the Preview settings turns them off, for documents that use `$` for prices (`\$` also writes a literal dollar with them on). With it off, ```` ```math ```` blocks show as code.
 
 ### Split workspace & scroll sync
 

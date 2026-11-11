@@ -18,6 +18,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
         gfm: true,
         breaks: false,
         allowHtml: true,
-        codeHighlight: true
+        codeHighlight: true,
+        math: true
     },
 };

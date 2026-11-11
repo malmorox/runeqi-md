@@ -15,6 +15,8 @@
     "dexie": "^4.4.5",
     "dexie-react-hooks": "^4.4.0",
     "emoji-picker-react": "^4.16.1",
+    "katex": "^0.19.1",
+    "mermaid": "^12.3.0",
     "mixpanel-browser": "^2.82.1",
     "react": "^19.2.0",
     "react-arborist": "^3.16.0",
@@ -26,6 +28,7 @@
     "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
