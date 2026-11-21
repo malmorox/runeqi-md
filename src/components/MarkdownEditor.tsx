@@ -142,6 +142,8 @@ const MarkdownEditor = () => {
                 beforeMount={handleEditorWillMount}
                 onMount={handleEditorDidMount}
                 options={editorOptions}
+                // Mientras Monaco se inicializa se muestra solo su fondo, sin texto de "Loading..."
+                loading={<div className={`w-full h-full ${theme === 'dark' ? 'bg-[#2d2d30]' : 'bg-[#fffffe]'}`} />}
             />
         </div>
     );

@@ -7,6 +7,7 @@ import { ThemeProvider } from "@contexts/ThemeContext";
 import { ActiveFileProvider } from "@contexts/ActiveFileContext";
 import { AlertsProvider } from "@contexts/AlertsContext";
 import App from './App.tsx'
+import '@utils/monaco'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(

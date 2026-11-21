@@ -28,4 +28,15 @@ export default defineConfig({
     },
   },
   envPrefix: ['VITE_', 'MIXPANEL_'],
+  build: {
+    rollupOptions: {
+      output: {
+        // Monaco va en su propio chunk: se descarga en paralelo con la app y la caché del navegador
+        // lo conserva entre despliegues mientras no cambie su versión
+        manualChunks(id) {
+          if (id.includes('node_modules/monaco-editor/')) return 'monaco';
+        },
+      },
+    },
+  },
 })
