@@ -116,7 +116,8 @@ export const markdownComponents: Components = {
         const isTaskItem = node?.properties?.className?.toString().includes('task-list-item');
         
         return (
-            <li data-line={sourceLine(node)} className={`ml-4 ${isTaskItem ? 'list-none flex items-center gap-2' : ''}`}>
+            // rq-task: the exported HTML is styled by this class (see documentExport)
+            <li data-line={sourceLine(node)} className={`ml-4 ${isTaskItem ? 'rq-task list-none flex items-center gap-2' : ''}`}>
                 <span className="[&>p]:my-0 [&>p]:inline">{children}</span>
             </li>
         );

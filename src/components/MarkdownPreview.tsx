@@ -1,9 +1,5 @@
 import { memo, useDeferredValue, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
-import remarkMath from "remark-math";
-import rehypeRaw from "rehype-raw";
 import { useMarkdown } from "@hooks/useMarkdown";
 import { useTheme } from "@hooks/useTheme";
 import { useSettings } from "@hooks/useSettings";
@@ -11,6 +7,7 @@ import { useScrollSync } from "@hooks/useScrollSync";
 import { ChunkLineContext } from "@contexts/ChunkLineContext";
 import { markdownComponents } from "@constants/markdownComponents";
 import { splitMarkdownChunks } from "@utils/markdownChunks";
+import { getRehypePlugins, getRemarkPlugins } from "@utils/markdownPlugins";
 
 // Un trozo solo se vuelve a parsear y renderizar si cambia su texto o los plugins (el tema solo cambia estilos)
 const MarkdownChunk = memo(ReactMarkdown);
@@ -25,14 +22,9 @@ const MarkdownPreview = () => {
     const { registerPreview, invalidateAnchors } = useScrollSync();
     const { gfm, breaks, allowHtml, math } = settings.previewer;
 
-    const remarkPlugins = useMemo(() => [
-        ...(gfm ? [remarkGfm] : []),
-        ...(breaks ? [remarkBreaks] : []),
-        // $...$ and $$...$$ formulas, drawn by MathFormula (see markdownComponents)
-        ...(math ? [remarkMath] : []),
-    ], [gfm, breaks, math]);
-
-    const rehypePlugins = useMemo(() => allowHtml ? [rehypeRaw] : [], [allowHtml]);
+    // Memoized per option: new arrays would make every chunk parse and render again
+    const remarkPlugins = useMemo(() => getRemarkPlugins({ gfm, breaks, math }), [gfm, breaks, math]);
+    const rehypePlugins = useMemo(() => getRehypePlugins({ allowHtml }), [allowHtml]);
 
     // El documento se trocea por bloques para que al editar solo se renderice el trozo que cambia
     const chunks = useMemo(() => splitMarkdownChunks(deferredMarkdown), [deferredMarkdown]);

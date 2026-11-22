@@ -22,7 +22,8 @@ const PreviewCodeBlock = ({ language, content }: PreviewCodeBlockProps) => {
             // With highlighting off the block keeps its box and base text color, just without token colors
             language={settings.previewer.codeHighlight ? language || 'plaintext' : 'text'}
             PreTag="div"
-            className="my-4 rounded-lg overflow-hidden"
+            // rq-code: the exported HTML is styled by this class (see documentExport)
+            className="rq-code my-4 rounded-lg overflow-hidden"
             customStyle={{
                 margin: 0,
                 padding: '1rem',

@@ -19,8 +19,8 @@ const PreviewImage = ({ src, alt }: PreviewImageProps) => {
         );
     }
 
-    // Still loading from the database
-    if (!image.src) return null;
+    // Still loading from the database. data-pending: the exports wait for it
+    if (!image.src) return <span data-pending />;
 
     // Not draggable: the browser would carry it as a file and dropping it on the editor would import a copy
     return <img src={image.src} alt={alt} draggable={false} className="my-4 max-w-full inline-block" />;

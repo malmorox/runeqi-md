@@ -17,6 +17,7 @@ const ERROR_CLASSES = '[&_.katex-error]:text-red-700! dark:[&_.katex-error]:text
 const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
     const { settings } = useSettings();
     const [katex, setKatex] = useState(getLoadedKatex);
+    const [loadFailed, setLoadFailed] = useState(false);
 
     useEffect(() => {
         if (katex) return;
@@ -24,7 +25,7 @@ const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
         loadKatex().then(
             (loaded) => { if (active) setKatex(loaded); },
             // Without KaTeX (e.g. offline) the formula stays as its source
-            () => {},
+            () => { if (active) setLoadFailed(true); },
         );
         return () => { active = false; };
     }, [katex]);
@@ -33,10 +34,11 @@ const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
     if (!settings.previewer.math) return <PreviewCodeBlock language="latex" content={tex} />;
 
     if (!katex) {
-        // Until KaTeX is loaded, the TeX source
+        // Until KaTeX is loaded, the TeX source. data-pending: the exports wait for KaTeX, unless it couldn't be loaded
+        const pending = loadFailed ? undefined : true;
         return display
-            ? <pre className="font-mono text-sm text-center text-neutral-600 dark:text-neutral-300">{tex}</pre>
-            : <code className="font-mono text-sm text-neutral-600 dark:text-neutral-300">{tex}</code>;
+            ? <pre data-pending={pending} className="font-mono text-sm text-center text-neutral-600 dark:text-neutral-300">{tex}</pre>
+            : <code data-pending={pending} className="font-mono text-sm text-neutral-600 dark:text-neutral-300">{tex}</code>;
     }
 
     // KaTeX's HTML (with MathML for screen readers), escaped by KaTeX
@@ -46,7 +48,7 @@ const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
         // Long formulas scroll sideways instead of overflowing the preview. Outside a paragraph nothing gives them a text
         // color, so they take the paragraphs' one (KaTeX draws with the current color)
         <div
-            className={`overflow-x-auto overflow-y-hidden text-neutral-700 dark:text-neutral-200 [&_.katex-display]:m-0 ${ERROR_CLASSES}`}
+            className={`rq-math-display overflow-x-auto overflow-y-hidden text-neutral-700 dark:text-neutral-200 [&_.katex-display]:m-0 ${ERROR_CLASSES}`}
             dangerouslySetInnerHTML={html}
         />
     ) : (

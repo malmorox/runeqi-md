@@ -75,14 +75,17 @@ const MermaidDiagram = ({ code, line }: MermaidDiagramProps) => {
         <>
             {svg ? (
                 // Mermaid's SVG, sanitized (securityLevel 'strict'). Straight on the preview's background: it's a
-                // drawing, not code, so it doesn't get the code blocks' card
+                // drawing, not code, so it doesn't get the code blocks' card. rq-diagram styles it in the exported HTML
                 <div
-                    className="overflow-x-auto [&>svg]:block [&>svg]:mx-auto"
+                    className="rq-diagram overflow-x-auto [&>svg]:block [&>svg]:mx-auto"
                     dangerouslySetInnerHTML={{ __html: svg }}
                 />
             ) : (
-                // Until the first drawing is ready, or while the code has never been valid, the code itself
-                <PreviewCodeBlock language="mermaid" content={code} />
+                // Until the first drawing is ready, or while the code has never been valid, the code itself.
+                // data-pending: the exports wait until it's drawn or the code turns out to be invalid
+                <div className="contents" data-pending={error === null ? true : undefined}>
+                    <PreviewCodeBlock language="mermaid" content={code} />
+                </div>
             )}
             {error && (
                 <div className="mt-2 rounded border px-3 py-2 text-sm border-red-300 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">

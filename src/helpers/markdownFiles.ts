@@ -1,4 +1,5 @@
 import { db } from './db';
+import { fileNameFor, saveFile, type FileFormat } from './saveFile';
 import { MARKDOWN_EXTENSIONS, MAX_MARKDOWN_SIZE } from '@constants/fileSystem';
 import type { FileSystemEntry } from '@/types/file';
 
@@ -8,8 +9,6 @@ export class MarkdownImportError extends Error {}
 export const ACCEPTED_MARKDOWN_TYPES = MARKDOWN_EXTENSIONS.join(',');
 
 const MARKDOWN_FILE = new RegExp(`(${MARKDOWN_EXTENSIONS.map((ext) => `\\${ext}`).join('|')})$`, 'i');
-// Characters that aren't allowed in file names on some systems (Windows is the strictest)
-const INVALID_FILE_NAME_CHARS = /[<>:"/\\|?*\p{Cc}]/gu;
 
 // "notes" -> "notes-1", "notes-2"... until it doesn't clash with another file at the root
 function uniqueName(name: string, taken: Set<string>) {
@@ -69,61 +68,15 @@ export async function importMarkdownFiles(files: File[]) {
     return { saved, errors };
 }
 
-// Name a file is downloaded with: "My notes" -> "My notes.md".
-// Characters not allowed in file names become "-", and the extension isn't repeated if the name already has one.
-export function markdownFileName(name: string) {
-    const safeName = name.replace(INVALID_FILE_NAME_CHARS, '-').trim().replace(/[. ]+$/, '') || 'document';
-    return MARKDOWN_FILE.test(safeName) ? safeName : `${safeName}.md`;
-}
+export const MARKDOWN_FORMAT: FileFormat = {
+    extension: '.md',
+    extensions: MARKDOWN_EXTENSIONS,
+    mimeType: 'text/markdown',
+    description: 'Markdown',
+};
 
-// File System Access API: only in Chromium browsers (Chrome, Edge...) and not in TypeScript's DOM types yet
-type SaveFilePicker = (options: {
-    suggestedName?: string;
-    types?: { description: string; accept: Record<string, string[]> }[];
-}) => Promise<FileSystemFileHandle>;
+// Name a file is exported with: "My notes" -> "My notes.md"
+export const markdownFileName = (name: string) => fileNameFor(name, MARKDOWN_FORMAT);
 
-// Saves the content as a .md file on the computer. Where the browser allows it, the app opens the system's
-// "Save as" dialog itself, so it knows when the file has really been saved (and with which name).
-// Elsewhere (Firefox, Safari) it's handed to the browser as a download, and whether it ends up saved is unknown.
-// Returns null if the dialog was closed without saving.
-export async function exportMarkdown(name: string, content: string) {
-    const fileName = markdownFileName(name);
-    const showSaveFilePicker = (window as Window & { showSaveFilePicker?: SaveFilePicker }).showSaveFilePicker;
-    if (!showSaveFilePicker) {
-        downloadMarkdown(name, content);
-        return { fileName, downloaded: true };
-    }
-
-    let handle: FileSystemFileHandle;
-    try {
-        handle = await showSaveFilePicker({
-            suggestedName: fileName,
-            types: [{ description: 'Markdown', accept: { 'text/markdown': MARKDOWN_EXTENSIONS } }],
-        });
-    } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return null;
-        // The dialog isn't allowed here (e.g. inside an iframe): the download still works
-        downloadMarkdown(name, content);
-        return { fileName, downloaded: true };
-    }
-
-    const writable = await handle.createWritable();
-    await writable.write(content);
-    await writable.close();
-    return { fileName: handle.name, downloaded: false };
-}
-
-// Downloads the content as a .md file to the computer
-export function downloadMarkdown(name: string, content: string) {
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = markdownFileName(name);
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
+// Saves the content as a .md file on the computer (see saveFile). Returns null if the dialog was closed without saving
+export const exportMarkdown = (name: string, content: string) => saveFile(name, content, MARKDOWN_FORMAT);
