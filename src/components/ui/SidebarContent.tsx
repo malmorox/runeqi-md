@@ -6,6 +6,13 @@ import { useSettings } from '@hooks/useSettings';
 import { useAlerts } from '@hooks/useAlerts';
 import SidebarMenuItem from '@components/ui/SidebarMenuItem';
 import ImportExportPanel from '@components/ui/ImportExportPanel';
+import { FaMinus, FaPlus } from 'react-icons/fa6';
+import {
+    EDITOR_FONT_FAMILY_OPTIONS,
+    EDITOR_FONT_SIZE_RANGE,
+    EDITOR_LINE_HEIGHT_OPTIONS,
+    EDITOR_TAB_SIZE_OPTIONS
+} from '@constants/editor';
 
 const shortcuts = Object.values(SHORTCUTS).map(({ id, label, key }) => ({ id, label, keys: shortcutKeys(key) }));
 
@@ -50,6 +57,83 @@ const SettingsToggle = ({
         />
         {label}
     </label>
+);
+
+// The values go through the <select> as strings and come back typed by finding their option
+const SettingsSelect = <T extends string | number>({
+    label,
+    value,
+    options,
+    onChange
+}: {
+    label: string;
+    value: T;
+    options: { value: T; label: string }[];
+    onChange: (v: T) => void;
+}) => (
+    <label className="flex items-center justify-between gap-2 text-sm text-[#252526]">
+        {label}
+        <select
+            value={String(value)}
+            onChange={e => {
+                const option = options.find(o => String(o.value) === e.target.value);
+                if (option) onChange(option.value);
+            }}
+            className="px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] bg-[#bbbbbb] hover:bg-[#D4D4D4] cursor-pointer"
+        >
+            {options.map(o => (
+                <option key={String(o.value)} value={String(o.value)}>{o.label}</option>
+            ))}
+        </select>
+    </label>
+);
+
+const STEPPER_BUTTON = "px-1.5 self-stretch flex items-center cursor-pointer enabled:hover:bg-[#D4D4D4] disabled:opacity-40 disabled:cursor-not-allowed";
+
+// − value + control. The buttons turn off at the limits, so the value can't leave the range
+const SettingsStepper = ({
+    label,
+    value,
+    min,
+    max,
+    step = 1,
+    unit = '',
+    onChange
+}: {
+    label: string;
+    value: number;
+    min: number;
+    max: number;
+    step?: number;
+    unit?: string;
+    onChange: (v: number) => void;
+}) => (
+    <div className="flex items-center justify-between gap-2 text-sm text-[#252526]">
+        <span>{label}</span>
+        <div role="group" aria-label={label} className="flex items-center rounded border border-[#2d2d30] bg-[#bbbbbb] overflow-hidden">
+            <button
+                type="button"
+                onClick={() => onChange(Math.max(min, value - step))}
+                disabled={value <= min}
+                className={STEPPER_BUTTON}
+                aria-label={`Decrease ${label.toLowerCase()}`}
+            >
+                <FaMinus size={10} aria-hidden />
+            </button>
+            <span className="min-w-12 px-1 py-0.5 text-center tabular-nums border-x border-[#2d2d30]" aria-live="polite">
+                {value}{unit}
+            </span>
+            <button
+                type="button"
+                onClick={() => onChange(Math.min(max, value + step))}
+                disabled={value >= max}
+                className={STEPPER_BUTTON}
+                aria-label={`Increase ${label.toLowerCase()}`}
+            >
+                <FaPlus size={10} aria-hidden />
+            </button>
+        </div>
+    </div>
 );
 
 const SidebarContent = ({
@@ -145,6 +229,31 @@ const SidebarContent = ({
                     
                     {(settings.workspace.viewMode === 'split' || settings.workspace.viewMode === 'editor') && (
                         <SettingsSection title="Editor" description="Customize how the editor looks and feels while you write.">
+                            <SettingsSelect
+                                label="Font"
+                                value={settings.editor.fontFamily}
+                                options={EDITOR_FONT_FAMILY_OPTIONS}
+                                onChange={v => updateSettings({ editor: { fontFamily: v } })}
+                            />
+                            <SettingsStepper
+                                label="Font size"
+                                value={settings.editor.fontSize}
+                                {...EDITOR_FONT_SIZE_RANGE}
+                                unit="px"
+                                onChange={v => updateSettings({ editor: { fontSize: v } })}
+                            />
+                            <SettingsSelect
+                                label="Line height"
+                                value={settings.editor.lineHeight}
+                                options={EDITOR_LINE_HEIGHT_OPTIONS}
+                                onChange={v => updateSettings({ editor: { lineHeight: v } })}
+                            />
+                            <SettingsSelect
+                                label="Tab size"
+                                value={settings.editor.tabSize}
+                                options={EDITOR_TAB_SIZE_OPTIONS}
+                                onChange={v => updateSettings({ editor: { tabSize: v } })}
+                            />
                             <SettingsToggle
                                 label="Wrap long lines"
                                 checked={settings.editor.wordWrap}
@@ -179,6 +288,11 @@ const SidebarContent = ({
                                 label="Allow embedded HTML"
                                 checked={settings.previewer.allowHtml}
                                 onChange={v => updateSettings({ previewer: { allowHtml: v } })}
+                            />
+                            <SettingsToggle
+                                label="Highlight code syntax"
+                                checked={settings.previewer.codeHighlight}
+                                onChange={v => updateSettings({ previewer: { codeHighlight: v } })}
                             />
                             <SettingsToggle
                                 label="Render math formulas"
