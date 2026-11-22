@@ -1,6 +1,7 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '@hooks/useTheme';
+import { useSettings } from '@hooks/useSettings';
 
 interface PreviewCodeBlockProps {
     language?: string;
@@ -8,15 +9,18 @@ interface PreviewCodeBlockProps {
 }
 
 // Code block of the preview. It's the only part of the preview that needs the theme in JS (the highlighter's colors
-// are inline styles), so only code blocks re-render when the theme changes; the rest switches with `dark:` classes
+// are inline styles), so only code blocks re-render when the theme changes; the rest switches with `dark:` classes.
+// For the same reason they read the codeHighlight setting themselves
 const PreviewCodeBlock = ({ language, content }: PreviewCodeBlockProps) => {
     const { theme } = useTheme();
+    const { settings } = useSettings();
     const isDark = theme === 'dark';
 
     return (
         <SyntaxHighlighter
             style={isDark ? vscDarkPlus : prism}
-            language={language || 'plaintext'}
+            // With highlighting off the block keeps its box and base text color, just without token colors
+            language={settings.previewer.codeHighlight ? language || 'plaintext' : 'text'}
             PreTag="div"
             className="my-4 rounded-lg overflow-hidden"
             customStyle={{

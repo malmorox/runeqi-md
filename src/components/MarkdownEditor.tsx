@@ -9,6 +9,7 @@ import { useActiveFile } from "@hooks/useActiveFile";
 import { useFileContent } from "@hooks/files/useFileContent";
 import { useImageImport } from "@hooks/files/useImageImport";
 import { imageMarkdown } from "@utils/imagePaths";
+import { EDITOR_FONT_STACKS } from "@constants/editor";
 import type { editor } from 'monaco-editor';
 
 // Se están arrastrando archivos desde fuera (no texto seleccionado dentro del editor)
@@ -120,7 +121,14 @@ const MarkdownEditor = () => {
         lineNumbers: settings.editor.lineNumbers ? "on" : "off",
         wordWrap: settings.editor.wordWrap ? "on" : "off",
         minimap: { enabled: settings.editor.minimap },
-        fontSize: 14,
+        fontSize: settings.editor.fontSize,
+        fontFamily: EDITOR_FONT_STACKS[settings.editor.fontFamily],
+        lineHeight: settings.editor.lineHeight,
+        // Indentation is a model option: Monaco passes these on to every open file. Without turning off
+        // detectIndentation, each file would keep the indentation it was written with
+        tabSize: settings.editor.tabSize,
+        insertSpaces: true,
+        detectIndentation: false,
         scrollBeyondLastLine: false,
         padding: { top: 24, bottom: 24 },
         automaticLayout: true
