@@ -1,5 +1,6 @@
 import { db } from './db';
 import { DEFAULT_FILE_CONTENT } from '@constants/editor';
+import WELCOME_FILE_CONTENT from '@constants/welcomeFile.md?raw';
 import type { FileSystemEntry, PendingNodeInfo } from '@/types/file';
 
 // `content` is only used for files; without it they start with the default content
@@ -17,3 +18,6 @@ export async function createFileSystemEntry(name: string, pending: PendingNodeIn
     await db.entries.add(entry);
     return entry;
 }
+// File that introduces the editor, at the root: created on the first visit and when the workspace is reset
+export const createWelcomeFile = () =>
+    createFileSystemEntry('Welcome file', { type: 'file', parentId: null }, WELCOME_FILE_CONTENT);

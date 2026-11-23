@@ -10,7 +10,7 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(undefine
 
 // Kept apart from the settings: resetting them doesn't change the theme
 const STORAGE_KEY = "runeqi-theme";
-const DEFAULT_THEME: Theme = "dark";
+export const DEFAULT_THEME: Theme = "dark";
 
 const isTheme = (value: unknown): value is Theme => value === "dark" || value === "light";
 

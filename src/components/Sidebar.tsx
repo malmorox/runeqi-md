@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { IoClose, IoSettingsSharp } from "react-icons/io5";
 import { FaKeyboard, FaPalette } from 'react-icons/fa';
 import { FaAngleLeft, FaCircleInfo } from "react-icons/fa6";
-import { IoIosSave } from "react-icons/io";
+import { IoIosSave, IoMdExit } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
 import SidebarContent from '@components/ui/SidebarContent';
 import { viewTitles } from '@constants/sidebarData';
 import ThemeSwitcher from '@components/ThemeSwitcher';
 import AboutModal from '@components/ui/AboutModal';
+import ResetApplicationModal from '@components/ui/ResetApplicationModal';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -17,6 +18,7 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const [currentView, setCurrentView] = useState<MenuView>('main');
     const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isResetOpen, setIsResetOpen] = useState(false);
 
     if (!isOpen) return null;
 
@@ -49,9 +51,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             hasSubview: true
         },
         {
+            icon: IoMdExit,
+            label: 'Reset application',
+            onClick: () => setIsResetOpen(true)
+        },
+        {
             icon: FaCircleInfo,
             label: 'About RuneQi',
-            view: 'about',
             onClick: () => setIsAboutOpen(true)
         }
     ];
@@ -96,8 +102,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                     onMenuItemClick={handleMenuItemClick}
                 />
             </aside>
-            {/* Outside the aside: on narrow windows the aside is fixed with its own z-index, which would hold the modal under it */}
+            {/* Outside the aside: on narrow windows the aside is fixed with its own z-index, which would hold the modals under it */}
             {isAboutOpen && <AboutModal onClose={() => setIsAboutOpen(false)} />}
+            {isResetOpen && <ResetApplicationModal onClose={() => setIsResetOpen(false)} />}
         </>
     );
 };
