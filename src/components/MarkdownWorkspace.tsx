@@ -2,14 +2,13 @@ import MarkdownEditor from "@components/MarkdownEditor";
 import MarkdownPreview from "@components/MarkdownPreview";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { useTheme } from "@hooks/useTheme";
-import { useSettings } from "@hooks/useSettings";
+import { useViewMode } from "@hooks/useViewMode";
 import { ScrollSyncProvider } from "@contexts/ScrollSyncContext";
 
 // Espacio de trabajo dividido en 2 paneles, el editor de Markdown y el intérprete que muestra su salida. Los paneles son redimensionables (de la libreria 'react-resizable-panels'), para dar libertad al usuario a la hora de trabajar.
 const MarkdownWorkspace = () => {
     const { theme } = useTheme();
-    const { settings } = useSettings();
-    const { viewMode } = settings.workspace;
+    const { viewMode } = useViewMode();
 
     const isSplit = viewMode === "split";
     const showEditor = viewMode !== "preview";

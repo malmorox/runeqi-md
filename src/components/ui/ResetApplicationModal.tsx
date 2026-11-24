@@ -32,7 +32,7 @@ interface ResetApplicationModalProps {
 }
 
 // Confirmation of "Reset application" (sidebar menu): deletes everything stored in this browser and starts over with
-// the welcome file. Settings and theme are only reset if asked, since they aren't content
+// the welcome file. Settings and theme are reset too unless the user unchecks the box
 const ResetApplicationModal = ({ onClose }: ResetApplicationModalProps) => {
     const entries = useFiles();
     const { setActiveFileId } = useActiveFile();
@@ -40,7 +40,7 @@ const ResetApplicationModal = ({ onClose }: ResetApplicationModalProps) => {
     const { resetSettings } = useSettings();
     const { setTheme } = useTheme();
     const alerts = useAlerts();
-    const [resetPreferences, setResetPreferences] = useState(false);
+    const [resetPreferences, setResetPreferences] = useState(true);
     const [isResetting, setIsResetting] = useState(false);
 
     const handleConfirm = async () => {

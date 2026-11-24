@@ -4,6 +4,7 @@ import { MarkdownProvider } from "@contexts/MarkdownContext";
 import { SettingsProvider } from "@contexts/SettingsContext";
 import { EditorProvider } from "@contexts/EditorContext";
 import { ThemeProvider } from "@contexts/ThemeContext";
+import { ViewModeProvider } from "@contexts/ViewModeContext";
 import { ActiveFileProvider } from "@contexts/ActiveFileContext";
 import { AlertsProvider } from "@contexts/AlertsContext";
 import App from './App.tsx'
@@ -13,6 +14,7 @@ import './index.css'
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ThemeProvider>
+        <ViewModeProvider>
         <AlertsProvider>
         <SettingsProvider>
         <MarkdownProvider>
@@ -24,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
         </MarkdownProvider>
         </SettingsProvider>
         </AlertsProvider>
+        </ViewModeProvider>
         </ThemeProvider>
     </StrictMode>,
 )

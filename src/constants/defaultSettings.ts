@@ -2,7 +2,6 @@ import type { AppSettings } from "@/types/settings";
 
 export const DEFAULT_SETTINGS: AppSettings = {
     workspace: {
-        viewMode: "split",
         syncScroll: true
     },
     editor: {

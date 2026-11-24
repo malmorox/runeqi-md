@@ -1,7 +1,7 @@
-import type { ShortcutKey } from '@/types/shortcut';
+import type { ShortcutKey, ViewModeKey } from '@/types/shortcut';
 
 // Monaco binds KeyMod.CtrlCmd to Cmd on macOS, so the label has to follow
-const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+export const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
 
 // Keys to show for a shortcut, e.g. ['Ctrl', 'Shift', 'S']
 export const shortcutKeys = (key: ShortcutKey): string[] => [
@@ -11,3 +11,10 @@ export const shortcutKeys = (key: ShortcutKey): string[] => [
 ];
 
 export const formatShortcut = (key: ShortcutKey) => shortcutKeys(key).join('+');
+
+// View shortcuts use Ctrl+Alt so they don't collide with browser Ctrl+Shift shortcuts or the formatting ones
+export const formatViewModeShortcut = (key: ViewModeKey) => [
+    isMac ? 'Cmd' : 'Ctrl',
+    isMac ? 'Option' : 'Alt',
+    key.replace(/^(Key|Digit)/, ''),
+].join('+');

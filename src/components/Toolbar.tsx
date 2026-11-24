@@ -4,9 +4,10 @@ import { SlOptions } from "react-icons/sl";
 import ToolbarToggleButton from '@components/ui/ToolbarToggleButton';
 import FormattingButtonGroup from '@components/ui/FormattingButtonGroup';
 import ActiveFileName from '@components/ui/ActiveFileName';
+import ViewModeSwitcher from '@components/ui/ViewModeSwitcher';
 import { useToolbarButtons } from '@hooks/toolbar/useToolbarButtons';
 import { useEditor } from "@hooks/useEditor";
-import { useSettings } from "@hooks/useSettings";
+import { useViewMode } from "@hooks/useViewMode";
 import { useEditorShortcuts } from '@hooks/editor/useEditorShortcuts';
 import type { ToolbarButton } from '@/types/toolbar';
 import type { ShortcutId } from '@/types/shortcut';
@@ -23,9 +24,9 @@ const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerO
     const [openDropdown, setOpenDropdown] = useState<ShortcutId | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const { editorInstance, undo, redo, canUndo, canRedo } = useEditor();
-    const { settings } = useSettings();
+    const { viewMode } = useViewMode();
 
-    const isEditorVisible = settings.workspace.viewMode === 'editor' || settings.workspace.viewMode === 'split';
+    const isEditorVisible = viewMode === 'editor' || viewMode === 'split';
     const closeDropdown = () => setOpenDropdown(null);
 
     const toolbarButtons = useToolbarButtons({ closeDropdown });
@@ -72,10 +73,10 @@ const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerO
     }, []);
 
     return (
-        // Columnas: explorador | botones de formato | nombre del archivo | opciones.
+        // Columnas: explorador | botones de formato | nombre del archivo | vista | opciones.
         // Los botones ocupan siempre todo su ancho en una sola fila y el nombre se queda con el espacio que sobre:
         // se acorta con "..." e incluso desaparece antes de que nada se salga de la pantalla.
-        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_max-content_minmax(0,1fr)_auto] gap-2 items-center" ref={dropdownRef}>
+        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_max-content_minmax(0,1fr)_auto_auto] gap-2 items-center" ref={dropdownRef}>
             <ToolbarToggleButton
                 icon={FaFolder}
                 isActive={isExplorerOpen}
@@ -99,6 +100,7 @@ const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerO
             <div className="col-start-3 flex justify-end mr-1 min-w-0">
                 <ActiveFileName />
             </div>
+            <ViewModeSwitcher />
             <ToolbarToggleButton
                 icon={SlOptions}
                 isActive={isSidebarOpen}

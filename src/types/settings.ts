@@ -1,8 +1,6 @@
-export type ViewMode = "split" | "editor" | "preview";
 export type FontFamily = "mono" | "sans" | "serif";
 
 export interface WorkspaceSettings {
-    viewMode: ViewMode;
     syncScroll: boolean;
 }
 

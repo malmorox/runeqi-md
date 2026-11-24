@@ -13,8 +13,6 @@ import {
 const EditorSettings = () => {
     const { settings, updateSettings } = useSettings();
 
-    if (settings.workspace.viewMode !== 'split' && settings.workspace.viewMode !== 'editor') return null;
-
     return (
         <SettingsSection title="Editor" description="Customize how the editor looks and feels while you write.">
             <SettingsSelect

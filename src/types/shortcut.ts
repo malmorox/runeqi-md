@@ -25,3 +25,6 @@ export interface ShortcutDefinition {
     // Always pressed with Ctrl+Shift (Cmd+Shift on macOS)
     key: ShortcutKey;
 }
+
+// Physical digit key that picks a view, always pressed with Ctrl+Alt (Cmd+Option on macOS)
+export type ViewModeKey = 'Digit1' | 'Digit2' | 'Digit3';

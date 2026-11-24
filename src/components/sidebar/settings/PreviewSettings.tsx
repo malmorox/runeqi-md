@@ -5,8 +5,6 @@ import SettingsToggle from '@components/sidebar/settings/SettingsToggle';
 const PreviewSettings = () => {
     const { settings, updateSettings } = useSettings();
 
-    if (settings.workspace.viewMode !== 'split' && settings.workspace.viewMode !== 'preview') return null;
-
     return (
         <SettingsSection title="Preview" description="Control how your document is displayed in the preview.">
             <SettingsToggle
