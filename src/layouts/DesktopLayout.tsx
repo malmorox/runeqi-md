@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Toolbar from "@components/Toolbar";
 import MarkdownWorkspace from "@components/MarkdownWorkspace";
-import Sidebar from "@components/Sidebar";
-import FileExplorer from "@components/FileExplorer";
+import Sidebar from "@components/sidebar/Sidebar";
+import FileExplorer from "@components/fileExplorer/FileExplorer";
 import Alerts from "@components/Alerts";
 import { useEnsureFileSystem } from "@hooks/files/useEnsureFileSystem";
 

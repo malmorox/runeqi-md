@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { IoClose, IoSettingsSharp } from "react-icons/io5";
+import { IoSettingsSharp } from "react-icons/io5";
 import { FaKeyboard, FaPalette } from 'react-icons/fa';
-import { FaAngleLeft, FaCircleInfo } from "react-icons/fa6";
+import { FaCircleInfo } from "react-icons/fa6";
 import { IoIosSave, IoMdExit } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
-import SidebarContent from '@components/ui/SidebarContent';
-import { viewTitles } from '@constants/sidebarData';
+import SidebarHeader from '@components/sidebar/SidebarHeader';
+import SidebarContent from '@components/sidebar/SidebarContent';
 import ThemeSwitcher from '@components/ThemeSwitcher';
 import AboutModal from '@components/ui/AboutModal';
 import ResetApplicationModal from '@components/ui/ResetApplicationModal';
@@ -74,27 +74,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <>
             <aside className="w-80 max-w-full h-full shrink-0 bg-[#D4D4D4] text-[#252526] flex flex-col panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:right-0 panel-overlay:z-50 panel-overlay:shadow-xl">
                 {/* Header */}
-                <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
-                    {currentView !== 'main' && (
-                        <button
-                            onClick={() => setCurrentView('main')}
-                            className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
-                            title='Back to menu'
-                        >
-                            <FaAngleLeft size={20} />
-                        </button>
-                    )}
-                    <span className="text-lg font-semibold flex-1">
-                        {viewTitles[currentView]}
-                    </span>
-                    <button
-                        onClick={onClose}
-                        className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
-                        title='Close sidebar'
-                    >
-                        <IoClose size={25} color="#2d2d30" />
-                    </button>
-                </div>
+                <SidebarHeader
+                    currentView={currentView}
+                    onBack={() => setCurrentView('main')}
+                    onClose={onClose}
+                />
                 {/* Contenido */}
                 <SidebarContent
                     currentView={currentView}

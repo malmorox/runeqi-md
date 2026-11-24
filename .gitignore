@@ -27,5 +27,7 @@ dist-ssr
 .env
 .env.local
 
-# Claude AI
+# Claude and AI Agents
 .claude/
+AGENTS.md
+CLAUDE.md

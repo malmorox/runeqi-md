@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { MdFileDownload, MdFileUpload } from 'react-icons/md';
-import SidebarMenuItem from '@components/ui/SidebarMenuItem';
+import SidebarMenuItem from '@components/sidebar/SidebarMenuItem';
 import { ACCEPTED_MARKDOWN_TYPES, exportMarkdown, importMarkdownFiles, markdownFileName } from '@helpers/markdownFiles';
 import { useMarkdown } from '@hooks/useMarkdown';
 import { useActiveFile } from '@hooks/useActiveFile';
@@ -10,7 +10,7 @@ import { listRejections, storageErrorMessage } from '@utils/alertMessages';
 import type { FileSystemEntry } from '@/types/file';
 
 // Import/Export view of the sidebar: Markdown files from the computer go to the root, and the active file is exported
-const ImportExportPanel = () => {
+const ImportExportView = () => {
     const { markdown } = useMarkdown();
     const activeEntry = useActiveFileEntry();
     const { setActiveFileId } = useActiveFile();
@@ -129,4 +129,4 @@ const ImportExportPanel = () => {
     );
 };
 
-export default ImportExportPanel;
+export default ImportExportView;
