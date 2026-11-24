@@ -13,8 +13,10 @@ export const shortcutKeys = (key: ShortcutKey): string[] => [
 export const formatShortcut = (key: ShortcutKey) => shortcutKeys(key).join('+');
 
 // View shortcuts use Ctrl+Alt so they don't collide with browser Ctrl+Shift shortcuts or the formatting ones
-export const formatViewModeShortcut = (key: ViewModeKey) => [
+export const viewModeShortcutKeys = (key: ViewModeKey): string[] => [
     isMac ? 'Cmd' : 'Ctrl',
     isMac ? 'Option' : 'Alt',
     key.replace(/^(Key|Digit)/, ''),
-].join('+');
+];
+
+export const formatViewModeShortcut = (key: ViewModeKey) => viewModeShortcutKeys(key).join('+');
