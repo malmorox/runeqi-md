@@ -2,12 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useFiles } from './useFiles';
 import { useActiveFile } from '../useActiveFile';
 import { db } from '@helpers/db';
-import { createFileSystemEntry } from '@helpers/createEntry';
+import { createFileSystemEntry, createWelcomeFile } from '@helpers/createEntry';
 import { ensureSystemFolders } from '@helpers/systemFolders';
 import { pickFallbackFile } from '@helpers/fallbackFile';
 import { useAlerts } from '@hooks/useAlerts';
 import { storageErrorMessage } from '@utils/alertMessages';
-import WELCOME_FILE_CONTENT from '@constants/welcomeFile.md?raw';
 
 /**
  * Keeps the file system usable at all times:
@@ -58,8 +57,10 @@ export function useEnsureFileSystem() {
             if (isCreatingFile.current) return;
             isCreatingFile.current = true;
             // If it fails it isn't tried again on every update: the alert explains why the editor is empty
-            const [name, content] = hadFiles.current ? ['New file', undefined] : ['Welcome file', WELCOME_FILE_CONTENT];
-            createFileSystemEntry(name, { type: 'file', parentId: null }, content)
+            const newFile = hadFiles.current
+                ? createFileSystemEntry('New file', { type: 'file', parentId: null })
+                : createWelcomeFile();
+            newFile
                 .then((entry) => setActiveFileId(entry.id))
                 .catch((error) => {
                     alerts.error({ title: "A new file couldn't be created", message: storageErrorMessage(error) });
