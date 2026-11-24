@@ -3,6 +3,7 @@ import { useAlerts } from '@hooks/useAlerts';
 import WorkspaceSettings from '@components/sidebar/settings/WorkspaceSettings';
 import EditorSettings from '@components/sidebar/settings/EditorSettings';
 import PreviewSettings from '@components/sidebar/settings/PreviewSettings';
+import PrivacySettings from '@components/sidebar/settings/PrivacySettings';
 
 const SettingsView = () => {
     const { resetSettings } = useSettings();
@@ -18,6 +19,7 @@ const SettingsView = () => {
             <WorkspaceSettings />
             <EditorSettings />
             <PreviewSettings />
+            <PrivacySettings />
             <button
                 onClick={handleReset}
                 className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"

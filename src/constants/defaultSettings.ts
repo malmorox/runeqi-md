@@ -21,4 +21,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
         codeHighlight: true,
         math: true
     },
+    // Opt-in: no usage data is sent until the user turns it on
+    privacy: {
+        usageData: false
+    },
 };

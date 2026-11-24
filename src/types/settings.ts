@@ -25,8 +25,13 @@ export interface PreviewerSettings {
     math: boolean;
 }
 
+export interface PrivacySettings {
+    usageData: boolean;
+}
+
 export interface AppSettings {
     workspace: WorkspaceSettings;
     editor: EditorSettings;
     previewer: PreviewerSettings;
+    privacy: PrivacySettings;
 }

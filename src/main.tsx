@@ -27,6 +27,3 @@ createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
     </StrictMode>,
 )
-
-// La analítica no es crítica: se carga en un chunk aparte después de arrancar la app
-void import('@utils/analytics');

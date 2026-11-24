@@ -54,10 +54,12 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
         setSettings(prev => deepMerge(prev, patch));
     }, []);
 
+    // A consent choice is the user's, so resetting preferences never changes it
     const resetSettings = useCallback(() => {
-        setSettings(DEFAULT_SETTINGS);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_SETTINGS));
-    }, []);
+        const next = { ...DEFAULT_SETTINGS, privacy: settings.privacy };
+        setSettings(next);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    }, [settings.privacy]);
 
     return (
         <SettingsContext.Provider value={{ settings, updateSettings, resetSettings }}>
