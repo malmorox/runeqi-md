@@ -1,5 +1,6 @@
 import { FaGithub, FaBug, FaXTwitter } from 'react-icons/fa6';
 import Modal from '@components/Modal';
+import logoUrl from '@/assets/runeqi-logo-on-light.svg';
 
 const REPOSITORY_URL = 'https://github.com/malmorox/runeqi-md';
 const TWITTER_URL = 'https://x.com/runeqimd';
@@ -23,7 +24,7 @@ const AboutModal = ({ onClose }: AboutModalProps) => (
         <div className="flex flex-col items-center text-center">
             {/* Logo and name on one line; the SVG has some empty space around the rune, hence the small gap */}
             <h2 id="about-runeqi-title" className="flex items-center gap-1 text-4xl font-semibold text-[#16161D]">
-                <img src="/brand/runeqi-logo-on-light.svg" alt="" width={72} height={72} className="size-18" />
+                <img src={logoUrl} alt="" width={72} height={72} className="size-18" />
                 RuneQi
             </h2>
             <p className="mt-2 text-gray-600">
