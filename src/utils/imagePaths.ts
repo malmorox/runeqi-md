@@ -9,6 +9,12 @@ export function imageMarkdownPath(name: string) {
     return `/${IMAGES_FOLDER_NAME}/${encodeName(name)}`;
 }
 
+// Splits a file name at its last dot; a leading dot (".gitignore") isn't an extension
+export function splitExtension(name: string): { base: string; ext: string } {
+    const dot = name.lastIndexOf('.');
+    return dot > 0 ? { base: name.slice(0, dot), ext: name.slice(dot) } : { base: name, ext: '' };
+}
+
 // Default alt text: the file name without its extension
 export function imageAlt(name: string) {
     return name.replace(/\.[^.]+$/, '').replace(/[[\]]/g, '');
