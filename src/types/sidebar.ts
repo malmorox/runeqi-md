@@ -1,7 +1,7 @@
 import React from 'react';
 import type { IconType } from 'react-icons';
 
-export type MenuView = 'main' | 'shortcuts' | 'settings' | 'import-export';
+export type MenuView = 'main' | 'cheatsheet' | 'shortcuts' | 'settings' | 'import-export';
 
 export interface MenuItem {
     icon: IconType;

@@ -171,6 +171,12 @@ The **Upload image** button in the toolbar's image dropdown keeps its own inline
 | error | `The Images and Trash folders couldn't be created` | The system folders couldn't be created on start. | [`useEnsureFileSystem.ts`](../src/hooks/files/useEnsureFileSystem.ts) |
 | error | `A new file couldn't be created` | The file created when none are left couldn't be saved. | [`useEnsureFileSystem.ts`](../src/hooks/files/useEnsureFileSystem.ts) |
 
+### Markdown cheatsheet — [`CheatsheetView.tsx`](../src/components/sidebar/CheatsheetView.tsx)
+
+| Variant | Title | When |
+|---|---|---|
+| error | `It couldn't be copied` | The browser refused access to the clipboard when copying a snippet. A successful copy shows a check on the copy icon instead of an alert. |
+
 ### Settings — [`SidebarContent.tsx`](../src/components/ui/SidebarContent.tsx)
 
 | Variant | Title | When |

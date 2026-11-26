@@ -15,6 +15,7 @@ Live at: [runeqimd.dev](https://runeqimd.dev)
   - [Live preview](#live-preview)
   - [Split workspace & scroll sync](#split-workspace--scroll-sync)
   - [File explorer](#file-explorer)
+  - [Markdown cheatsheet](#markdown-cheatsheet)
   - [Settings](#settings)
   - [Theming](#theming)
   - [Alerts](#alerts)
@@ -137,6 +138,16 @@ A collapsible panel (opened from the toolbar) showing a file/folder tree:
 - The currently open file is shown in bold in the tree; the most recently clicked node is highlighted.
 
 All file/folder data is persisted locally (see [Data persistence](#data-persistence)).
+
+### Markdown cheatsheet
+
+The first item of the sidebar menu is a minimalist reference of the Markdown syntax the preview draws, grouped by kind: headings, styling, lists, links, blocks (quotes, code and Mermaid blocks, tables, rules, footnotes), math and HTML (highlight, subscript and superscript, keyboard keys, collapsible sections, comments).
+
+- Each section is a bold title over a dashed line. Each example is written as it looks in the editor: the Markdown markers are grey and the text shows its effect (bold, struck, underlined, monospace...). The lines are drawn by hand with the sidebar's colors rather than through the preview components, which carry the preview's sizes, margins and scroll sync.
+- The lines are plain, selectable text: nothing is inserted into the editor. The only action is a small **Copy** icon that puts the entry's syntax on the clipboard. It appears on hover or keyboard focus, and is always visible on touch screens.
+- Lines that need a preview setting that's off (tables and task lists, math formulas, embedded HTML) are dimmed, and a one-line hint under the section title names the setting to turn on.
+
+The entries live in `src/constants/cheatsheet.tsx`. Only add syntax the preview really draws (`==mark==`, `~sub~`/`^sup^`, sized images and `:emoji:` shortcodes aren't), and check it there in both themes.
 
 ### Settings
 

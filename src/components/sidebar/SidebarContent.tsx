@@ -2,6 +2,7 @@ import type { MenuItem, MenuView } from '@/types/sidebar';
 import SidebarMenuItem from '@components/sidebar/SidebarMenuItem';
 import ImportExportView from '@components/sidebar/ImportExportView';
 import ShortcutsView from '@components/sidebar/ShortcutsView';
+import CheatsheetView from '@components/sidebar/CheatsheetView';
 import SettingsView from '@components/sidebar/settings/SettingsView';
 
 interface SidebarContentProps {
@@ -28,6 +29,9 @@ const SidebarContent = ({
                     ))}
                 </div>
             );
+
+        case 'cheatsheet':
+            return <CheatsheetView />;
 
         case 'import-export':
             return <ImportExportView />;

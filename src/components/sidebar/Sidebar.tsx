@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IoSettingsSharp } from "react-icons/io5";
-import { FaKeyboard, FaPalette } from 'react-icons/fa';
+import { FaKeyboard, FaMarkdown, FaPalette } from 'react-icons/fa';
 import { FaCircleInfo } from "react-icons/fa6";
 import { IoIosSave, IoMdExit } from "react-icons/io";
 import type { MenuView, MenuItem } from '@/types/sidebar';
@@ -23,6 +23,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     if (!isOpen) return null;
 
     const mainMenuItems: MenuItem[] = [
+        {
+            icon: FaMarkdown,
+            label: 'Markdown Cheatsheet',
+            description: 'Markdown syntax at a glance.',
+            view: 'cheatsheet',
+            hasSubview: true
+        },
         {
             icon: FaKeyboard,
             label: 'Keyboard Shortcuts',
