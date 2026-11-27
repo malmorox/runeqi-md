@@ -47,9 +47,7 @@ const FileTree = ({
             rowHeight={24}
             width="100%"
             height={height}
-            // Rows come with `min-width: max-content` and grow with long names (horizontal scroll):
-            // they're kept to the panel's width and the names are truncated instead
-            rowClassName="min-w-0!"
+            rowClassName="tree-row-wrapper"
             disableDrag={(data) => isSpecialFolderId(data.id)}
             onSelect={(nodes) => {
                 const node = nodes[0]?.data ?? null;

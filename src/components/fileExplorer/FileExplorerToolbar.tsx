@@ -36,11 +36,11 @@ const FileExplorerToolbar = ({
     const imageInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
+        <div className="panel-header">
             <button
                 onClick={onCreateFile}
                 disabled={isBusy}
-                className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="panel-icon-button"
                 title="New file"
             >
                 <HiDocumentPlus size={20} />
@@ -48,7 +48,7 @@ const FileExplorerToolbar = ({
             <button
                 onClick={onCreateFolder}
                 disabled={isBusy}
-                className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="panel-icon-button"
                 title="New folder"
             >
                 <HiFolderPlus size={20} />
@@ -57,7 +57,7 @@ const FileExplorerToolbar = ({
                 <button
                     onClick={() => imageInputRef.current?.click()}
                     disabled={isBusy}
-                    className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="panel-icon-button"
                     title="Upload images"
                 >
                     <RiImageAddFill size={20} />
@@ -78,7 +78,7 @@ const FileExplorerToolbar = ({
             <button
                 onClick={onRename}
                 disabled={isBusy || !canRename}
-                className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="panel-icon-button"
                 title="Rename selected"
             >
                 <FaPencilAlt size={18} />
@@ -86,18 +86,18 @@ const FileExplorerToolbar = ({
             <button
                 onClick={onDelete}
                 disabled={isBusy || !hasSelection || !deleteLabel}
-                className="p-1 hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="panel-icon-button"
                 title={deleteLabel ?? 'Delete selected'}
             >
                 <FaTrash size={18} />
             </button>
-            <span className="flex-1" />
+            <span className="panel-header-spacer" />
             <button 
                 onClick={onClose} 
-                className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer" 
+                className="panel-icon-button panel-icon-button-muted"
                 title="Close explorer"
             >
-                <IoClose size={25} color="#2d2d30" />
+                <IoClose size={25} />
             </button>
         </div>
     );

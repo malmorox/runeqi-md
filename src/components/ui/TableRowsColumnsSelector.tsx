@@ -35,12 +35,12 @@ const TableRowsColumnsSelector = ({
     };
 
     return (
-        <div className="p-3">
+        <div className="table-picker">
             <div
-                className="inline-block"
+                className="table-picker-area"
                 onMouseLeave={handleMouseLeave}
             >
-                <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${maxCols}, 1fr)` }}>
+                <div className="table-picker-grid" style={{ gridTemplateColumns: `repeat(${maxCols}, 1fr)` }}>
                     {Array.from({ length: maxRows }, (_, rowIndex) => (
                         Array.from({ length: maxCols }, (_, colIndex) => {
                             const row = rowIndex + 1;
@@ -50,11 +50,8 @@ const TableRowsColumnsSelector = ({
                             return (
                                 <div
                                     key={`${row}-${col}`}
-                                    className={`w-6 h-6 border-2 rounded transition-all duration-100 cursor-pointer ${
-                                        active
-                                            ? 'bg-sky-400 border-sky-600'
-                                            : 'bg-white border-[#cccccc] hover:border-sky-400'
-                                    }`}
+                                    data-active={active || undefined}
+                                    className="table-picker-cell"
                                     onMouseEnter={() => handleMouseEnter(row, col)}
                                     onClick={handleClick}
                                 />
@@ -65,7 +62,7 @@ const TableRowsColumnsSelector = ({
             </div>
 
             {isHovering && hoveredCell.row > 0 && hoveredCell.col > 0 && (
-                <div className="text-center text-sm text-[#cccccc] font-medium mt-3">
+                <div className="table-picker-size">
                     {hoveredCell.row} × {hoveredCell.col}
                 </div>
             )}

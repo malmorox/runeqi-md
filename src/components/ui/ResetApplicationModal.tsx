@@ -81,17 +81,17 @@ const ResetApplicationModal = ({ onClose }: ResetApplicationModalProps) => {
             onConfirm={handleConfirm}
             onCancel={onClose}
         >
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="modal-detail">
                 {describeEntries(entries)} will be permanently deleted, Trash included. To keep a copy of a file,
                 export it first from <strong>Menu → Import/Export</strong>.
             </p>
-            <label className="mt-4 flex items-center gap-2 text-sm text-gray-800 cursor-pointer">
+            <label className="modal-option">
                 <input
                     type="checkbox"
                     checked={resetPreferences}
                     onChange={(e) => setResetPreferences(e.target.checked)}
                     disabled={isResetting}
-                    className="accent-red-600"
+                    className="modal-option-checkbox"
                 />
                 Also reset settings and theme to their defaults
             </label>

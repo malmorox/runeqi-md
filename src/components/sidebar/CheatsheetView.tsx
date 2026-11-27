@@ -37,17 +37,14 @@ const CheatsheetCopyButton = ({ entry }: CheatsheetCopyButtonProps) => {
             <button
                 type="button"
                 onClick={handleCopy}
-                className={`shrink-0 p-1 rounded text-[#2d2d30] cursor-pointer hover:bg-[#bbbbbb] focus-visible:outline-2 focus-visible:outline-sky-500 ${
-                    copied
-                        ? 'opacity-100'
-                        : 'opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100'
-                }`}
+                data-copied={copied || undefined}
+                className="cheatsheet-copy-button"
                 title={copied ? 'Copied' : 'Copy'}
                 aria-label={`Copy ${entry.label.toLowerCase()}`}
             >
                 {copied ? <MdCheck size={14} aria-hidden /> : <MdOutlineContentCopy size={14} aria-hidden />}
             </button>
-            <span className="sr-only" role="status">{copied ? 'Copied' : ''}</span>
+            <span className="visually-hidden" role="status">{copied ? 'Copied' : ''}</span>
         </>
     );
 };
@@ -57,7 +54,7 @@ const CheatsheetView = () => {
     const { settings } = useSettings();
 
     return (
-        <div className="overflow-y-auto flex-1 p-3 space-y-8">
+        <div className="sidebar-view cheatsheet-view">
             {CHEATSHEET.map((section) => {
                 const headingId = `cheatsheet-section-${section.id}`;
                 const missingSettings = [...new Set(section.entries.flatMap((entry) =>
@@ -68,26 +65,25 @@ const CheatsheetView = () => {
                     <section key={section.id} aria-labelledby={headingId}>
                         <h3
                             id={headingId}
-                            className="pb-1 mb-3 text-lg font-bold text-[#252526] border-b border-dashed border-[#2d2d30]/40"
+                            className="cheatsheet-section-title"
                         >
                             {section.title}
                         </h3>
                         {missingSettings.length > 0 && (
-                            <p className="-mt-2 mb-3 text-[11px] text-[#595959]">
+                            <p className="cheatsheet-hint">
                                 Dimmed lines need {missingSettings.join(' and ')} in Settings.
                             </p>
                         )}
-                        <ul className="space-y-3">
+                        <ul className="cheatsheet-list">
                             {section.entries.map((entry) => {
                                 const isOff = entry.requires !== undefined && !settings.previewer[entry.requires];
                                 return (
-                                    // `relative` keeps the sr-only status inside the line: otherwise it's positioned
-                                    // against the page and, far down the list, makes the whole page scroll
                                     <li
                                         key={entry.label}
-                                        className={`group relative flex items-start gap-2 text-sm text-[#252526] ${isOff ? 'opacity-50' : ''}`}
+                                        data-unavailable={isOff || undefined}
+                                        className="cheatsheet-entry"
                                     >
-                                        <div className="flex-1 min-w-0 wrap-break-word">{entry.line}</div>
+                                        <div className="cheatsheet-entry-line">{entry.line}</div>
                                         <CheatsheetCopyButton entry={entry} />
                                     </li>
                                 );

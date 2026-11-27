@@ -136,7 +136,7 @@ const MarkdownEditor = () => {
 
     return (
         <div
-            className="w-full h-full"
+            className="editor-pane"
             onPasteCapture={handlePaste}
             onDragOverCapture={handleDragOver}
             onDropCapture={handleDrop}
@@ -151,7 +151,7 @@ const MarkdownEditor = () => {
                 onMount={handleEditorDidMount}
                 options={editorOptions}
                 // Mientras Monaco se inicializa se muestra solo su fondo, sin texto de "Loading..."
-                loading={<div className={`w-full h-full ${theme === 'dark' ? 'bg-[#2d2d30]' : 'bg-[#fffffe]'}`} />}
+                loading={<div className={`editor-loading ${theme === 'dark' ? 'dark' : ''}`} />}
             />
         </div>
     );

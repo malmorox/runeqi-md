@@ -4,9 +4,6 @@ import { renameFileSystemEntry } from '@helpers/renameEntry';
 import { useAlerts } from '@hooks/useAlerts';
 import { storageErrorMessage } from '@utils/alertMessages';
 
-// Shared by the name and its rename input, so switching between them doesn't change the size or move the text
-const NAME_TEXT = "text-xl font-semibold text-center px-2 py-1 rounded";
-
 const ActiveFileName = () => {
     const activeEntry = useActiveFileEntry();
     const [isEditing, setIsEditing] = useState(false);
@@ -36,8 +33,8 @@ const ActiveFileName = () => {
     if (isEditing) {
         return (
             // An input doesn't grow with its text: an invisible copy of the text in the same grid cell gives it its width
-            <span className="inline-grid max-w-lg min-w-12">
-                <span aria-hidden className={`${NAME_TEXT} invisible col-start-1 row-start-1 whitespace-pre overflow-hidden`}>
+            <span className="active-file-name-editor">
+                <span aria-hidden className="active-file-name active-file-name-sizer">
                     {draft || ' '}
                 </span>
                 <input
@@ -48,7 +45,7 @@ const ActiveFileName = () => {
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     onFocus={(e) => e.currentTarget.select()}
-                    className={`${NAME_TEXT} col-start-1 row-start-1 w-full min-w-0 bg-[#3c3c3c] text-white outline-none ring-1 ring-[#666] focus:ring-sky-500`}
+                    className="active-file-name active-file-name-input"
                     onBlur={(e) => commitRename(e.currentTarget.value)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -69,7 +66,7 @@ const ActiveFileName = () => {
         <button
             onClick={startEditing}
             title="Rename file"
-            className={`${NAME_TEXT} text-[#bbbbbb] hover:text-white hover:bg-[#4d4d4d] transition-colors cursor-pointer truncate max-w-lg`}
+            className="active-file-name active-file-name-button"
         >
             {activeEntry.name}
         </button>

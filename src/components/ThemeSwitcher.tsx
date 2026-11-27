@@ -14,19 +14,10 @@ export default function ThemeSwitcher() {
     return (
         <button
             onClick={handleToggle}
-            className={`
-                relative w-11 h-6 flex items-center rounded-md
-                cursor-pointer outline outline-[#252526] transition-colors
-                ${isDark ? "bg-[#2d2d30]" : "bg-white"}
-            `}
+            aria-pressed={isDark}
+            className="theme-switch"
         >
-            <span
-                className={`
-                    absolute w-4.5 h-4.5 bg-[#D4D4D4] border border-[#252526] rounded-sm shadow
-                    transition-transform
-                    ${isDark ? "translate-x-[22.5px]" : "translate-x-[3.5px]"}
-                `}
-            />
+            <span className="theme-switch-thumb" />
         </button>
     );
 }

@@ -42,14 +42,14 @@ const DesktopLayout = () => {
     }, []);
 
     return (
-        <div className="w-screen h-screen flex overflow-hidden">
+        <div className="app-shell">
             <FileExplorer
                 isOpen={isFileExplorerOpen}
                 onClose={() => closePanel('explorer')}
             />
-            <div className="flex-1 min-w-0 h-full flex flex-col">
+            <div className="app-main">
                 {/* Toolbar */}
-                <div className="shrink-0">
+                <div className="app-toolbar-slot">
                     <Toolbar
                         onSidebarToggle={() => togglePanel('menu')}
                         isSidebarOpen={isSidebarOpen}
@@ -58,7 +58,7 @@ const DesktopLayout = () => {
                     />
                 </div>
                 {/* Espacio de trabajo */}
-                <div className="w-full h-full bg-[#1e1e1e] overflow-hidden">
+                <div className="app-workspace">
                     <MarkdownWorkspace />
                 </div>
             </div>

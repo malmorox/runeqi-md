@@ -45,14 +45,13 @@ const MarkdownPreview = () => {
     return (
         // The theme only toggles the `dark` class: the components are the same in both themes, so switching
         // only changes styles and the Markdown isn't rendered again (images stay loaded)
-        <div ref={registerPreview} className={`preview-scroll w-full h-full overflow-auto bg-[#f3f3f3] dark:bg-[#2d2d30] ${
+        <div ref={registerPreview} className={`preview-pane preview-scroll ${
             theme === "dark" ? "dark" : ""
         }`}>
-            {/* El primer encabezado del documento no lleva margen superior */}
-            <div data-markdown-root className="p-6 max-w-4xl mx-auto wrap-break-word overflow-wrap-anywhere [&>:first-child>:first-child:is(h1,h2,h3,h4,h5,h6)]:mt-0">
+            <div data-markdown-root className="markdown-body">
                 {chunks.map((chunk) => (
                     // `contents`: el envoltorio no genera caja, así que el layout es el mismo que sin trocear
-                    <div key={chunk.key} className="contents" data-chunk-line={chunk.line}>
+                    <div key={chunk.key} className="markdown-chunk" data-chunk-line={chunk.line}>
                         <ChunkLineContext.Provider value={chunk.line}>
                             <MarkdownChunk
                                 remarkPlugins={remarkPlugins}

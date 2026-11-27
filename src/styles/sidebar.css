@@ -1,0 +1,185 @@
+@layer components {
+    .sidebar {
+        @apply panel-overlay:right-0;
+    }
+
+    .sidebar-view {
+        @apply overflow-y-auto flex-1 p-3;
+    }
+
+    .sidebar-divider {
+        @apply my-3 mx-4 border-panel-strong;
+    }
+
+    .sidebar-item {
+        @apply w-full flex items-start gap-3 px-4 py-3 rounded-md text-left transition-colors;
+    }
+
+    button.sidebar-item {
+        @apply cursor-pointer enabled:hover:bg-panel-raised focus-visible:outline-2 focus-visible:outline-sky-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    div.sidebar-item {
+        @apply cursor-default;
+
+        &[data-disabled] {
+            @apply opacity-50 cursor-not-allowed;
+        }
+    }
+
+    .sidebar-item-icon {
+        @apply shrink-0 flex items-center self-stretch;
+    }
+
+    .sidebar-item-text {
+        @apply flex-1 min-w-0;
+    }
+
+    .sidebar-item-label {
+        @apply block font-medium;
+    }
+
+    .sidebar-item-description {
+        @apply block text-xs text-editor-dark mt-0.5 wrap-break-word;
+    }
+
+    .theme-switch {
+        @apply relative w-11 h-6 flex items-center rounded-md cursor-pointer outline outline-surface-dark transition-colors bg-white;
+
+        &[aria-pressed="true"] {
+            @apply bg-editor-dark;
+        }
+    }
+
+    .theme-switch-thumb {
+        @apply absolute w-4.5 h-4.5 bg-panel border border-surface-dark rounded-sm shadow transition-transform translate-x-[3.5px];
+
+        .theme-switch[aria-pressed="true"] & {
+            @apply translate-x-[22.5px];
+        }
+    }
+
+    .shortcuts-view {
+        @apply space-y-4;
+    }
+
+    .shortcuts-group-title {
+        @apply font-semibold text-surface-dark mb-2;
+    }
+
+    .shortcuts-list {
+        @apply space-y-2;
+    }
+
+    .shortcut-row {
+        @apply flex items-center justify-between py-2 px-3 bg-panel-raised rounded;
+    }
+
+    .shortcut-keys {
+        @apply flex;
+    }
+
+    .shortcut-key {
+        @apply px-2 py-1 text-xs font-semibold text-surface-dark bg-panel border border-editor-dark rounded;
+    }
+
+    .shortcut-plus {
+        @apply text-editor-dark px-1;
+    }
+
+    .cheatsheet-view {
+        @apply space-y-8;
+    }
+
+    .cheatsheet-section-title {
+        @apply pb-1 mb-3 text-lg font-bold text-surface-dark border-b border-dashed border-editor-dark/40;
+    }
+
+    .cheatsheet-hint {
+        @apply -mt-2 mb-3 text-[11px] text-muted;
+    }
+
+    .cheatsheet-list {
+        @apply space-y-3;
+    }
+
+    /* `relative` keeps the visually hidden status inside the line: otherwise it's positioned against the page and, far
+       down the list, makes the whole page scroll */
+    .cheatsheet-entry {
+        @apply relative flex items-start gap-2 text-sm text-surface-dark;
+
+        &[data-unavailable] {
+            @apply opacity-50;
+        }
+    }
+
+    .cheatsheet-entry-line {
+        @apply flex-1 min-w-0 wrap-break-word;
+    }
+
+    .cheatsheet-copy-button {
+        @apply shrink-0 p-1 rounded text-editor-dark cursor-pointer hover:bg-panel-strong focus-visible:outline-2 focus-visible:outline-sky-500 opacity-0 focus-visible:opacity-100 pointer-coarse:opacity-100;
+
+        @media (hover: hover) {
+            .cheatsheet-entry:hover & {
+                @apply opacity-100;
+            }
+        }
+
+        &[data-copied] {
+            @apply opacity-100;
+        }
+    }
+
+    .cheatsheet-marker {
+        @apply font-normal not-italic no-underline text-muted;
+    }
+
+    .cheatsheet-line {
+        @apply block;
+    }
+
+    .cheatsheet-h1 {
+        @apply text-2xl font-bold;
+    }
+
+    .cheatsheet-h2 {
+        @apply text-xl font-bold;
+    }
+
+    .cheatsheet-h3 {
+        @apply text-lg font-bold;
+    }
+
+    .cheatsheet-code {
+        @apply font-mono text-xs;
+    }
+
+    .cheatsheet-code-block {
+        @apply block font-mono text-xs;
+    }
+
+    .cheatsheet-indent {
+        @apply pl-4;
+    }
+
+    .cheatsheet-formula {
+        @apply italic;
+    }
+
+    .cheatsheet-link {
+        @apply underline underline-offset-2;
+    }
+
+    .cheatsheet-quote {
+        @apply text-muted;
+    }
+
+    .cheatsheet-mark {
+        @apply bg-yellow-200 text-surface-dark;
+    }
+
+    .cheatsheet-kbd {
+        @apply px-1 text-xs font-semibold border border-editor-dark rounded;
+    }
+}

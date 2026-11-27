@@ -1,0 +1,116 @@
+@layer base {
+    :root {
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@layer components {
+    .visually-hidden {
+        @apply sr-only;
+    }
+
+    /* Sidebar and file explorer */
+    .side-panel {
+        @apply w-80 max-w-full h-full shrink-0 bg-panel text-surface-dark flex flex-col panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:z-50 panel-overlay:shadow-xl;
+    }
+
+    .panel-header {
+        @apply flex items-center h-12 px-3 gap-1 bg-panel-strong;
+    }
+
+    .panel-header-title {
+        @apply text-lg font-semibold flex-1;
+    }
+
+    .panel-header-spacer {
+        @apply flex-1;
+    }
+
+    .panel-icon-button {
+        @apply p-1 hover:bg-panel-hover rounded transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed;
+    }
+
+    .panel-icon-button-muted {
+        @apply text-editor-dark;
+    }
+
+    /* Preview scrollbar: same look as Monaco's (size and slider colors of its light and dark themes), so the editor and
+       the preview match side by side. The `dark` class sits on the preview itself, so `.dark` picks the dark colors */
+    .preview-scroll {
+        --scrollbar-thumb: rgb(100 100 100 / 0.4);
+        --scrollbar-thumb-hover: rgb(100 100 100 / 0.7);
+        --scrollbar-thumb-active: rgb(0 0 0 / 0.6);
+    }
+
+    .preview-scroll.dark {
+        --scrollbar-thumb: rgb(121 121 121 / 0.4);
+        --scrollbar-thumb-active: rgb(191 191 191 / 0.4);
+    }
+
+    .preview-scroll::-webkit-scrollbar {
+        width: 14px;
+        height: 14px;
+    }
+
+    .preview-scroll::-webkit-scrollbar-track,
+    .preview-scroll::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    .preview-scroll::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+    }
+
+    .preview-scroll::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+    }
+
+    .preview-scroll::-webkit-scrollbar-thumb:active {
+        background: var(--scrollbar-thumb-active);
+    }
+
+    /* Firefox has no ::-webkit-scrollbar: only the colors can be set there. It isn't used elsewhere because Chrome ignores
+       ::-webkit-scrollbar on an element that sets scrollbar-color */
+    @supports not selector(::-webkit-scrollbar) {
+        .preview-scroll {
+            scrollbar-color: var(--scrollbar-thumb) transparent;
+        }
+    }
+}
+
+/* Alert animations (their tokens are in the @theme of index.css) */
+@keyframes alert-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes alert-fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes alert-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+}
+
+@keyframes alert-out {
+    to {
+        opacity: 0;
+        transform: translateX(16px);
+    }
+}
+
+/* Timer bar of an alert, set inline with the alert's duration */
+@keyframes alert-progress {
+    to {
+        transform: scaleX(0);
+    }
+}

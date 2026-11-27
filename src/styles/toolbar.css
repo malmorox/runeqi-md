@@ -1,0 +1,254 @@
+@layer components {
+    .toolbar {
+        @apply bg-app px-1 py-1 grid grid-cols-[auto_max-content_minmax(0,1fr)_auto_auto] gap-2 items-center;
+    }
+
+    .toolbar-file-name-slot {
+        @apply col-start-3 flex justify-end mr-1 min-w-0;
+    }
+
+    .toolbar-icon-button {
+        @apply w-10 aspect-square p-2 rounded flex items-center justify-center transition-colors text-panel-strong cursor-pointer enabled:hover:bg-control-dark-active enabled:hover:text-white;
+
+        &:disabled {
+            @apply text-control-dark-strong cursor-not-allowed opacity-50;
+        }
+    }
+
+    .toolbar-toggle-button {
+        @apply w-10 shrink-0 aspect-square p-2 rounded flex items-center justify-center transition-colors cursor-pointer text-panel-strong;
+
+        &:not([aria-pressed="true"]) {
+            @apply hover:bg-control-dark-active;
+        }
+
+        &[aria-pressed="true"] {
+            @apply bg-control-dark-active text-white;
+        }
+    }
+
+    .formatting-buttons {
+        @apply flex gap-0.5 items-center;
+    }
+
+    .toolbar-separator {
+        @apply w-px h-6 bg-control-dark-active mx-1;
+    }
+
+    .toolbar-button-slot {
+        @apply relative;
+    }
+
+    .dropdown {
+        @apply absolute top-full left-0 mt-3 bg-surface-dark border border-panel-strong rounded-lg shadow-lg z-10;
+    }
+
+    .view-mode-switcher {
+        @apply relative inline-flex shrink-0 items-center rounded-md bg-editor-dark border border-control-dark p-0.5;
+    }
+
+    /* The offsets match the w-8 segments */
+    .view-mode-thumb {
+        @apply absolute top-0.5 left-0.5 h-7 w-8 rounded bg-control-dark-active shadow-sm transition-transform duration-200 motion-reduce:transition-none translate-x-0;
+
+        &[data-mode="split"] {
+            @apply translate-x-8;
+        }
+
+        &[data-mode="preview"] {
+            @apply translate-x-16;
+        }
+    }
+
+    .view-mode-button {
+        @apply relative z-10 h-7 w-8 flex items-center justify-center rounded cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sky-500;
+
+        &[aria-pressed="true"] {
+            @apply text-white;
+        }
+
+        &[aria-pressed="false"] {
+            @apply text-segment-idle hover:text-segment-hover;
+        }
+    }
+
+    /* Shared by the name and its rename input, so switching between them doesn't change the size or move the text */
+    .active-file-name {
+        @apply text-xl font-semibold text-center px-2 py-1 rounded;
+    }
+
+    .active-file-name-editor {
+        @apply inline-grid max-w-lg min-w-12;
+    }
+
+    .active-file-name-sizer {
+        @apply invisible col-start-1 row-start-1 whitespace-pre overflow-hidden;
+    }
+
+    .active-file-name-input {
+        @apply col-start-1 row-start-1 w-full min-w-0 bg-control-dark text-white outline-none ring-1 ring-input-ring-dark focus:ring-sky-500;
+    }
+
+    .active-file-name-button {
+        @apply text-panel-strong hover:text-white hover:bg-control-dark-active transition-colors cursor-pointer truncate max-w-lg;
+    }
+
+    /* Toolbar dropdowns */
+    .dropdown-form-panel {
+        @apply p-3 min-w-[250px];
+    }
+
+    .dropdown-form {
+        @apply space-y-2;
+    }
+
+    .dropdown-field-label {
+        @apply block text-xs font-medium text-on-dark mb-1;
+    }
+
+    .dropdown-input {
+        @apply w-full px-2 py-1.5 text-sm text-app bg-white border border-on-dark rounded focus:outline-none focus:ring-2 focus:ring-sky-500;
+    }
+
+    .dropdown-submit {
+        @apply w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer;
+    }
+
+    .dropdown-submit-spaced {
+        @apply mt-2;
+    }
+
+    .dropdown-divider {
+        @apply flex items-center gap-2 text-xs text-on-dark-subtle;
+    }
+
+    .dropdown-divider-line {
+        @apply h-px flex-1 bg-control-dark-strong;
+    }
+
+    .dropdown-upload-button {
+        @apply w-full flex items-center justify-center gap-2 border border-control-dark-strong text-on-dark px-3 py-1.5 rounded text-sm hover:bg-control-dark-hover transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-wait;
+    }
+
+    .dropdown-error {
+        @apply text-xs text-red-400;
+    }
+
+    .image-dropdown {
+        @apply space-y-2;
+    }
+
+    .heading-options {
+        @apply p-2 min-w-[160px] space-y-1;
+    }
+
+    .heading-option {
+        @apply w-full text-left text-on-dark px-3 py-1.5 rounded hover:bg-control-dark-hover cursor-pointer;
+
+        &[data-level="1"] {
+            @apply text-2xl font-bold;
+        }
+
+        &[data-level="2"] {
+            @apply text-xl font-bold;
+        }
+
+        &[data-level="3"] {
+            @apply text-lg font-semibold;
+        }
+
+        &[data-level="4"] {
+            @apply text-base font-medium;
+        }
+
+        &[data-level="5"] {
+            @apply text-sm font-medium;
+        }
+
+        &[data-level="6"] {
+            @apply text-xs font-medium;
+        }
+    }
+
+    .code-language-custom {
+        @apply p-3 min-w-70;
+    }
+
+    .code-language-field {
+        @apply mb-3;
+    }
+
+    .code-language-label {
+        @apply block text-xs font-medium text-on-dark mb-2;
+    }
+
+    .code-language-actions {
+        @apply flex gap-2;
+    }
+
+    .code-language-insert {
+        @apply flex-1 bg-sky-500 text-white px-3 py-2 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer;
+    }
+
+    .code-language-cancel {
+        @apply flex-1 bg-on-dark text-app px-3 py-2 rounded text-sm hover:bg-panel-hover transition-colors cursor-pointer;
+    }
+
+    .code-language-picker {
+        @apply p-3 min-w-50;
+    }
+
+    .code-language-grid {
+        @apply grid grid-cols-4 gap-2 mb-3;
+    }
+
+    .code-language-option {
+        @apply aspect-square cursor-pointer flex items-center justify-center p-1 bg-white border border-panel-strong rounded hover:bg-tile-hover hover:border-tile-hover-border transition-all;
+
+        & > svg {
+            @apply text-control-dark-hover transition-transform;
+        }
+
+        @media (hover: hover) {
+            &:hover > svg {
+                @apply scale-110 text-surface-dark;
+            }
+        }
+    }
+
+    .code-language-more {
+        @apply pt-3 border-t border-panel-strong;
+    }
+
+    .code-language-other {
+        @apply w-full px-3 py-1 text-sm font-medium text-sky-600 bg-sky-50 border border-sky-200 rounded hover:bg-sky-100 hover:border-sky-400 transition-colors cursor-pointer;
+    }
+
+    .table-picker {
+        @apply p-3;
+    }
+
+    .table-picker-area {
+        @apply inline-block;
+    }
+
+    .table-picker-grid {
+        @apply grid gap-1;
+    }
+
+    .table-picker-cell {
+        @apply w-6 h-6 border-2 rounded transition-all duration-100 cursor-pointer bg-white border-on-dark;
+
+        &:not([data-active]) {
+            @apply hover:border-sky-400;
+        }
+
+        &[data-active] {
+            @apply bg-sky-400 border-sky-600;
+        }
+    }
+
+    .table-picker-size {
+        @apply text-center text-sm text-on-dark font-medium mt-3;
+    }
+}

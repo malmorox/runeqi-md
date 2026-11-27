@@ -11,7 +11,7 @@ export const ALERT_DURATIONS: Record<AlertVariant, number> = {
 export const MIN_ACTION_ALERT_DURATION = 6000;
 // Older alerts are dropped beyond this, so the stack never covers too much of the workspace
 export const MAX_VISIBLE_ALERTS = 4;
-// Length of the exit animation (alert-out in index.css)
+// Length of the exit animation (alert-out in base.css)
 export const ALERT_EXIT_MS = 150;
 // Rejected files listed in an alert before summing up the rest ("…and 3 more")
 export const MAX_LISTED_REJECTIONS = 3;

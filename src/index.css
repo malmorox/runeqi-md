@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import "./styles/base.css";
+@import "./styles/preview.css";
+@import "./styles/emoji-picker.css";
+@import "./styles/layout.css";
+@import "./styles/toolbar.css";
+@import "./styles/sidebar.css";
+@import "./styles/settings.css";
+@import "./styles/file-explorer.css";
+@import "./styles/modal.css";
+@import "./styles/alerts.css";
 
 /* `dark:` follows the app's theme toggle instead of the system's: it applies inside an element with the `dark` class
    (the preview), so switching themes only changes styles and nothing has to be rendered again */
@@ -8,94 +18,72 @@
    the menu open over the workspace instead of pushing it (see SINGLE_PANEL_QUERY for when only one can be open) */
 @custom-variant panel-overlay (@media (width < 1140px));
 
-/* Preview scrollbar: same look as Monaco's (size and slider colors of its light and dark themes), so the editor and
-   the preview match side by side. The `dark` class sits on the preview itself, so `.dark` picks the dark colors */
-.preview-scroll {
-    --scrollbar-thumb: rgb(100 100 100 / 0.4);
-    --scrollbar-thumb-hover: rgb(100 100 100 / 0.7);
-    --scrollbar-thumb-active: rgb(0 0 0 / 0.6);
-}
-
-.preview-scroll.dark {
-    --scrollbar-thumb: rgb(121 121 121 / 0.4);
-    --scrollbar-thumb-active: rgb(191 191 191 / 0.4);
-}
-
-.preview-scroll::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-}
-
-.preview-scroll::-webkit-scrollbar-track,
-.preview-scroll::-webkit-scrollbar-corner {
-    background: transparent;
-}
-
-.preview-scroll::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-}
-
-.preview-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
-}
-
-.preview-scroll::-webkit-scrollbar-thumb:active {
-    background: var(--scrollbar-thumb-active);
-}
-
-/* Firefox has no ::-webkit-scrollbar: only the colors can be set there. It isn't used elsewhere because Chrome ignores
-   ::-webkit-scrollbar on an element that sets scrollbar-color */
-@supports not selector(::-webkit-scrollbar) {
-    .preview-scroll {
-        scrollbar-color: var(--scrollbar-thumb) transparent;
-    }
-}
-
-root {
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* Alerts: they come in from below and leave to the right (see ALERT_EXIT_MS).
-   When the system asks for reduced motion they only fade in and out, without moving */
 @theme {
+    /* Alerts: they come in from below and leave to the right (see ALERT_EXIT_MS).
+       When the system asks for reduced motion they only fade in and out, without moving */
     --animate-alert-in: alert-in 200ms ease-out;
     --animate-alert-out: alert-out 150ms ease-in forwards;
     --animate-alert-fade-in: alert-fade-in 200ms ease-out;
     --animate-alert-fade-out: alert-fade-out 150ms ease-in forwards;
-}
 
-@keyframes alert-fade-in {
-    from {
-        opacity: 0;
-    }
-}
-
-@keyframes alert-fade-out {
-    to {
-        opacity: 0;
-    }
-}
-
-@keyframes alert-in {
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.98);
-    }
-}
-
-@keyframes alert-out {
-    to {
-        opacity: 0;
-        transform: translateX(16px);
-    }
-}
-
-/* Timer bar of an alert, set inline with the alert's duration */
-@keyframes alert-progress {
-    to {
-        transform: scaleX(0);
-    }
+    /* App frame and toolbar background */
+    --color-app: #1e1e1e;
+    /* Workspace and dropdown background; main text on light panels */
+    --color-surface-dark: #252526;
+    /* Dark editor and preview background; secondary text and borders on light panels */
+    --color-editor-dark: #2d2d30;
+    /* Dark controls */
+    --color-control-dark: #3c3c3c;
+    /* Hover and selected on dark dropdowns, alert background */
+    --color-control-dark-hover: #3e3e42;
+    /* Pressed toolbar buttons */
+    --color-control-dark-active: #4d4d4d;
+    /* Highlights and borders on dark dropdowns */
+    --color-control-dark-strong: #555555;
+    /* Muted text on light panels */
+    --color-muted: #595959;
+    /* Hover on light panels */
+    --color-panel-hover: #a8a8a8;
+    /* Inputs, headers and borders on light panels */
+    --color-panel-strong: #bbbbbb;
+    /* Raised rows on light panels */
+    --color-panel-raised: #c4c4c4;
+    /* Text on dark dropdowns */
+    --color-on-dark: #cccccc;
+    /* Light sidebar, explorer and workspace background */
+    --color-panel: #d4d4d4;
+    /* Light preview background */
+    --color-preview-light: #f3f3f3;
+    /* Light editor background */
+    --color-editor-light: #fffffe;
+    /* Light blockquote background */
+    --color-blockquote-light: #f0edeb;
+    /* Dark inline code background */
+    --color-inline-code-dark: #545459;
+    /* Dark table header background */
+    --color-table-head-dark: #353538;
+    /* "or" divider text on dark dropdowns */
+    --color-on-dark-subtle: #999999;
+    /* Hover on the code language tiles */
+    --color-tile-hover: #ededed;
+    /* Border of a hovered code language tile */
+    --color-tile-hover-border: #8c8c8c;
+    /* Ring of the file name input in the toolbar */
+    --color-input-ring-dark: #666666;
+    /* Idle view mode buttons */
+    --color-segment-idle: #8a8a8a;
+    /* Hovered view mode buttons */
+    --color-segment-hover: #dddddd;
+    /* Hovered workspace resize handle, dark theme */
+    --color-resize-dark-hover: #212122;
+    /* Hovered workspace resize handle, light theme */
+    --color-resize-light-hover: #c8c8c8;
+    /* Border of the name input in the file tree */
+    --color-tree-input-border: #888888;
+    /* About modal title */
+    --color-brand-ink: #16161d;
+    /* Close button of a light alert */
+    --color-alert-close-light: #616161;
+    /* Hovered close button of a light alert */
+    --color-alert-close-light-hover: #ececec;
 }

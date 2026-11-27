@@ -1,5 +1,4 @@
 import EmojiPicker, { Theme, EmojiStyle, type EmojiClickData } from 'emoji-picker-react';
-import "@styles/components/emoji-picker.css"
 
 interface EmojiSelectorProps {
     onSelect: (emoji: string) => void;

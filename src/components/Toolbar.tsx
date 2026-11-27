@@ -76,7 +76,7 @@ const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerO
         // Columnas: explorador | botones de formato | nombre del archivo | vista | opciones.
         // Los botones ocupan siempre todo su ancho en una sola fila y el nombre se queda con el espacio que sobre:
         // se acorta con "..." e incluso desaparece antes de que nada se salga de la pantalla.
-        <div className="bg-[#1e1e1e] px-1 py-1 grid grid-cols-[auto_max-content_minmax(0,1fr)_auto_auto] gap-2 items-center" ref={dropdownRef}>
+        <div className="toolbar" ref={dropdownRef}>
             <ToolbarToggleButton
                 icon={FaFolder}
                 isActive={isExplorerOpen}
@@ -97,7 +97,7 @@ const Toolbar = ({ onSidebarToggle, isSidebarOpen, onExplorerToggle, isExplorerO
             )}
 
             {/* Columna fija: aunque no haya botones de formato (solo preview), el nombre sigue a la derecha */}
-            <div className="col-start-3 flex justify-end mr-1 min-w-0">
+            <div className="toolbar-file-name-slot">
                 <ActiveFileName />
             </div>
             <ViewModeSwitcher />

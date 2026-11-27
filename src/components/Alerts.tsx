@@ -12,14 +12,13 @@ const Alerts = () => {
     return (
         <section
             aria-label="Notifications"
-            className="fixed bottom-4 right-4 z-110 w-90 max-w-[calc(100vw-2rem)] pointer-events-none"
+            className={`alerts ${theme === "dark" ? "dark" : ""}`}
         >
-            <ol className="flex flex-col gap-2">
+            <ol className="alerts-list">
                 {alerts.map((alert) => (
                     <AlertToast
                         key={alert.id}
                         alert={alert}
-                        isDark={theme === "dark"}
                         onDismiss={() => dismiss(alert.id)}
                     />
                 ))}

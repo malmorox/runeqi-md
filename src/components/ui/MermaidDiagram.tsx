@@ -77,7 +77,7 @@ const MermaidDiagram = ({ code, line }: MermaidDiagramProps) => {
                 // Mermaid's SVG, sanitized (securityLevel 'strict'). Straight on the preview's background: it's a
                 // drawing, not code, so it doesn't get the code blocks' card
                 <div
-                    className="overflow-x-auto [&>svg]:block [&>svg]:mx-auto"
+                    className="mermaid-diagram preview-embed"
                     dangerouslySetInnerHTML={{ __html: svg }}
                 />
             ) : (
@@ -85,10 +85,10 @@ const MermaidDiagram = ({ code, line }: MermaidDiagramProps) => {
                 <PreviewCodeBlock language="mermaid" content={code} />
             )}
             {error && (
-                <div className="mt-2 rounded border px-3 py-2 text-sm border-red-300 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
-                    <p className="font-semibold">Diagram error</p>
+                <div className="mermaid-error preview-embed">
+                    <p>Diagram error</p>
                     {/* Mermaid's context lines are short and keep their ^ marker aligned: only the long "Expecting..." one wraps */}
-                    <pre className="mt-1 font-mono text-xs whitespace-pre-wrap wrap-break-word">{error}</pre>
+                    <pre>{error}</pre>
                 </div>
             )}
         </>

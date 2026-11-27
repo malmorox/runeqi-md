@@ -1,0 +1,190 @@
+@layer components {
+    .preview-pane {
+        @apply w-full h-full overflow-auto bg-preview-light dark:bg-editor-dark;
+    }
+
+    /* Rendered Markdown. Its elements are styled from here instead of in each renderer. Embedded widgets (code blocks,
+       Mermaid, formulas) are marked `preview-embed` and left out: Mermaid's labels are <p> and <span> inside the SVG,
+       and the highlighter and the formula fallbacks render their own <code> and <pre> */
+    .markdown-body {
+        @apply p-6 max-w-4xl mx-auto wrap-break-word;
+
+        & h1:not(.preview-embed, .preview-embed *) {
+            @apply text-4xl font-bold mb-4 border-b pb-2 mt-8 text-neutral-900 border-neutral-300 dark:text-white dark:border-neutral-700;
+        }
+
+        & h2:not(.preview-embed, .preview-embed *) {
+            @apply text-3xl font-bold mb-3 mt-6 text-neutral-900 dark:text-white;
+        }
+
+        & h3:not(.preview-embed, .preview-embed *) {
+            @apply text-2xl font-bold mb-2 mt-5 text-neutral-900 dark:text-white;
+        }
+
+        & h4:not(.preview-embed, .preview-embed *) {
+            @apply text-xl font-semibold mb-2 mt-4 text-neutral-800 dark:text-neutral-200;
+        }
+
+        & h5:not(.preview-embed, .preview-embed *) {
+            @apply text-lg font-semibold mb-2 mt-3 text-neutral-800 dark:text-neutral-200;
+        }
+
+        & h6:not(.preview-embed, .preview-embed *) {
+            @apply text-base font-semibold mb-1 mt-2 text-neutral-700 dark:text-neutral-300;
+        }
+
+        /* The document's first heading has no top margin. More specific than the heading rules above, so it wins */
+        & > :first-child > :first-child:is(h1, h2, h3, h4, h5, h6) {
+            @apply mt-0;
+        }
+
+        & p:not(.preview-embed, .preview-embed *) {
+            @apply my-4 leading-relaxed text-neutral-700 dark:text-neutral-200;
+        }
+
+        /* Only links: an <a> without href is an anchor written in HTML and stays unstyled */
+        & a[href]:not(.preview-embed, .preview-embed *) {
+            @apply text-sky-500 hover:text-sky-600 hover:underline transition-colors;
+        }
+
+        & ul:not(.preview-embed, .preview-embed *) {
+            @apply list-disc list-inside my-4 space-y-2 text-neutral-700 dark:text-neutral-200;
+        }
+
+        & ol:not(.preview-embed, .preview-embed *) {
+            @apply list-decimal list-inside my-4 space-y-2 text-neutral-700 dark:text-neutral-200;
+        }
+
+        & li:not(.preview-embed, .preview-embed *) {
+            @apply ml-4;
+        }
+
+        & li[data-task-item]:not(.preview-embed, .preview-embed *) {
+            @apply list-none flex items-center gap-2;
+        }
+
+        & li > span > p:not(.preview-embed, .preview-embed *) {
+            @apply my-0 inline;
+        }
+
+        & input[type="checkbox"]:not(.preview-embed, .preview-embed *) {
+            @apply mr-2 accent-sky-500;
+        }
+
+        & blockquote:not(.preview-embed, .preview-embed *) {
+            @apply border-l-4 border-sky-500 pl-4 my-4 italic py-2 text-neutral-600 bg-blockquote-light dark:text-neutral-300 dark:bg-neutral-800/50;
+        }
+
+        & code:not(.preview-embed, .preview-embed *) {
+            @apply px-1.5 py-0.5 rounded text-sm font-mono bg-neutral-200 text-neutral-700 dark:bg-inline-code-dark dark:text-white;
+        }
+
+        & pre:not(.preview-embed, .preview-embed *) {
+            @apply my-4;
+        }
+
+        /* Tables written in HTML with an inline width keep no border */
+        & table:not([data-html-width]):not(.preview-embed, .preview-embed *) {
+            @apply border border-neutral-300 dark:border-neutral-700;
+        }
+
+        & thead:not(.preview-embed, .preview-embed *) {
+            @apply bg-neutral-200 dark:bg-table-head-dark;
+        }
+
+        & tbody:not(.preview-embed, .preview-embed *) {
+            @apply divide-y divide-neutral-300 dark:divide-neutral-700;
+        }
+
+        & tr:not(.preview-embed, .preview-embed *) {
+            @apply border-b border-neutral-300 dark:border-neutral-700;
+        }
+
+        & th:not(.preview-embed, .preview-embed *) {
+            @apply px-4 py-2 text-left font-semibold border text-neutral-900 border-neutral-300 dark:text-neutral-200 dark:border-neutral-700;
+        }
+
+        & td:not(.preview-embed, .preview-embed *) {
+            @apply px-4 py-2 border text-neutral-700 border-neutral-300 dark:text-neutral-300 dark:border-neutral-700;
+        }
+
+        & hr:not(.preview-embed, .preview-embed *) {
+            @apply my-8 border-neutral-300 dark:border-neutral-700;
+        }
+
+        & strong:not(.preview-embed, .preview-embed *) {
+            @apply font-bold text-neutral-900 dark:text-white;
+        }
+
+        & em:not(.preview-embed, .preview-embed *) {
+            @apply italic text-neutral-700 dark:text-neutral-200;
+        }
+    }
+
+    .markdown-chunk {
+        @apply contents;
+    }
+
+    /* Wrapper of a Mermaid diagram or a formula block */
+    .preview-block {
+        @apply my-4;
+    }
+
+    .table-scroll {
+        @apply overflow-x-auto my-4;
+    }
+
+    .code-block {
+        @apply my-4 rounded-lg overflow-hidden;
+    }
+
+    .preview-image {
+        @apply my-4 max-w-full inline-block;
+    }
+
+    .preview-image-missing {
+        @apply my-4 inline-flex items-center gap-1.5 rounded border border-dashed px-2 py-1 text-sm border-neutral-400 text-neutral-600 dark:border-neutral-600 dark:text-neutral-400;
+    }
+
+    .mermaid-diagram {
+        @apply overflow-x-auto;
+
+        & > svg {
+            @apply block mx-auto;
+        }
+    }
+
+    .mermaid-error {
+        @apply mt-2 rounded border px-3 py-2 text-sm border-red-300 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300;
+
+        & p {
+            @apply font-semibold;
+        }
+
+        & pre {
+            @apply mt-1 font-mono text-xs whitespace-pre-wrap wrap-break-word;
+        }
+    }
+
+    .formula-block {
+        @apply overflow-x-auto overflow-y-hidden text-neutral-700 dark:text-neutral-200;
+
+        & .katex-display {
+            @apply m-0;
+        }
+    }
+
+    /* Invalid TeX: KaTeX colors it inline with a red that's too dark on the dark theme */
+    :is(.formula, .formula-block) .katex-error {
+        @apply text-red-700! dark:text-red-400!;
+    }
+
+    /* TeX source shown until KaTeX is loaded */
+    .formula-source {
+        @apply font-mono text-sm text-neutral-600 dark:text-neutral-300;
+    }
+
+    .formula-source-block {
+        @apply font-mono text-sm text-center text-neutral-600 dark:text-neutral-300;
+    }
+}

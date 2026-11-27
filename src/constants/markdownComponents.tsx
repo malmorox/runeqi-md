@@ -25,37 +25,37 @@ const sourceLine = (node?: HastElement) => node?.position?.start.line;
 // the whole preview (and images went blank while they were loaded again).
 export const markdownComponents: Components = {
     h1: ({ children, node }) => (
-        <h1 data-line={sourceLine(node)} className="text-4xl font-bold mb-4 border-b pb-2 mt-8 text-neutral-900 border-neutral-300 dark:text-white dark:border-neutral-700">
+        <h1 data-line={sourceLine(node)}>
             {children}
         </h1>
     ),
     h2: ({ children, node }) => (
-        <h2 data-line={sourceLine(node)} className="text-3xl font-bold mb-3 mt-6 text-neutral-900 dark:text-white">
+        <h2 data-line={sourceLine(node)}>
             {children}
         </h2>
     ),
     h3: ({ children, node }) => (
-        <h3 data-line={sourceLine(node)} className="text-2xl font-bold mb-2 mt-5 text-neutral-900 dark:text-white">
+        <h3 data-line={sourceLine(node)}>
             {children}
         </h3>
     ),
     h4: ({ children, node }) => (
-        <h4 data-line={sourceLine(node)} className="text-xl font-semibold mb-2 mt-4 text-neutral-800 dark:text-neutral-200">
+        <h4 data-line={sourceLine(node)}>
             {children}
         </h4>
     ),
     h5: ({ children, node }) => (
-        <h5 data-line={sourceLine(node)} className="text-lg font-semibold mb-2 mt-3 text-neutral-800 dark:text-neutral-200">
+        <h5 data-line={sourceLine(node)}>
             {children}
         </h5>
     ),
     h6: ({ children, node }) => (
-        <h6 data-line={sourceLine(node)} className="text-base font-semibold mb-1 mt-2 text-neutral-700 dark:text-neutral-300">
+        <h6 data-line={sourceLine(node)}>
             {children}
         </h6>
     ),
     p: ({ children, node }) => (
-        <p data-line={sourceLine(node)} className="my-4 leading-relaxed text-neutral-700 dark:text-neutral-200">
+        <p data-line={sourceLine(node)}>
             {children}
         </p>
     ),
@@ -66,14 +66,11 @@ export const markdownComponents: Components = {
             return <a id={id ?? (typeof name === "string" ? name : undefined)}>{children}</a>;
         }
 
-        const className = "text-sky-500 hover:text-sky-600 hover:underline transition-colors";
-
         // Enlaces internos (#seccion): llevan al encabezado dentro del preview en vez de abrir otra pestaña
         if (href?.startsWith('#')) {
             return (
                 <a
                     href={href}
-                    className={className}
                     onClick={(event) => {
                         event.preventDefault();
                         const root = event.currentTarget.closest<HTMLElement>("[data-markdown-root]");
@@ -94,7 +91,6 @@ export const markdownComponents: Components = {
         return (
             <a
                 href={url}
-                className={className}
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -103,12 +99,12 @@ export const markdownComponents: Components = {
         );
     },
     ul: ({ children, node }) => (
-        <ul data-line={sourceLine(node)} className="list-disc list-inside my-4 space-y-2 text-neutral-700 dark:text-neutral-200">
+        <ul data-line={sourceLine(node)}>
             {children}
         </ul>
     ),
     ol: ({ children, node }) => (
-        <ol data-line={sourceLine(node)} className="list-decimal list-inside my-4 space-y-2 text-neutral-700 dark:text-neutral-200">
+        <ol data-line={sourceLine(node)}>
             {children}
         </ol>
     ),
@@ -116,8 +112,8 @@ export const markdownComponents: Components = {
         const isTaskItem = node?.properties?.className?.toString().includes('task-list-item');
         
         return (
-            <li data-line={sourceLine(node)} className={`ml-4 ${isTaskItem ? 'list-none flex items-center gap-2' : ''}`}>
-                <span className="[&>p]:my-0 [&>p]:inline">{children}</span>
+            <li data-line={sourceLine(node)} data-task-item={isTaskItem || undefined}>
+                <span>{children}</span>
             </li>
         );
     },
@@ -128,14 +124,13 @@ export const markdownComponents: Components = {
                     type="checkbox"
                     checked={checked}
                     readOnly
-                    className="mr-2 accent-sky-500"
                 />
             );
         }
         return <input type={type} />;
     },
     blockquote: ({ children, node }) => (
-        <blockquote data-line={sourceLine(node)} className="border-l-4 border-sky-500 pl-4 my-4 italic py-2 text-neutral-600 bg-[#F0EDEB] dark:text-neutral-300 dark:bg-neutral-800/50">
+        <blockquote data-line={sourceLine(node)}>
             {children}
         </blockquote>
     ),
@@ -147,7 +142,7 @@ export const markdownComponents: Components = {
         }
 
         return (
-            <code className="px-1.5 py-0.5 rounded text-sm font-mono bg-neutral-200 text-neutral-700 dark:bg-[#545459] dark:text-white">
+            <code>
                 {children}
             </code>
         );
@@ -158,7 +153,7 @@ export const markdownComponents: Components = {
         const codeNode = node?.children.find(
             (child): child is HastElement => child.type === "element" && child.tagName === "code"
         );
-        if (!codeNode) return <pre data-line={sourceLine(node)} className="my-4">{children}</pre>;
+        if (!codeNode) return <pre data-line={sourceLine(node)}>{children}</pre>;
 
         const language = LANGUAGE_CLASS.exec(String(codeNode.properties.className ?? ""))?.[1];
         // Solo se quita el salto de línea final que añade el parser, para conservar la sangría de la primera línea
@@ -168,7 +163,7 @@ export const markdownComponents: Components = {
         // Mermaid blocks are drawn as diagrams instead of shown as code
         if (language === "mermaid") {
             return (
-                <div data-line={sourceLine(node)} className="my-4">
+                <div data-line={sourceLine(node)} className="preview-block">
                     <MermaidDiagram code={content} line={sourceLine(node)} />
                 </div>
             );
@@ -177,14 +172,14 @@ export const markdownComponents: Components = {
         // Formula blocks: $$ ... $$ (remark-math) and ```math, the way GitHub draws them
         if (language === "math") {
             return (
-                <div data-line={sourceLine(node)} className="my-4">
+                <div data-line={sourceLine(node)} className="preview-block">
                     <MathFormula tex={content} display />
                 </div>
             );
         }
 
         return (
-            <pre data-line={sourceLine(node)} className="my-4">
+            <pre data-line={sourceLine(node)}>
                 <PreviewCodeBlock language={language} content={content} />
             </pre>
         );
@@ -196,42 +191,42 @@ export const markdownComponents: Components = {
         
         if (hasInlineStyle) {
             return (
-                <div data-line={sourceLine(node)} className="overflow-x-auto my-4">
-                    <table {...props}>{children}</table>
+                <div data-line={sourceLine(node)} className="table-scroll">
+                    <table {...props} data-html-width>{children}</table>
                 </div>
             );
         }
         
         return (
-            <div data-line={sourceLine(node)} className="overflow-x-auto my-4">
-                <table className="border border-neutral-300 dark:border-neutral-700">
+            <div data-line={sourceLine(node)} className="table-scroll">
+                <table>
                     {children}
                 </table>
             </div>
         );
     },
     thead: ({ children }) => (
-        <thead className="bg-neutral-200 dark:bg-[#353538]">
+        <thead>
             {children}
         </thead>
     ),
     tbody: ({ children }) => (
-        <tbody className="divide-y divide-neutral-300 dark:divide-neutral-700">
+        <tbody>
             {children}
         </tbody>
     ),
     tr: ({ children, node }) => (
-        <tr data-line={sourceLine(node)} className="border-b border-neutral-300 dark:border-neutral-700">
+        <tr data-line={sourceLine(node)}>
             {children}
         </tr>
     ),
     th: ({ children }) => (
-        <th className="px-4 py-2 text-left font-semibold border text-neutral-900 border-neutral-300 dark:text-neutral-200 dark:border-neutral-700">
+        <th>
             {children}
         </th>
     ),
     td: ({ children }) => (
-        <td className="px-4 py-2 border text-neutral-700 border-neutral-300 dark:text-neutral-300 dark:border-neutral-700">
+        <td>
             {children}
         </td>
     ),
@@ -242,15 +237,15 @@ export const markdownComponents: Components = {
         />
     ),
     hr: ({ node }) => (
-        <hr data-line={sourceLine(node)} className="my-8 border-neutral-300 dark:border-neutral-700" />
+        <hr data-line={sourceLine(node)} />
     ),
     strong: ({ children }) => (
-        <strong className="font-bold text-neutral-900 dark:text-white">
+        <strong>
             {children}
         </strong>
     ),
     em: ({ children }) => (
-        <em className="italic text-neutral-700 dark:text-neutral-200">
+        <em>
             {children}
         </em>
     ),

@@ -29,11 +29,11 @@ export const InputContent = ({
     };
 
     return (
-        <div className="p-3 min-w-[250px]">
-            <form className="space-y-2" onSubmit={handleSubmit}>
+        <div className="dropdown-form-panel">
+            <form className="dropdown-form" onSubmit={handleSubmit}>
                 {fields.map(field => (
                     <div key={field.name}>
-                        <label className="block text-xs font-medium text-[#cccccc] mb-1">
+                        <label className="dropdown-field-label">
                             {field.label}
                         </label>
                         <input
@@ -41,13 +41,13 @@ export const InputContent = ({
                             value={values[field.name] || ''}
                             onChange={(e) => handleChange(field.name, e.target.value)}
                             placeholder={field.placeholder}
-                            className="w-full px-2 py-1.5 text-sm text-[#1e1e1e] bg-white border border-[#cccccc] rounded focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            className="dropdown-input"
                         />
                     </div>
                 ))}
                 <button
                     type="submit"
-                    className="w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors mt-2 cursor-pointer"
+                    className="dropdown-submit dropdown-submit-spaced"
                 >
                     {buttonText}
                 </button>
@@ -63,21 +63,13 @@ export const HeadingContent = ({
     options: { label: string; level: 1 | 2 | 3 | 4 | 5 | 6 }[];
     onSelect: (level: 1 | 2 | 3 | 4 | 5 | 6, label: string) => void;
 }) => {
-    const sizes = {
-        1: "text-2xl font-bold",
-        2: "text-xl font-bold",
-        3: "text-lg font-semibold",
-        4: "text-base font-medium",
-        5: "text-sm font-medium",
-        6: "text-xs font-medium"
-    };
-
     return (
-        <div className="p-2 min-w-[160px] space-y-1">
+        <div className="heading-options">
             {options.map((h) => (
                 <button
                     key={h.level}
-                    className={`w-full text-left text-[#cccccc] px-3 py-1.5 rounded hover:bg-[#3e3e42] ${sizes[h.level]} cursor-pointer`}
+                    data-level={h.level}
+                    className="heading-option"
                     onClick={() => onSelect(h.level, h.label)}
                 >
                     {h.label}
@@ -115,8 +107,6 @@ export const ImageContent = ({
         }
     };
 
-    const inputClassName = "w-full px-2 py-1.5 text-sm text-[#1e1e1e] bg-white border border-[#cccccc] rounded focus:outline-none focus:ring-2 focus:ring-sky-500";
-
     // A form, so Enter in either field inserts the image
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -126,10 +116,10 @@ export const ImageContent = ({
     };
 
     return (
-        <div className="p-3 min-w-[250px] space-y-2">
-            <form className="space-y-2" onSubmit={handleSubmit}>
+        <div className="dropdown-form-panel image-dropdown">
+            <form className="dropdown-form" onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="image-alt" className="block text-xs font-medium text-[#cccccc] mb-1">
+                    <label htmlFor="image-alt" className="dropdown-field-label">
                         Alt text
                     </label>
                     <input
@@ -138,11 +128,11 @@ export const ImageContent = ({
                         value={alt}
                         onChange={(e) => setAlt(e.target.value)}
                         placeholder="Description"
-                        className={inputClassName}
+                        className="dropdown-input"
                     />
                 </div>
                 <div>
-                    <label htmlFor="image-url" className="block text-xs font-medium text-[#cccccc] mb-1">
+                    <label htmlFor="image-url" className="dropdown-field-label">
                         Image URL
                     </label>
                     <input
@@ -151,28 +141,28 @@ export const ImageContent = ({
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://example.com/image.jpg"
-                        className={inputClassName}
+                        className="dropdown-input"
                     />
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-sky-500 text-white px-3 py-1.5 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer"
+                    className="dropdown-submit"
                 >
                     Insert
                 </button>
             </form>
 
-            <div className="flex items-center gap-2 text-xs text-[#999999]">
-                <span className="h-px flex-1 bg-[#555555]" />
+            <div className="dropdown-divider">
+                <span className="dropdown-divider-line" />
                 or
-                <span className="h-px flex-1 bg-[#555555]" />
+                <span className="dropdown-divider-line" />
             </div>
 
             <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="w-full flex items-center justify-center gap-2 border border-[#555555] text-[#cccccc] px-3 py-1.5 rounded text-sm hover:bg-[#3e3e42] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-wait"
+                className="dropdown-upload-button"
             >
                 <HiArrowUpTray size={16} aria-hidden />
                 {isUploading ? 'Uploading…' : 'Upload image'}
@@ -189,7 +179,7 @@ export const ImageContent = ({
                 }}
             />
             {error && (
-                <p role="alert" className="text-xs text-red-400">
+                <p role="alert" className="dropdown-error">
                     {error}
                 </p>
             )}

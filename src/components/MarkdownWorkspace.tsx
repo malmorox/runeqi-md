@@ -16,7 +16,7 @@ const MarkdownWorkspace = () => {
 
     return (
         <ScrollSyncProvider>
-            <PanelGroup direction="horizontal" className="w-full h-full">
+            <PanelGroup direction="horizontal" className="workspace-panels">
                 <Panel
                     defaultSize={50}
                     minSize={20}
@@ -27,11 +27,7 @@ const MarkdownWorkspace = () => {
                 <PanelResizeHandle
                     disabled={!isSplit}
                     style={{ display: isSplit ? undefined : "none" }}
-                    className={`w-2 cursor-col-resize ${
-                        theme === "dark"
-                            ? "bg-[#252526] hover:bg-[#212122]"
-                            : "bg-[#d4d4d4] hover:bg-[#c8c8c8]"
-                    }`}
+                    className={`workspace-resize-handle ${theme === "dark" ? "dark" : ""}`}
                 />
                 <Panel
                     defaultSize={50}

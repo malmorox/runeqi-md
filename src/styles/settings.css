@@ -1,0 +1,45 @@
+@layer components {
+    .settings-view {
+        @apply space-y-3;
+    }
+
+    .settings-reset-button {
+        @apply w-full bg-panel-strong hover:bg-panel-hover rounded-md py-2 text-surface-dark font-medium transition-colors cursor-pointer;
+    }
+
+    .settings-section {
+        @apply bg-panel-raised rounded-md p-3 space-y-2;
+    }
+
+    .settings-section-title {
+        @apply font-semibold text-surface-dark;
+    }
+
+    .settings-section-description {
+        @apply text-xs text-editor-dark mt-0.5 mb-3;
+    }
+
+    .settings-row {
+        @apply flex items-center justify-between gap-2 text-sm text-surface-dark;
+    }
+
+    .settings-select {
+        @apply px-1.5 py-0.5 text-sm rounded border border-editor-dark bg-panel-strong hover:bg-panel cursor-pointer;
+    }
+
+    .settings-stepper {
+        @apply flex items-center rounded border border-editor-dark bg-panel-strong overflow-hidden;
+    }
+
+    .settings-stepper-button {
+        @apply px-1.5 self-stretch flex items-center cursor-pointer enabled:hover:bg-panel disabled:opacity-40 disabled:cursor-not-allowed;
+    }
+
+    .settings-stepper-value {
+        @apply min-w-12 px-1 py-0.5 text-center tabular-nums border-x border-editor-dark;
+    }
+
+    .settings-toggle {
+        @apply flex items-center gap-2 text-sm text-surface-dark cursor-pointer;
+    }
+}

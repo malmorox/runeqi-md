@@ -45,9 +45,9 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
 
     if (showCustomInput) {
         return (
-            <div className="p-3 min-w-70">
-                <div className="mb-3">
-                    <label className="block text-xs font-medium text-[#cccccc] mb-2">
+            <div className="code-language-custom">
+                <div className="code-language-field">
+                    <label className="code-language-label">
                         Specify language
                     </label>
                     <input
@@ -56,14 +56,14 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
                         onChange={(e) => setCustomLanguage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleCustomSubmit()}
                         placeholder="ruby, go, rust..."
-                        className="w-full px-2 py-1.5 text-sm text-[#1e1e1e] bg-white border border-[#cccccc] rounded focus:outline-none focus:ring-2 focus:ring-sky-500"
+                        className="dropdown-input"
                         autoFocus
                     />
                 </div>
-                <div className="flex gap-2">
+                <div className="code-language-actions">
                     <button
                         onClick={handleCustomSubmit}
-                        className="flex-1 bg-sky-500 text-white px-3 py-2 rounded text-sm hover:bg-sky-600 transition-colors cursor-pointer"
+                        className="code-language-insert"
                     >
                         Insert
                     </button>
@@ -72,7 +72,7 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
                             setShowCustomInput(false);
                             setCustomLanguage('');
                         }}
-                        className="flex-1 bg-[#cccccc] text-[#1e1e1e] px-3 py-2 rounded text-sm hover:bg-[#A8A8A8] transition-colors cursor-pointer"
+                        className="code-language-cancel"
                     >
                         Cancel
                     </button>
@@ -82,29 +82,26 @@ const CodeLanguageSelector = ({ onSelect }: CodeLanguageSelectorProps) => {
     }
 
     return (
-        <div className="p-3 min-w-50">
-            <div className="grid grid-cols-4 gap-2 mb-3">
+        <div className="code-language-picker">
+            <div className="code-language-grid">
                 {popularLanguages.map((lang) => {
                     return (
                         <button
                             key={lang.value}
                             onClick={() => handleLanguageClick(lang.value)}
-                            className="aspect-square cursor-pointer flex items-center justify-center p-1 bg-white border border-[#bbbbbb] rounded hover:bg-[#EDEDED] hover:border-[#8C8C8C] transition-all group"
+                            className="code-language-option"
                             title={lang.name}
                         >
-                            <lang.icon 
-                                size={20} 
-                                className="text-[#3e3e42] group-hover:scale-110 group-hover:text-[#252526] transition-transform"
-                            />
+                            <lang.icon size={20} />
                         </button>
                     );
                 })}
             </div>
             
-            <div className="pt-3 border-t border-[#bbbbbb]">
+            <div className="code-language-more">
                 <button
                     onClick={() => setShowCustomInput(true)}
-                    className="w-full px-3 py-1 text-sm font-medium text-sky-600 bg-sky-50 border border-sky-200 rounded hover:bg-sky-100 hover:border-sky-400 transition-colors cursor-pointer"
+                    className="code-language-other"
                 >
                     Other language...
                 </button>

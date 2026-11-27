@@ -10,25 +10,25 @@ interface SidebarHeaderProps {
 }
 
 const SidebarHeader = ({ currentView, onBack, onClose }: SidebarHeaderProps) => (
-    <div className="flex items-center h-12 px-3 gap-1 bg-[#bbbbbb]">
+    <div className="panel-header">
         {currentView !== 'main' && (
             <button
                 onClick={onBack}
-                className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
+                className="panel-icon-button panel-icon-button-muted"
                 title='Back to menu'
             >
                 <FaAngleLeft size={20} />
             </button>
         )}
-        <span className="text-lg font-semibold flex-1">
+        <span className="panel-header-title">
             {viewTitles[currentView]}
         </span>
         <button
             onClick={onClose}
-            className="p-1 text-[#2d2d30] hover:bg-[#A8A8A8] rounded transition-colors cursor-pointer"
+            className="panel-icon-button panel-icon-button-muted"
             title='Close sidebar'
         >
-            <IoClose size={25} color="#2d2d30" />
+            <IoClose size={25} />
         </button>
     </div>
 );

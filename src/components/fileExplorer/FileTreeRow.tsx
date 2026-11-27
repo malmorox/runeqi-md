@@ -18,21 +18,20 @@ const FileTreeRow = ({ node, style, dragHandle, isSelected }: FileTreeRowProps) 
                 if (isFolder) node.toggle();
             }}
             title={node.data.name}
-            className={`h-full min-w-0 box-border px-2 cursor-pointer text-sm leading-5 flex items-center gap-1 ${
-                isSelected ? 'bg-[#A8A8A8]' : ''
-            }`}
+            data-selected={isSelected || undefined}
+            className="tree-row"
         >
             {isFolder ? (
                 node.isOpen
-                    ? <GoTriangleDown size={14} className="shrink-0" />
-                    : <GoTriangleRight size={14} className="shrink-0" />
+                    ? <GoTriangleDown size={14} />
+                    : <GoTriangleRight size={14} />
             ) : node.data.type === 'image' ? (
-                <HiOutlinePhoto size={14} className="shrink-0" aria-hidden />
+                <HiOutlinePhoto size={14} aria-hidden />
             ) : (
-                <span className="w-3.5 shrink-0" />
+                <span className="tree-row-spacer" />
             )}
             {/* Long names end in "…" (the full name shows on hover) */}
-            <span className="truncate">{node.data.name}</span>
+            <span className="tree-row-name">{node.data.name}</span>
         </div>
     );
 };

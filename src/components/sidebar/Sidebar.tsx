@@ -79,7 +79,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
     return (
         <>
-            <aside className="w-80 max-w-full h-full shrink-0 bg-[#D4D4D4] text-[#252526] flex flex-col panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:right-0 panel-overlay:z-50 panel-overlay:shadow-xl">
+            <aside className="side-panel sidebar">
                 {/* Header */}
                 <SidebarHeader
                     currentView={currentView}

@@ -91,7 +91,7 @@ const ImportExportView = () => {
             : 'Save the current file to your computer.';
 
     return (
-        <div className="overflow-y-auto flex-1 p-3">
+        <div className="sidebar-view">
             <SidebarMenuItem
                 item={{
                     icon: MdFileUpload,
@@ -114,7 +114,7 @@ const ImportExportView = () => {
                 }}
             />
 
-            <hr className="my-3 mx-4 border-[#bbbbbb]" />
+            <hr className="sidebar-divider" />
 
             <SidebarMenuItem
                 item={{

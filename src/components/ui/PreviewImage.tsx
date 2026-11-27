@@ -12,7 +12,7 @@ const PreviewImage = ({ src, alt }: PreviewImageProps) => {
 
     if (image.missing) {
         return (
-            <span className="my-4 inline-flex items-center gap-1.5 rounded border border-dashed px-2 py-1 text-sm border-neutral-400 text-neutral-600 dark:border-neutral-600 dark:text-neutral-400">
+            <span className="preview-image-missing">
                 <HiOutlinePhoto size={16} aria-hidden />
                 Image not found: {image.name}
             </span>
@@ -23,7 +23,7 @@ const PreviewImage = ({ src, alt }: PreviewImageProps) => {
     if (!image.src) return null;
 
     // Not draggable: the browser would carry it as a file and dropping it on the editor would import a copy
-    return <img src={image.src} alt={alt} draggable={false} className="my-4 max-w-full inline-block" />;
+    return <img src={image.src} alt={alt} draggable={false} className="preview-image" />;
 };
 
 export default PreviewImage;

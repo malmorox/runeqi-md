@@ -19,7 +19,7 @@ const SidebarContent = ({
     switch (currentView) {
         case 'main':
             return (
-                <div className="overflow-y-auto flex-1 p-3">
+                <div className="sidebar-view">
                     {mainMenuItems.map((item) => (
                         <SidebarMenuItem
                             key={item.label}

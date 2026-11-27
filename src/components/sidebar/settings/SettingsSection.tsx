@@ -7,10 +7,10 @@ interface SettingsSectionProps {
 }
 
 const SettingsSection = ({ title, description, children }: SettingsSectionProps) => (
-    <section className="bg-[#C4C4C4] rounded-md p-3 space-y-2">
+    <section className="settings-section">
         <div>
-            <div className="font-semibold text-[#252526]">{title}</div>
-            <p className="text-xs text-[#2d2d30] mt-0.5 mb-3">{description}</p>
+            <div className="settings-section-title">{title}</div>
+            <p className="settings-section-description">{description}</p>
         </div>
         {children}
     </section>

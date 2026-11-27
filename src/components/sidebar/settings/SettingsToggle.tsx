@@ -7,7 +7,7 @@ const SettingsToggle = ({
     checked: boolean;
     onChange: (v: boolean) => void;
 }) => (
-    <label className="flex items-center gap-2 text-sm text-[#252526] cursor-pointer">
+    <label className="settings-toggle">
         <input
             type="checkbox"
             checked={checked}

@@ -10,7 +10,7 @@ const SettingsSelect = <T extends string | number>({
     options: { value: T; label: string }[];
     onChange: (v: T) => void;
 }) => (
-    <label className="flex items-center justify-between gap-2 text-sm text-[#252526]">
+    <label className="settings-row">
         {label}
         <select
             value={String(value)}
@@ -18,7 +18,7 @@ const SettingsSelect = <T extends string | number>({
                 const option = options.find(o => String(o.value) === e.target.value);
                 if (option) onChange(option.value);
             }}
-            className="px-1.5 py-0.5 text-sm rounded border border-[#2d2d30] bg-[#bbbbbb] hover:bg-[#D4D4D4] cursor-pointer"
+            className="settings-select"
         >
             {options.map(o => (
                 <option key={String(o.value)} value={String(o.value)}>{o.label}</option>

@@ -9,9 +9,6 @@ interface MathFormulaProps {
     display?: boolean;
 }
 
-// Invalid TeX: KaTeX colors it inline with a red that's too dark on the dark theme
-const ERROR_CLASSES = '[&_.katex-error]:text-red-700! dark:[&_.katex-error]:text-red-400!';
-
 // Formula of the preview, drawn with KaTeX. Once KaTeX is loaded it's drawn while rendering, so editing a formula never
 // goes through an empty or loading state
 const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
@@ -35,8 +32,8 @@ const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
     if (!katex) {
         // Until KaTeX is loaded, the TeX source
         return display
-            ? <pre className="font-mono text-sm text-center text-neutral-600 dark:text-neutral-300">{tex}</pre>
-            : <code className="font-mono text-sm text-neutral-600 dark:text-neutral-300">{tex}</code>;
+            ? <pre className="formula-source-block preview-embed">{tex}</pre>
+            : <code className="formula-source preview-embed">{tex}</code>;
     }
 
     // KaTeX's HTML (with MathML for screen readers), escaped by KaTeX
@@ -46,11 +43,11 @@ const MathFormula = ({ tex, display = false }: MathFormulaProps) => {
         // Long formulas scroll sideways instead of overflowing the preview. Outside a paragraph nothing gives them a text
         // color, so they take the paragraphs' one (KaTeX draws with the current color)
         <div
-            className={`overflow-x-auto overflow-y-hidden text-neutral-700 dark:text-neutral-200 [&_.katex-display]:m-0 ${ERROR_CLASSES}`}
+            className="formula-block preview-embed"
             dangerouslySetInnerHTML={html}
         />
     ) : (
-        <span className={ERROR_CLASSES} dangerouslySetInnerHTML={html} />
+        <span className="formula preview-embed" dangerouslySetInnerHTML={html} />
     );
 };
 

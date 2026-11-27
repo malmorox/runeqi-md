@@ -1,0 +1,47 @@
+@layer components {
+    .app-shell {
+        @apply w-screen h-screen flex overflow-hidden;
+    }
+
+    .app-main {
+        @apply flex-1 min-w-0 h-full flex flex-col;
+    }
+
+    .app-toolbar-slot {
+        @apply shrink-0;
+    }
+
+    .app-workspace {
+        @apply w-full h-full bg-app overflow-hidden;
+    }
+
+    .mobile-notice {
+        @apply w-screen h-screen flex flex-col items-center justify-center bg-app text-white text-center p-8;
+    }
+
+    .mobile-notice-title {
+        @apply text-2xl font-bold mb-4;
+    }
+
+    .mobile-notice-text {
+        @apply text-gray-400;
+    }
+
+    .workspace-panels {
+        @apply w-full h-full;
+    }
+
+    /* Gets the `dark` class with the dark theme */
+    .workspace-resize-handle {
+        @apply w-2 cursor-col-resize bg-panel hover:bg-resize-light-hover dark:bg-surface-dark dark:hover:bg-resize-dark-hover;
+    }
+
+    .editor-pane {
+        @apply w-full h-full;
+    }
+
+    /* Gets the `dark` class with the dark theme */
+    .editor-loading {
+        @apply w-full h-full bg-editor-light dark:bg-editor-dark;
+    }
+}

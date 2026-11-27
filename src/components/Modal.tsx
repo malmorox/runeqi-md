@@ -35,10 +35,10 @@ const Modal = ({ isOpen, onClose, children, labelledBy }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center">
+    <div className="modal">
       {/* Overlay con capa oscura semitransparente */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="modal-backdrop"
         onClick={onClose}
       />
 
@@ -49,7 +49,7 @@ const Modal = ({ isOpen, onClose, children, labelledBy }: ModalProps) => {
         aria-modal="true"
         aria-labelledby={labelledBy}
         tabIndex={-1}
-        className="relative z-10 w-full max-w-lg rounded-lg bg-white p-6 shadow-lg focus:outline-none"
+        className="modal-dialog"
       >
         {children}
       </div>

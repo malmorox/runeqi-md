@@ -2,7 +2,6 @@ import type { CheatsheetRequirement, CheatsheetSection } from '@/types/cheatshee
 import { Line, Marker } from '@components/sidebar/CheatsheetLine';
 import { imageAlt, imageMarkdown, imageMarkdownPath } from '@utils/imagePaths';
 
-const MONO = 'font-mono text-xs';
 const LOCAL_IMAGE = 'photo.png';
 
 // Only syntax the preview really draws: anything listed here has to look right there too.
@@ -16,17 +15,17 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 label: 'Heading 1',
                 syntax: '# Heading 1',
                 // Paragraphs, not headings: they'd become part of the sidebar's outline
-                line: <p className="text-2xl font-bold"><Marker># </Marker>Heading 1</p>,
+                line: <p className="cheatsheet-h1"><Marker># </Marker>Heading 1</p>,
             },
             {
                 label: 'Heading 2',
                 syntax: '## Heading 2',
-                line: <p className="text-xl font-bold"><Marker>## </Marker>Heading 2</p>,
+                line: <p className="cheatsheet-h2"><Marker>## </Marker>Heading 2</p>,
             },
             {
                 label: 'Heading 3',
                 syntax: '### Heading 3',
-                line: <p className="text-lg font-bold"><Marker>### </Marker>Heading 3</p>,
+                line: <p className="cheatsheet-h3"><Marker>### </Marker>Heading 3</p>,
             },
         ],
     },
@@ -68,7 +67,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
             {
                 label: 'Inline code',
                 syntax: '`inline code`',
-                line: <><Marker>`</Marker><code className={MONO}>inline code</code><Marker>`</Marker></>,
+                line: <><Marker>`</Marker><code className="cheatsheet-code">inline code</code><Marker>`</Marker></>,
             },
             {
                 label: 'Escaped symbol',
@@ -98,7 +97,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                     <>
                         <Line><Marker>- </Marker>Item</Line>
                         <Line><Marker>- </Marker>Item</Line>
-                        <Line className="pl-4"><Marker>- </Marker>Nested item</Line>
+                        <Line className="cheatsheet-indent"><Marker>- </Marker>Nested item</Line>
                     </>
                 ),
             },
@@ -137,7 +136,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 line: (
                     <>
                         <Marker>[</Marker>
-                        <span className="underline underline-offset-2">link text</span>
+                        <span className="cheatsheet-link">link text</span>
                         <Marker>](https://example.com)</Marker>
                     </>
                 ),
@@ -148,7 +147,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 line: (
                     <>
                         <Marker>[</Marker>
-                        <span className="underline underline-offset-2">Go to Lists</span>
+                        <span className="cheatsheet-link">Go to Lists</span>
                         <Marker>](#lists)</Marker>
                     </>
                 ),
@@ -176,13 +175,13 @@ export const CHEATSHEET: CheatsheetSection[] = [
             {
                 label: 'Quote',
                 syntax: '> Quoted text',
-                line: <span className="text-[#595959]"><Marker>&gt; </Marker>Quoted text</span>,
+                line: <span className="cheatsheet-quote"><Marker>&gt; </Marker>Quoted text</span>,
             },
             {
                 label: 'Code block',
                 syntax: '```js\nconsole.log("Hello");\n```',
                 line: (
-                    <span className={`block ${MONO}`}>
+                    <span className="cheatsheet-code-block">
                         <Line><Marker>```js</Marker></Line>
                         <Line>console.log("Hello");</Line>
                         <Line><Marker>```</Marker></Line>
@@ -193,10 +192,10 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 label: 'Mermaid diagram',
                 syntax: '```mermaid\nflowchart LR\n    A[Write] --> B[Preview]\n```',
                 line: (
-                    <span className={`block ${MONO}`}>
+                    <span className="cheatsheet-code-block">
                         <Line><Marker>```mermaid</Marker></Line>
                         <Line>flowchart LR</Line>
-                        <Line className="pl-4">A[Write] --&gt; B[Preview]</Line>
+                        <Line className="cheatsheet-indent">A[Write] --&gt; B[Preview]</Line>
                         <Line><Marker>```</Marker></Line>
                     </span>
                 ),
@@ -242,7 +241,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 label: 'Inline formula',
                 syntax: '$E = mc^2$',
                 requires: 'math',
-                line: <><Marker>$</Marker><span className="italic">E = mc<sup>2</sup></span><Marker>$</Marker></>,
+                line: <><Marker>$</Marker><span className="cheatsheet-formula">E = mc<sup>2</sup></span><Marker>$</Marker></>,
             },
             {
                 label: 'Formula block',
@@ -251,7 +250,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 line: (
                     <>
                         <Line><Marker>$$</Marker></Line>
-                        <Line className="italic">x<sup>2</sup> + y<sup>2</sup> = z<sup>2</sup></Line>
+                        <Line className="cheatsheet-formula">x<sup>2</sup> + y<sup>2</sup> = z<sup>2</sup></Line>
                         <Line><Marker>$$</Marker></Line>
                     </>
                 ),
@@ -269,7 +268,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 line: (
                     <>
                         <Marker>&lt;mark&gt;</Marker>
-                        <mark className="bg-yellow-200 text-[#252526]">highlighted text</mark>
+                        <mark className="cheatsheet-mark">highlighted text</mark>
                         <Marker>&lt;/mark&gt;</Marker>
                     </>
                 ),
@@ -293,7 +292,7 @@ export const CHEATSHEET: CheatsheetSection[] = [
                 line: (
                     <>
                         Press <Marker>&lt;kbd&gt;</Marker>
-                        <kbd className="px-1 text-xs font-semibold border border-[#2d2d30] rounded">Enter</kbd>
+                        <kbd className="cheatsheet-kbd">Enter</kbd>
                         <Marker>&lt;/kbd&gt;</Marker>
                     </>
                 ),

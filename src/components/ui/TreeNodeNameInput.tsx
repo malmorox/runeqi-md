@@ -27,18 +27,18 @@ const TreeNodeNameInput = ({ type, style, isOpen = false, defaultValue = '', onC
     };
 
     return (
-        <div style={style} className="h-full box-border px-2 flex items-center gap-1 text-sm leading-5">
+        <div style={style} className="tree-row-editor">
             {isFolder ? (
                 isOpen ? <HiChevronDown size={14} /> : <HiChevronRight size={14} />
             ) : (
-                <span className="w-3.5 shrink-0" />
+                <span className="tree-row-spacer" />
             )}
             <input
                 autoFocus
                 defaultValue={base}
                 aria-label={ext ? `Image name (extension ${ext} is kept)` : undefined}
                 onFocus={(e) => e.currentTarget.select()}
-                className="flex-1 min-w-0 bg-white text-black text-sm px-1 py-0.5 rounded outline-none border border-[#888]"
+                className="tree-name-input"
                 onBlur={(e) => confirm(e.currentTarget.value)}
                 onKeyDown={(e) => {
                     e.stopPropagation();
@@ -54,7 +54,7 @@ const TreeNodeNameInput = ({ type, style, isOpen = false, defaultValue = '', onC
                 }}
             />
             {ext && (
-                <span aria-hidden="true" className="shrink-0 text-sm">
+                <span aria-hidden="true" className="tree-name-extension">
                     {ext}
                 </span>
             )}

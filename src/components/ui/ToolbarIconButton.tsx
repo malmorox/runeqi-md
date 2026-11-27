@@ -12,12 +12,7 @@ const ToolbarIconButton = ({ icon: Icon, iconSize = 20, onClick, disabled = fals
     <button
         onClick={onClick}
         disabled={disabled}
-        className={`
-            w-10 aspect-square p-2 rounded flex items-center justify-center transition-colors
-            ${disabled
-                ? 'text-[#555] cursor-not-allowed opacity-50'
-                : 'text-[#bbbbbb] hover:bg-[#4d4d4d] hover:text-white cursor-pointer'}
-        `}
+        className="toolbar-icon-button"
         title={title}
     >
         <Icon size={iconSize} />

@@ -15,14 +15,14 @@ const SettingsView = () => {
     };
 
     return (
-        <div className="overflow-y-auto flex-1 p-3 space-y-3">
+        <div className="sidebar-view settings-view">
             <WorkspaceSettings />
             <EditorSettings />
             <PreviewSettings />
             <PrivacySettings />
             <button
                 onClick={handleReset}
-                className="w-full bg-[#bbbbbb] hover:bg-[#A8A8A8] rounded-md py-2 text-[#252526] font-medium transition-colors cursor-pointer"
+                className="settings-reset-button"
             >
                 Reset to defaults
             </button>

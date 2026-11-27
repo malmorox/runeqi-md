@@ -25,7 +25,7 @@ const FormattingButtonGroup = ({
     canRedo
 }: FormattingButtonGroupProps) => (
     // Siempre en una sola fila: el layout deja sitio a la toolbar cerrando o superponiendo los paneles laterales
-    <nav className="flex gap-0.5 items-center">
+    <nav className="formatting-buttons">
         <ToolbarIconButton 
             icon={LuUndo} 
             iconSize={24} 
@@ -41,11 +41,11 @@ const FormattingButtonGroup = ({
             title="Redo" 
         />
 
-        <div className="w-px h-6 bg-[#4d4d4d] mx-1" />
+        <div className="toolbar-separator" />
 
         {buttons.map((button, index) => (
             <React.Fragment key={button.name}>
-                <div className="relative">
+                <div className="toolbar-button-slot">
                     <ToolbarIconButton
                         icon={button.icon}
                         iconSize={button.iconSize}
@@ -58,7 +58,7 @@ const FormattingButtonGroup = ({
                         </Dropdown>
                     )}
                 </div>
-                {(index === 6 || index === 9) && <div className="w-px h-6 bg-[#4d4d4d] mx-1" />}
+                {(index === 6 || index === 9) && <div className="toolbar-separator" />}
             </React.Fragment>
         ))}
     </nav>

@@ -1,0 +1,51 @@
+@layer components {
+    .file-explorer {
+        @apply panel-overlay:left-0;
+
+        &[data-dragging] {
+            @apply outline-2 -outline-offset-2 outline-dashed outline-sky-500;
+        }
+    }
+
+    .file-tree-container {
+        @apply flex-1 min-h-0 overflow-hidden;
+    }
+
+    /* react-arborist's row wrapper. Rows come with `min-width: max-content` and grow with long names (horizontal
+       scroll): they're kept to the panel's width and the names are truncated instead */
+    .tree-row-wrapper {
+        @apply min-w-0!;
+    }
+
+    .tree-row {
+        @apply h-full min-w-0 box-border px-2 cursor-pointer text-sm leading-5 flex items-center gap-1;
+
+        & > svg {
+            @apply shrink-0;
+        }
+
+        &[data-selected] {
+            @apply bg-panel-hover;
+        }
+    }
+
+    .tree-row-spacer {
+        @apply w-3.5 shrink-0;
+    }
+
+    .tree-row-name {
+        @apply truncate;
+    }
+
+    .tree-row-editor {
+        @apply h-full box-border px-2 flex items-center gap-1 text-sm leading-5;
+    }
+
+    .tree-name-input {
+        @apply flex-1 min-w-0 bg-white text-black text-sm px-1 py-0.5 rounded outline-none border border-tree-input-border;
+    }
+
+    .tree-name-extension {
+        @apply shrink-0 text-sm;
+    }
+}

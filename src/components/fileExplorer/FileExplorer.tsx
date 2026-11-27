@@ -103,9 +103,8 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
     return (
         <aside
             {...dropHandlers}
-            className={`w-80 max-w-full h-full bg-[#D4D4D4] text-[#252526] flex flex-col shrink-0 panel-overlay:fixed panel-overlay:inset-y-0 panel-overlay:left-0 panel-overlay:z-50 panel-overlay:shadow-xl ${
-                isDraggingFiles ? 'outline-2 -outline-offset-2 outline-dashed outline-sky-500' : ''
-            }`}
+            data-dragging={isDraggingFiles || undefined}
+            className="side-panel file-explorer"
         >
             <FileExplorerToolbar
                 isBusy={editing.isBusy}
@@ -121,7 +120,7 @@ const FileExplorer = ({ isOpen, onClose }: FileExplorerProps) => {
                 onClose={onClose}
             />
 
-            <div ref={treeContainerRef} className="flex-1 min-h-0 overflow-hidden">
+            <div ref={treeContainerRef} className="file-tree-container">
                 <FileTree
                     treeData={treeData}
                     treeApiRef={treeApiRef}

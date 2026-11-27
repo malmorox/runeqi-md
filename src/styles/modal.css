@@ -1,0 +1,90 @@
+@layer components {
+    .modal {
+        @apply fixed inset-0 z-100 flex items-center justify-center;
+    }
+
+    .modal-backdrop {
+        @apply absolute inset-0 bg-black/50;
+    }
+
+    .modal-dialog {
+        @apply relative z-10 w-full max-w-lg rounded-lg bg-white p-6 shadow-lg focus:outline-none;
+    }
+
+    .modal-title {
+        @apply text-xl font-semibold text-gray-900;
+    }
+
+    .modal-message {
+        @apply mt-2 text-gray-600;
+    }
+
+    .modal-detail {
+        @apply mt-2 text-sm text-gray-600;
+    }
+
+    .modal-option {
+        @apply mt-4 flex items-center gap-2 text-sm text-gray-800 cursor-pointer;
+    }
+
+    .modal-option-checkbox {
+        @apply accent-red-600;
+    }
+
+    .modal-actions {
+        @apply mt-6 flex justify-end gap-2;
+    }
+
+    .modal-button-secondary {
+        @apply px-4 py-2 rounded text-editor-dark bg-panel enabled:hover:bg-panel-strong transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .modal-button-primary {
+        @apply px-4 py-2 text-white rounded bg-sky-400 enabled:hover:bg-sky-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+
+        /* The confirm button is red, for actions that delete things for good */
+        &[data-variant="danger"] {
+            @apply bg-red-600 enabled:hover:bg-red-700;
+        }
+    }
+
+    .about-content {
+        @apply flex flex-col items-center text-center;
+    }
+
+    .about-title {
+        @apply flex items-center gap-1 text-4xl font-semibold text-brand-ink;
+    }
+
+    .about-logo {
+        @apply size-18;
+    }
+
+    .about-links {
+        @apply mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2;
+    }
+
+    .about-link {
+        @apply text-sky-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-sky-500 rounded-sm;
+    }
+
+    .about-link-with-icon {
+        @apply inline-flex items-center gap-1.5;
+    }
+
+    .about-divider {
+        @apply my-6 w-24 border-gray-200;
+    }
+
+    .about-subtitle {
+        @apply font-semibold text-gray-900;
+    }
+
+    .about-text {
+        @apply mt-1 text-sm text-gray-600;
+    }
+
+    .about-license {
+        @apply mt-6 text-sm text-gray-500;
+    }
+}
